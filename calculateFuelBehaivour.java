@@ -1,2 +1,2 @@
-public class calculateFuelBehaivour {
+public class CalculateFuelBehaivour {
 }
