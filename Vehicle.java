@@ -1,5 +1,8 @@
 public interface Vehicle {
     public void load(Container container);
-    public Container unLoad();
-    public void refuelling();
+
+    public Container unLoad(String id);
+    public void refueling(double fuel);
+    public double calculateFuelConsumption(Port port);
+    public double getCurrentStoringCapacity();
 }
