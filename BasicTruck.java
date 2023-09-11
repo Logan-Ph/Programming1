@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 public class BasicTruck implements Vehicle, Truck{
     private String id;
     private String name;
@@ -28,7 +27,7 @@ public class BasicTruck implements Vehicle, Truck{
         if(LoadContainerBehavior.load(container,this) && getCurrentStoringCapacity() + container.getWeight()<getStoringCapacity()){ // check if that vehicle can load the container or if the container weight exceed the storing capacity
             this.containers.add(container);
         }else {
-            throw new RuntimeException("This vehicle cannot carry this container!"); // throw exception if the container does not match the criteria
+            System.out.println("This vehicle cannot carry this container!"); // throw exception if the container does not match the criteria
         }
     }
 
@@ -48,15 +47,15 @@ public class BasicTruck implements Vehicle, Truck{
         try {
             this.containers.remove(container); // remove the container from the ArrayList
             return container;
-        }catch (Exception e){
-            throw new RuntimeException("There is no matching ID container!"); // Throw exception if the container doesn't exist in the ArrayList
+        }catch (NullPointerException e){
+            System.out.println("There is no matching ID container!"); // Throw exception if the container doesn't exist in the ArrayList
         }
+        return null;
     }
 
     //Find the container by using id
     public Container findContainerByID(String id){
         Container container = null;
-
         for (Container cont: this.containers){
             if (cont.getId().equals(id)){
                 container = cont;
@@ -68,8 +67,8 @@ public class BasicTruck implements Vehicle, Truck{
     //Refueling the vehicle
     @Override
     public void refueling(double fuel) {
-        if (getCurrentFuel() + fuel > fuelCapacity){ // check if it does not exceed the fuel capacity
-            throw new RuntimeException("You can not refuel more than the fuel capacity of this vehicle!");
+        if (getCurrentFuel() + fuel > getFuelCapacity()){ // check if it does not exceed the fuel capacity
+            System.out.println("You can not refuel more than the fuel capacity of this vehicle");
         }else {
             currentFuel += fuel;
         }

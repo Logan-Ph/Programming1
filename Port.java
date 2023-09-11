@@ -5,7 +5,7 @@ public class Port {
     private double latitude;
     private double longitude;
     private double storingCapacity;
-    private boolean landingAbility;
+    private boolean landingAbility; // '0' (false) for ship and '1' (true) for truck
     private double currentCapacity;
     private ArrayList<Vehicle> vehicles;
     private ArrayList<Container> containers;
@@ -39,7 +39,7 @@ public class Port {
         if (container.getWeight() + getCurrentCapacity() <= getStoringCapacity()){
             this.containers.add(container);
         }else {
-            throw new RuntimeException("Can not add this container!");
+            System.out.println("Can not add this container!");
         }
     }
 
@@ -49,9 +49,10 @@ public class Port {
         try{
             this.containers.remove(container); // remove the container in the port
             return container;
-        }catch (Exception e){
-            throw new RuntimeException("The container does not exist in this Port!");
+        }catch (NullPointerException e){
+            System.out.println("The container does not exist in this Port!");
         }
+        return null;
     }
 
     // Get distance to other port
@@ -59,9 +60,15 @@ public class Port {
         return Math.round(Math.sqrt(Math.pow(this.latitude - port.latitude,2) + Math.pow(this.longitude - port.longitude,2))*100)/100.0;
     }
 
+    // Get distance form the start
+    // This is used when adding new vehicle and the vehicle coordinate is 0,0; so we need to calculate the distance of the port to the root coordinate
+    public double getDistance(){
+        return Math.round(Math.sqrt(Math.pow(this.latitude,2) + Math.pow(this.latitude,2))*100)/100.0;
+    }
+
     // Get all distance to all the ports
     public void getAllDistance(){
-
+        // go with the for loop and using the 'getDistance' method at each port to print out
     }
 
     public double getCurrentCapacity() {
@@ -100,17 +107,46 @@ public class Port {
         return name;
     }
 
-    public void confirmTrip(String id){}
-
     public Trip findTripById(String id){
-    return null;
+        for(Trip trip: this.trips){
+            if (trip.getId().equals(id)){
+                return trip;
+            }
+        }
+        return null;
     }
 
-    public void removeTrip(){}
+    public void confirmTrip(String id){
+        Trip trip = findTripById(id);
+        try{
+            this.trips.remove(trip);
+        }catch (NullPointerException e){
+            System.out.println("The trip does not exist");
+        }
+    }
 
-    public void displayTrip(){}
+    public void displayTrip(String id){
+        Trip trip = findTripById(id);
+        try{
+            System.out.println(trip);
+        }catch (NullPointerException e){
+            System.out.println("The trip does not exist");
+        }
+    }
+
+    public void displayTrip(Trip trip){
+        if (trips.contains(trip)){
+            System.out.println(trip);
+        }else {
+            System.out.println("The trip does not exist");
+        }
+    }
 
     public void addTrip(Trip trip){
         this.trips.add(trip);
+    }
+
+    public boolean isLandingAbility() {
+        return landingAbility;
     }
 }

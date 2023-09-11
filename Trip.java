@@ -33,6 +33,7 @@ public class Trip {
     }
 
     public void sendTrip(Port port){
+        port.addTrip(this);
         // get Port
         // invoke method add Trip of class port
     }
