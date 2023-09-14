@@ -116,7 +116,7 @@ public class Port implements Serializable {
 
     public Trip findTripById(String id){
         for(Trip trip: this.trips){
-            if (trip.getId().equals(id)){
+            if (trip.){
                 return trip;
             }
         }
