@@ -1,4 +1,6 @@
-public class Admin implements User{
+import java.io.Serializable;
+
+public class Admin implements User, Serializable {
     private String password;
     private String username;
 
@@ -13,5 +15,13 @@ public class Admin implements User{
 
     public String getUsername() {
         return username;
+    }
+
+    @Override
+    public String toString() {
+        return "Admin{" +
+                "password='" + password + '\'' +
+                ", username='" + username + '\'' +
+                '}';
     }
 }

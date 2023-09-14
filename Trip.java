@@ -1,17 +1,19 @@
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Trip {
-    private String id;
+    private static int id = 0;
     private Vehicle vehicle;
-    private Date departureDate;
-    private Date arrivalDate;
+    private LocalDate departureDate;
+    private LocalDate arrivalDate;
     private Port departurePort;
     private Port arrivalPort;
     private boolean status;
 
-    public Trip(Date departureDate, Date arrivalDate, Port departurePort, Port arrivalPort, boolean status) {
-        this.departureDate = departureDate;
-        this.arrivalDate = arrivalDate;
+
+    public Trip(Port departurePort, Port arrivalPort, boolean status) {
+        id = id++;
+        this.departureDate = LocalDate.now();
         this.departurePort = departurePort;
         this.arrivalPort = arrivalPort;
         this.status = status;
@@ -20,12 +22,16 @@ public class Trip {
     public Trip() {
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
+    }
+
+    public void setArrivalDate() {
+        this.arrivalDate = LocalDate.now();
     }
 
     public void setStatus(boolean status) {
@@ -42,7 +48,7 @@ public class Trip {
         return vehicle;
     }
 
-    public Date getDepartureDate() {
+    public LocalDate getDepartureDate() {
         return departureDate;
     }
 
@@ -50,13 +56,12 @@ public class Trip {
         return arrivalPort;
     }
 
-    public Date getArrivalDate() {
+    public LocalDate getArrivalDate() {
         return arrivalDate;
     }
 
     public Port getDeparturePort() {
         return departurePort;
     }
-
 
 }

@@ -1,4 +1,6 @@
-public class OpenSide implements Container{
+import java.io.Serializable;
+
+public class OpenSide implements Container, Serializable {
     private String id;
     private double weight;
     private Vehicle vehicle;

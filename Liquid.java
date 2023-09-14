@@ -1,4 +1,6 @@
-public class Liquid implements Container{
+import java.io.Serializable;
+
+public class Liquid implements Container, Serializable {
     private String id;
     private double weight;
     private Vehicle vehicle;

@@ -1,5 +1,6 @@
+import java.io.Serializable;
 import java.util.ArrayList;
-public class Port {
+public class Port implements Serializable {
     private String id;
     private String name;
     private double latitude;
@@ -69,6 +70,12 @@ public class Port {
     // Get all distance to all the ports
     public void getAllDistance(){
         // go with the for loop and using the 'getDistance' method at each port to print out
+        System.out.println("The distance to all ports");
+        for (Port port : ContainerPortManagementSystem.getPorts()){
+            if (port != this){
+                System.out.println(port.getId() + ": " + port.getDistance(this));
+            }
+        }
     }
 
     public double getCurrentCapacity() {
