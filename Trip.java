@@ -1,8 +1,9 @@
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
 public class Trip {
-    private static int id = 0;
+    private String id;
     private Vehicle vehicle;
     private LocalDate departureDate;
     private LocalDate arrivalDate;
@@ -12,7 +13,7 @@ public class Trip {
 
 
     public Trip(Port departurePort, Port arrivalPort, boolean status) {
-        id = id++;
+        id = generateID();
         this.departureDate = LocalDate.now();
         this.departurePort = departurePort;
         this.arrivalPort = arrivalPort;
@@ -22,7 +23,7 @@ public class Trip {
     public Trip() {
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -42,6 +43,10 @@ public class Trip {
         port.addTrip(this);
         // get Port
         // invoke method add Trip of class port
+    }
+
+    public void sendTrip(String portID){
+
     }
 
     public Vehicle getVehicle() {
@@ -64,4 +69,7 @@ public class Trip {
         return departurePort;
     }
 
+    public String generateID(){
+        return IDFactory.generateID("trip");
+    }
 }

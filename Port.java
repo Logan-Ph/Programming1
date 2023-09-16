@@ -16,8 +16,8 @@ public class Port implements Serializable {
     public Port() {
     }
 
-    public Port(String id, String name, double latitude, double longitude, double storingCapacity, boolean landingAbility, double currentCapacity, PortManager user) {
-        this.id = id;
+    public Port(String name, double latitude, double longitude, double storingCapacity, boolean landingAbility, double currentCapacity, PortManager user) {
+        this.id = generateID();
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -149,11 +149,16 @@ public class Port implements Serializable {
         }
     }
 
+
     public void addTrip(Trip trip){
         this.trips.add(trip);
     }
 
     public boolean isLandingAbility() {
         return landingAbility;
+    }
+
+    public String generateID(){
+        return IDFactory.generateID("port");
     }
 }

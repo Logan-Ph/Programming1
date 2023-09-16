@@ -5,4 +5,8 @@ public interface Vehicle {
     public void refueling(double fuel);
     public double calculateFuelConsumption(Port port);
     public double getCurrentStoringCapacity();
+
+    public String generateID();
+
+    public String getID();
 }

@@ -60,6 +60,24 @@ public class ContainerPortManagementSystem {
         return false;
     }
 
+    public static Container findContainerById(String id){
+        for (Container container: getContainers()){
+            if (container.getId().equals(id)){
+                return container;
+            }
+        }
+        return null;
+    }
+
+    public static Vehicle findVehicleById(String id){
+        for(Vehicle vehicle: getVehicles()){
+            if (vehicle.getID().equals(id)){
+                return vehicle;
+            }
+        }
+        return null;
+    }
+
     public static Port findPortById(String id){
         for(Port port: getPorts()){
             if (port.getId().equals(id)){
@@ -85,25 +103,25 @@ public class ContainerPortManagementSystem {
         return vehicles;
     }
 
-    public static String getPortFilePath() {
-        return FileSystems.getDefault()
+    public static String getPortFilePath() throws IOException {
+        return new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
-                .toString().concat("\\Programming1\\PortManagementSystem\\Ports.txt");
+                .toString().concat("\\Programming1\\PortManagementSystem\\Ports.txt")).getCanonicalPath();
     }
 
-    public static String getUserFilePath() {
-        return FileSystems.getDefault()
+    public static String getUserFilePath() throws IOException {
+        return new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
-                .toString().concat("\\Programming1\\PortManagementSystem\\Users.txt");
+                .toString().concat("\\Programming1\\PortManagementSystem\\Users.txt")).getCanonicalPath();
     }
 
-    public static String getVehicleFilePath() {
-        return FileSystems.getDefault()
+    public static String getVehicleFilePath() throws IOException {
+        return new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
-                .toString().concat("\\Programming1\\PortManagementSystem\\Vehicles.txt");
+                .toString().concat("\\Programming1\\PortManagementSystem\\Vehicles.txt")).getCanonicalPath();
     }
 
     //check if the time exceeds 7 days

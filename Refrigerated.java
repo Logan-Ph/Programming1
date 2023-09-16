@@ -3,8 +3,8 @@ public class Refrigerated implements Container{
     private double weight;
     private Vehicle vehicle;
 
-    public Refrigerated(String id, double weight) {
-        this.id = id;
+    public Refrigerated(double weight) {
+        this.id = generateID();
         this.weight = weight;
         this.vehicle = null;
     }
@@ -27,4 +27,11 @@ public class Refrigerated implements Container{
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
     }
+
+    @Override
+    public String generateID() {
+        return IDFactory.generateID("container");
+    }
+
+
 }

@@ -3,8 +3,6 @@ public class LandingBehaviour {
     // else if the vehicle is ship and the landing ability is 'false' (0) return 'true'
     // the remains cases return 'false'
     public static boolean landing (Port port, Vehicle vehicle){
-        if (vehicle instanceof Truck && port.isLandingAbility()){
-            return true;
-        } else return vehicle instanceof Ship && !port.isLandingAbility();
+        return !(vehicle instanceof Truck) || port.isLandingAbility();
     }
 }

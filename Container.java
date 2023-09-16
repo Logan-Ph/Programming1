@@ -6,4 +6,6 @@ public interface Container {
     public Vehicle getVehicle();
 
     public void setVehicle(Vehicle vehicle);
+
+    public String generateID();
 }

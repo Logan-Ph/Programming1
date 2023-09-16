@@ -13,8 +13,8 @@ public class Ship implements Vehicle{
     }
 
     // initialize the constructor
-    public Ship(String id, String name, double fuelCapacity, double storingCapacity) {
-        this.id = id;
+    public Ship(String name, double fuelCapacity, double storingCapacity) {
+        this.id = generateID();
         this.name = name;
         this.currentFuel = 0.0;
         this.fuelCapacity = fuelCapacity;
@@ -25,7 +25,7 @@ public class Ship implements Vehicle{
     //Load the container to the vehicle
     @Override
     public void load(Container container) {
-        if(LoadContainerBehavior.load(container,this) && getCurrentStoringCapacity() + container.getWeight()<getStoringCapacity()){ // check if that vehicle can load the container or if the container weight exceed the storing capacity
+        if(getCurrentStoringCapacity() + container.getWeight()<getStoringCapacity()){ // check if that vehicle can load the container or if the container weight exceed the storing capacity
             this.containers.add(container);
         }else {
             throw new RuntimeException("This vehicle cannot carry this container!"); // throw exception if the container does not match the criteria
@@ -39,6 +39,16 @@ public class Ship implements Vehicle{
             totalWeight+= container.getWeight();
         }
         return totalWeight;
+    }
+
+    @Override
+    public String generateID() {
+        return IDFactory.generateID("ship");
+    }
+
+    @Override
+    public String getID() {
+        return id;
     }
 
     //Unload the container from the vehicle

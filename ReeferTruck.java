@@ -13,8 +13,8 @@ public class ReeferTruck implements Vehicle, Truck{
     }
 
     // initialize the constructor
-    public ReeferTruck(String id, String name, double fuelCapacity, double storingCapacity) {
-        this.id = id;
+    public ReeferTruck(String name, double fuelCapacity, double storingCapacity) {
+        this.id = generateID();
         this.name = name;
         this.currentFuel = 0.0;
         this.fuelCapacity = fuelCapacity;
@@ -39,6 +39,16 @@ public class ReeferTruck implements Vehicle, Truck{
             totalWeight+= container.getWeight();
         }
         return totalWeight;
+    }
+
+    @Override
+    public String generateID() {
+        return IDFactory.generateID("truck");
+    }
+
+    @Override
+    public String getID() {
+        return id;
     }
 
     //Unload the container from the vehicle

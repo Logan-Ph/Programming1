@@ -14,8 +14,8 @@ public class TankerTruck implements Vehicle, Truck{
     }
 
     // initialize the constructor
-    public TankerTruck(String id, String name, double fuelCapacity, double storingCapacity) {
-        this.id = id;
+    public TankerTruck(String name, double fuelCapacity, double storingCapacity) {
+        this.id = generateID();
         this.name = name;
         this.currentFuel = 0.0;
         this.fuelCapacity = fuelCapacity;
@@ -40,6 +40,16 @@ public class TankerTruck implements Vehicle, Truck{
             totalWeight+= container.getWeight();
         }
         return totalWeight;
+    }
+
+    @Override
+    public String generateID() {
+        return IDFactory.generateID("truck");
+    }
+
+    @Override
+    public String getID() {
+        return id;
     }
 
     //Unload the container from the vehicle
