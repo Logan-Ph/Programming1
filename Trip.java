@@ -1,6 +1,5 @@
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Trip {
     private String id;
@@ -10,7 +9,6 @@ public class Trip {
     private Port departurePort;
     private Port arrivalPort;
     private boolean status;
-
 
     public Trip(Port departurePort, Port arrivalPort, boolean status) {
         id = generateID();
