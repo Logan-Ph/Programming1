@@ -1,5 +1,5 @@
-public class PortManagerGUI implements GUI{
-    @Override
-    public void display() {
+public class PortManagerGUI{
+
+    public static void display() {
     }
 }

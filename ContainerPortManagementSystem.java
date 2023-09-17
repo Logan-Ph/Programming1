@@ -14,8 +14,7 @@ public class ContainerPortManagementSystem {
     private static Vector<Container> containers = new Vector<>();
 
     public static void main(String[] args) {
-        GUI systemGUI = new SystemGUI();
-        systemGUI.display();
+        SystemGUI.display();
         systemInitialization();
         users.forEach(System.out::println);
     }

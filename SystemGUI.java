@@ -1,6 +1,5 @@
-public class SystemGUI implements GUI {
-    @Override
-    public void display() {
+public class SystemGUI{
+    public static void display() {
         System.out.println("------------------------------------------------");
         System.out.println("| COSC2081 GROUP ASSIGNMENT                    |");
         System.out.println("| CONTAINER PORT MANAGEMENT SYSTEM             |");
@@ -12,10 +11,5 @@ public class SystemGUI implements GUI {
         System.out.println("| s3978798 Tran Pham Khanh Doan                |");
         System.out.println("------------------------------------------------");
 
-    }
-
-    public static void main(String[] args) {
-        GUI gui = new SystemGUI();
-        gui.display();
     }
 }
