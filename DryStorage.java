@@ -1,4 +1,6 @@
-public class DryStorage implements Container{
+import java.io.Serializable;
+
+public class DryStorage implements Container, Serializable {
     private String id;
     private double weight;
     private Vehicle vehicle;

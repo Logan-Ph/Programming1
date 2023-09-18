@@ -1,14 +1,15 @@
 public class AdminGUI{
 
     public static void display() {
-        System.out.println("Welcome back");
-        System.out.println("Please enter associated number to do operation");
+        System.out.println("Select the operation");
         System.out.println("1: Add container");
         System.out.println("2: Add port manager and port");
         System.out.println("3: Add Vehicle");
         System.out.println("4: Remove container");
         System.out.println("5: Remove port manager");
         System.out.println("6: Remove Vehicle");
+        System.out.println(Separator.sep());
+
     }
 
     public static void displayVehicleType(){
@@ -19,10 +20,10 @@ public class AdminGUI{
     }
 
     public static void displayContainerType(){
-        System.out.println("1: dry storage");
+        System.out.println("1: Dry Storage");
         System.out.println("2: liquid");
-        System.out.println("3: open top");
-        System.out.println("4: open side");
-        System.out.println("5: refrigerated");
+        System.out.println("3: Open Top");
+        System.out.println("4: Open Side");
+        System.out.println("5: Refrigerated");
     }
 }

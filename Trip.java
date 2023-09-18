@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
-public class Trip {
+public class Trip implements Serializable {
     private String id;
     private Vehicle vehicle;
     private LocalDate departureDate;
@@ -69,5 +70,18 @@ public class Trip {
 
     public String generateID(){
         return IDFactory.generateID("trip");
+    }
+
+    @Override
+    public String toString() {
+        return "Trip{" +
+                "id='" + id + '\'' +
+                ", vehicle=" + vehicle +
+                ", departureDate=" + departureDate +
+                ", arrivalDate=" + arrivalDate +
+                ", departurePort=" + departurePort +
+                ", arrivalPort=" + arrivalPort +
+                ", status=" + status +
+                '}';
     }
 }

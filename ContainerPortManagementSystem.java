@@ -3,7 +3,6 @@ import java.nio.file.FileSystems;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -13,50 +12,88 @@ public class ContainerPortManagementSystem {
     private static Vector<User> users = new Vector<>();
     private static Vector<Container> containers = new Vector<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        Scanner input = new Scanner(System.in);
+        String exit= "";
+
         SystemGUI.display();
+        System.out.println(Separator.sep());
         systemInitialization();
-        users.forEach(System.out::println);
-    }
+        System.out.println(Separator.sep());
 
-    private static void loadUsers() {
-        users = readUser();
-    }
+        while (!exit.equals("q")){
+            User user = login();
+            System.out.println(Separator.sep());
 
-    private static void loadPorts() {
-        ports = readPort();
-    }
+            while (user!= null){
+                if (user instanceof Admin) {
+                    AdminGUI.display();
+                    System.out.println("Enter the number associated with the operation");
+                    String operation = input.nextLine();
+                    user.operationCase(operation);
+                    System.out.println("Enter 'x' to exit to login page");
+                    if (input.nextLine().equals("x")){break;}
+                }else if (user instanceof PortManager){
+                    System.out.println("asdsdafasd");
+                    System.out.println("Enter 'x' to exit to login page");
+                    if (input.nextLine().equals("x")){break;}
+                }
+            }
+            System.out.println("Enter 'q' to end system");
+            exit = input.nextLine();
+            System.out.println(Separator.sep());
+        }
+        endSystem();
+        System.out.println(Separator.sep());
 
-    private static void loadVehicles() {
-        vehicles = readVehicle();
-    }
-
-    private static void loadContainers() {
-        containers = readContainer();
     }
 
     private static void systemInitialization() {
-        loadUsers();
-        loadPorts();
-        loadVehicles();
-        loadContainers();
+        readUser();
+        readPort();
+        readVehicle();
+        readContainer();
     }
 
-    private static boolean login() {
-        Scanner input = new Scanner(System.in);
-        Vector<User> users = getUsers();
+    private static void endSystem() {
+        writePort();
+        writeUser();
+        writeVehicle();
+        writeContainer();
+    }
 
-        System.out.println("Please enter the username");
-        String username = input.nextLine();
-        System.out.println("Please enter the password");
-        String password = input.nextLine();
-
-        for (User user : users) {
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+    public static boolean checkUsername(String username){
+        for (User user: getUsers()){
+            if (user.username().equals(username)){
                 return true;
             }
         }
         return false;
+    }
+
+    public static boolean checkCoordinatePort(double latitude, double longitude){
+        for (Port port: getPorts()){
+            if (port.getLatitude() == latitude && port.getLongitude() == longitude){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static User login() {
+        Scanner input = new Scanner(System.in);
+        Vector<User> users = getUsers();
+
+        System.out.println("Please enter the username");
+        String username = input.nextLine().strip();
+        System.out.println("Please enter the password");
+        String password = input.nextLine().strip();
+        for (User user : users) {
+            if (user.username().equals(username) && user.password().equals(password)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     public static Container findContainerById(String id){
@@ -123,19 +160,19 @@ public class ContainerPortManagementSystem {
                 .toString().concat("\\Programming1\\PortManagementSystem\\Vehicles.txt")).getCanonicalPath();
     }
 
+    public static String getContainerFilePath() throws IOException {
+        return new File(FileSystems.getDefault()
+                .getPath("")
+                .toAbsolutePath()
+                .toString().concat("\\Programming1\\PortManagementSystem\\Containers.txt")).getCanonicalPath();
+    }
+
     //check if the time exceeds 7 days
     public boolean validateTime(String date){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM yyyy");
         LocalDate priorDate = LocalDate.parse(date, dtf);
         LocalDate thisDate = LocalDate.now();
         return (ChronoUnit.DAYS.between(priorDate, thisDate)) >= 7;
-    }
-
-    public static String getContainerFilePath() {
-        return FileSystems.getDefault()
-                .getPath("")
-                .toAbsolutePath()
-                .toString().concat("\\Programming1\\PortManagementSystem\\Containers.txt");
     }
 
     private static void writeContainer() {
@@ -145,21 +182,19 @@ public class ContainerPortManagementSystem {
             containerOut.close();
             System.out.println("Writing Container successfully");
         } catch (IOException e) {
-            System.out.println("The 'Containers.txt' file does not exist");
+           e.printStackTrace();
         }
     }
 
-    private static Vector<Container> readContainer() {
-        Vector<Container> containers = null;
+    private static void readContainer() {
         try {
             ObjectInputStream containerIn = new ObjectInputStream(new FileInputStream(getContainerFilePath()));
             containers = (Vector<Container>) containerIn.readObject();
             containerIn.close();
-            System.out.println("Reading Vehicle successfully");
+            System.out.println("Reading Container successfully");
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("The 'Containers.txt' file does not exist or the file is empty");
         }
-        return containers;
     }
 
     private static void writeVehicle() {
@@ -173,8 +208,7 @@ public class ContainerPortManagementSystem {
         }
     }
 
-    private static Vector<Vehicle> readVehicle() {
-        Vector<Vehicle> vehicles = null;
+    private static void readVehicle() {
         try {
             ObjectInputStream vehicleIn = new ObjectInputStream(new FileInputStream(getVehicleFilePath()));
             vehicles = (Vector<Vehicle>) vehicleIn.readObject();
@@ -183,7 +217,6 @@ public class ContainerPortManagementSystem {
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("The 'Vehicles.txt' file does not exist or the file is empty");
         }
-        return vehicles;
     }
 
     private static void writePort() {
@@ -191,14 +224,13 @@ public class ContainerPortManagementSystem {
             ObjectOutputStream portOut = new ObjectOutputStream(new FileOutputStream(getPortFilePath()));
             portOut.writeObject(getPorts());
             portOut.close();
-            System.out.println("Writing 'Ports.txt' successfully");
+            System.out.println("Writing Port successfully");
         } catch (IOException e) {
             System.out.println("The 'Ports.txt' file does not exist!");
         }
     }
 
-    private static Vector<Port> readPort() {
-        Vector<Port> ports = null;
+    private static void readPort() {
         try {
             ObjectInputStream portIn = new ObjectInputStream(new FileInputStream(getPortFilePath()));
             ports = (Vector<Port>) portIn.readObject();
@@ -207,7 +239,6 @@ public class ContainerPortManagementSystem {
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("The 'Ports.txt' file does not exist or the file is empty");
         }
-        return ports;
     }
 
     private static void writeUser() {
@@ -221,8 +252,7 @@ public class ContainerPortManagementSystem {
         }
     }
 
-    private static Vector<User> readUser() {
-        Vector<User> users = null;
+    private static void readUser() {
         try {
             ObjectInputStream UserIn = new ObjectInputStream(new FileInputStream(getUserFilePath()));
             users = (Vector<User>) UserIn.readObject();
@@ -231,6 +261,5 @@ public class ContainerPortManagementSystem {
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("The 'Users.txt' file does not exist or the file is empty");
         }
-        return users;
     }
 }

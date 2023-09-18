@@ -1,8 +1,8 @@
 import java.io.Serializable;
 
 public class PortManager implements User, Serializable {
-    private String password;
-    private String username;
+    private final String password;
+    private final String username;
 
     private Port port;
 
@@ -12,22 +12,20 @@ public class PortManager implements User, Serializable {
         this.port = port;
     }
 
-    public PortManager(String username, String password) {
-        this.password = password;
-        this.username = username;
-        this.port = port;
-    }
-
-    public String getPassword() {
+    public String password() {
         return password;
     }
 
-    public String getUsername() {
+    public String username() {
         return username;
     }
 
     public Port getPort() {
         return port;
+    }
+
+    public void setPort(Port port) {
+        this.port = port;
     }
 
     @Override
@@ -36,5 +34,10 @@ public class PortManager implements User, Serializable {
                 "password='" + password + '\'' +
                 ", username='" + username + '\'' +
                 '}';
+    }
+
+    @Override
+    public void operationCase(String opCase) {
+
     }
 }

@@ -1,12 +1,15 @@
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.Vector;
 
-public class ReeferTruck implements Vehicle, Truck{
+public class ReeferTruck implements Vehicle, Truck, Serializable {
     private String id;
     private String name;
     private double currentFuel;
     private double fuelCapacity;
     private double storingCapacity;
-    private ArrayList<Container> containers;
+    private double currentStoringCapacity;
+
+    private Vector<Container> containers;
     private Port port;
 
     public ReeferTruck() {
@@ -25,20 +28,19 @@ public class ReeferTruck implements Vehicle, Truck{
     //Load the container to the vehicle
     @Override
     public void load(Container container) {
-        if(LoadContainerBehavior.load(container,this) && getCurrentStoringCapacity() + container.getWeight()<getStoringCapacity()){ // check if that vehicle can load the container or if the container weight exceed the storing capacity
+        if (LoadContainerBehavior.load(container, this) && getCurrentStoringCapacity() + container.getWeight() <= getStoringCapacity()) { // check if that vehicle can load the container or if the container weight exceed the storing capacity
             this.containers.add(container);
-        }else {
-            throw new RuntimeException("This vehicle cannot carry this container!"); // throw exception if the container does not match the criteria
+            currentStoringCapacity += container.getWeight();
+        } else {
+            System.out.println("This vehicle cannot carry this container!");
+            System.out.println("The current storing capacity of this vehicle is: " + getCurrentStoringCapacity());
+            System.out.println("The maximum storing capacity of this vehicle is: " + getStoringCapacity());
         }
     }
 
     //Get the current storing capacity
-    public double getCurrentStoringCapacity(){
-        double totalWeight = 0.0;
-        for (Container container: this.containers){
-            totalWeight+= container.getWeight();
-        }
-        return totalWeight;
+    public double getCurrentStoringCapacity() {
+        return currentStoringCapacity;
     }
 
     @Override
@@ -58,17 +60,17 @@ public class ReeferTruck implements Vehicle, Truck{
         try {
             this.containers.remove(container); // remove the container from the ArrayList
             return container;
-        }catch (Exception e){
-            throw new RuntimeException("There is no matching ID container!"); // Throw exception if the container doesn't exist in the ArrayList
+        } catch (Exception e) {
+            System.out.println("There is no matching ID container!"); // Throw exception if the container doesn't exist in the ArrayList
+            return null;
         }
     }
 
     //Find the container by using id
-    public Container findContainerByID(String id){
+    public Container findContainerByID(String id) {
         Container container = null;
-
-        for (Container cont: this.containers){
-            if (cont.getId().equals(id)){
+        for (Container cont : this.containers) {
+            if (cont.getId().equals(id)) {
                 container = cont;
             }
         }
@@ -78,17 +80,26 @@ public class ReeferTruck implements Vehicle, Truck{
     //Refueling the vehicle
     @Override
     public void refueling(double fuel) {
-        if (getCurrentFuel() + fuel > fuelCapacity){ // check if it does not exceed the fuel capacity
-            throw new RuntimeException("You can not refuel more than the fuel capacity of this vehicle!");
-        }else {
+        if (getCurrentFuel() + fuel > fuelCapacity) { // check if it does not exceed the fuel capacity
+            System.out.println("You can not refuel more than the fuel capacity of this vehicle!");
+            System.out.println("The current fuel of the vehicle is: "+getCurrentFuel());
+            System.out.println("The maximum fuel capacity of the vehicle is: "+getFuelCapacity());
+        } else {
             currentFuel += fuel;
         }
     }
 
     @Override
     public double calculateFuelConsumption(Port port) {
-        // calculate distance of the port
-        return 0.0;
+        double totalFuelConsumption = 0.0;
+        for (Container container: containers){
+            totalFuelConsumption += container.getWeight()*CalculateFuelBehaviour.calculateFuelConsumption(container,this);
+        }
+        if (this.port != null){
+            return totalFuelConsumption*this.port.getDistance(port);
+        }else {
+            return totalFuelConsumption*port.getDistance();
+        }
     }
 
     public void setPort(Port port) {

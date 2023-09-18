@@ -1,4 +1,6 @@
-public class Refrigerated implements Container{
+import java.io.Serializable;
+
+public class Refrigerated implements Container, Serializable {
     private String id;
     private double weight;
     private Vehicle vehicle;

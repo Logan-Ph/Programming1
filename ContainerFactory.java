@@ -1,11 +1,11 @@
 public class ContainerFactory {
     public static Container createContainer(String containerType, double weight){
         return switch (containerType) {
-            case "dry storage" -> new DryStorage(weight);
-            case "liquid" -> new Liquid(weight);
-            case "open top" -> new OpenTop(weight);
-            case "open side" -> new OpenSide(weight);
-            case "refrigerated" -> new Refrigerated(weight);
+            case "1" -> new DryStorage(weight);
+            case "2" -> new Liquid(weight);
+            case "3" -> new OpenTop(weight);
+            case "4" -> new OpenSide(weight);
+            case "5" -> new Refrigerated(weight);
             default -> null;
         };
     }

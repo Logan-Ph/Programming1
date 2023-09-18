@@ -1,5 +1,8 @@
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Vector;
+
+// con method add vehicle, vaf remove vehicle=
+
 public class Port implements Serializable {
     private String id;
     private String name;
@@ -7,40 +10,32 @@ public class Port implements Serializable {
     private double longitude;
     private double storingCapacity;
     private boolean landingAbility; // '0' (false) for ship and '1' (true) for truck
-    private double currentCapacity;
-    private ArrayList<Vehicle> vehicles;
-    private ArrayList<Container> containers;
-    private PortManager user;
-    private ArrayList<Trip> trips;
+    private double currentStoringCapacity;
+    private Vector<Vehicle> vehicles;
+    private Vector<Container> containers;
+    private User portManager;
+    private Vector<Trip> trips;
 
     public Port() {
     }
 
-    public Port(String name, double latitude, double longitude, double storingCapacity, boolean landingAbility, double currentCapacity, PortManager user) {
+    public Port(String name, double latitude, double longitude, double storingCapacity, boolean landingAbility) {
         this.id = generateID();
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
         this.storingCapacity = storingCapacity;
         this.landingAbility = landingAbility;
-        this.currentCapacity = currentCapacity;
-        this.user = user;
     }
 
-    public Container findContainerByID(String id){
-        for(Container container: this.containers){
-            if (container.getId().equals(id)){
-                return container;
-            }
-        }
-        return null;
-    }
-
-    public void addContainers(Container container){
-        if (container.getWeight() + getCurrentCapacity() <= getStoringCapacity()){
+    public void addContainer(Container container){
+        if (container.getWeight() + getCurrentStoringCapacity() <= getStoringCapacity()){
             this.containers.add(container);
+            currentStoringCapacity += container.getWeight();
         }else {
-            System.out.println("Can not add this container!");
+            System.out.println("Can not add this container to the port!");
+            System.out.println("The current storing capacity of this port is: " + getCurrentStoringCapacity());
+            System.out.println("The maximum storing capacity of this port is: " + getStoringCapacity());
         }
     }
 
@@ -52,6 +47,22 @@ public class Port implements Serializable {
             return container;
         }catch (NullPointerException e){
             System.out.println("The container does not exist in this Port!");
+        }
+        return null;
+    }
+
+    public void addVehicle(Vehicle vehicle){
+        vehicles.add(vehicle);
+    }
+
+    //Remove the container from the port
+    public Vehicle removeVehicle(String id){
+        Vehicle vehicle = findVehicleByID(id); // find the container in the port
+        try{
+            this.vehicles.remove(vehicle); // remove the container in the port
+            return vehicle;
+        }catch (NullPointerException e){
+            System.out.println("The vehicle does not exist in this Port!");
         }
         return null;
     }
@@ -78,19 +89,19 @@ public class Port implements Serializable {
         }
     }
 
-    public double getCurrentCapacity() {
-        return currentCapacity;
+    public double getCurrentStoringCapacity() {
+        return currentStoringCapacity;
     }
 
     public double getStoringCapacity() {
         return storingCapacity;
     }
 
-    public ArrayList<Container> getContainers() {
+    public Vector<Container> getContainers() {
         return containers;
     }
 
-    public ArrayList<Vehicle> getVehicles() {
+    public Vector<Vehicle> getVehicles() {
         return vehicles;
     }
 
@@ -102,8 +113,12 @@ public class Port implements Serializable {
         return longitude;
     }
 
-    public PortManager getUser() {
-        return user;
+    public User getUser() {
+        return portManager;
+    }
+
+    public void setPortManager(User portManager) {
+        this.portManager = portManager;
     }
 
     public String getId() {
@@ -116,7 +131,7 @@ public class Port implements Serializable {
 
     public Trip findTripById(String id){
         for(Trip trip: this.trips){
-            if (trip.){
+            if (trip.getId().equals(id)){
                 return trip;
             }
         }
@@ -132,23 +147,27 @@ public class Port implements Serializable {
         }
     }
 
-    public void displayTrip(String id){
-        Trip trip = findTripById(id);
-        try{
-            System.out.println(trip);
-        }catch (NullPointerException e){
-            System.out.println("The trip does not exist");
+    public Container findContainerByID(String id){
+        for(Container container: this.containers){
+            if (container.getId().equals(id)){
+                return container;
+            }
         }
+        return null;
     }
 
-    public void displayTrip(Trip trip){
-        if (trips.contains(trip)){
-            System.out.println(trip);
-        }else {
-            System.out.println("The trip does not exist");
+    public Vehicle findVehicleByID(String id){
+        for(Vehicle vehicle: this.vehicles){
+            if (vehicle.getID().equals(id)){
+                return vehicle;
+            }
         }
+        return null;
     }
 
+    public void displayTrip() {
+        trips.forEach(System.out::println);
+    }
 
     public void addTrip(Trip trip){
         this.trips.add(trip);
