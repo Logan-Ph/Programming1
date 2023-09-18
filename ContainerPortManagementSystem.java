@@ -24,7 +24,6 @@ public class ContainerPortManagementSystem {
         while (!exit.equals("q")){
             User user = login();
             System.out.println(Separator.sep());
-
             while (user!= null){
                 if (user instanceof Admin) {
                     AdminGUI.display();
@@ -45,7 +44,6 @@ public class ContainerPortManagementSystem {
         }
         endSystem();
         System.out.println(Separator.sep());
-
     }
 
     private static void systemInitialization() {

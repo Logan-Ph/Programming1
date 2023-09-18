@@ -127,10 +127,10 @@ public record Admin(String username, String password) implements User, Serializa
     }
 
     private void createPortHistoryFile(Port port) throws IOException {
-        File file = new File(FileSystems.getDefault()
+        File file = new File(new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
-                .toString().concat("\\Programming1\\PortManagementSystem\\PortHistory\\" + port.getId() + ".txt"));
+                .toString().concat("/Programming1/PortManagementSystem/PortHistory/" + port.getId() + ".txt")).getCanonicalPath());
         boolean result = file.createNewFile();
         if (result) {
             System.out.println("File create successfully " + file.getCanonicalPath());
