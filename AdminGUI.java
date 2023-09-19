@@ -8,8 +8,15 @@ public class AdminGUI{
         System.out.println("4: Remove container");
         System.out.println("5: Remove port manager");
         System.out.println("6: Remove Vehicle");
+        System.out.println("7: Operation on Port");
         System.out.println(Separator.sep());
+    }
 
+    public static void displayPort(){
+        int i =1;
+        for (Port port: ContainerPortManagementSystem.getPorts()){
+            System.out.println(i++ + ": " + port.getId());
+        }
     }
 
     public static void displayVehicleType(){
@@ -17,6 +24,8 @@ public class AdminGUI{
         System.out.println("2: Reefer Truck");
         System.out.println("3: Tanker Truck");
         System.out.println("4: Ship");
+        System.out.println(Separator.sep());
+
     }
 
     public static void displayContainerType(){

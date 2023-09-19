@@ -30,15 +30,15 @@ public class ContainerPortManagementSystem {
                     System.out.println("Enter the number associated with the operation");
                     String operation = input.nextLine();
                     user.operationCase(operation);
-                    System.out.println("Enter 'x' to exit to login page");
+                    System.out.println("Enter 'x' to exit to login page or else to continue");
                     if (input.nextLine().equals("x")){break;}
                 }else if (user instanceof PortManager){
                     System.out.println("asdsdafasd");
-                    System.out.println("Enter 'x' to exit to login page");
+                    System.out.println("Enter 'x' to exit to login page or else to continue");
                     if (input.nextLine().equals("x")){break;}
                 }
             }
-            System.out.println("Enter 'q' to end system");
+            System.out.println("Enter 'q' to end system or else to continue");
             exit = input.nextLine();
             System.out.println(Separator.sep());
         }

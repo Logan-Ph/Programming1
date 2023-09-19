@@ -27,48 +27,58 @@ public record Admin(String username, String password) implements User, Serializa
 
     // phải try catch ở từng input cho vehicle
     public void createVehicle() {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Select what vehicle you want to create");
-        AdminGUI.displayVehicleType();
-        System.out.println(Separator.sep());
-        System.out.println("Enter the number associated with vehicle type");
-        String vehicleType = input.nextLine().trim();
-        System.out.println("Enter the vehicle name");
-        String vehicleName = input.nextLine();
-        System.out.println("Enter the fuel capacity of the vehicle");
-        double fuelCapacity = input.nextDouble();
-        System.out.println("Enter the storing capacity of the vehicle");
-        double storingCapacity = input.nextDouble();
+        if (ContainerPortManagementSystem.getPorts().isEmpty()) {
+            System.out.println("No port in the system. You have to create the Port first!");
+        } else {
+            Scanner input = new Scanner(System.in);
+            System.out.println("Select what vehicle you want to create");
+            AdminGUI.displayVehicleType();
+            System.out.println("Enter the number associated with vehicle type");
+            String vehicleType = input.nextLine().trim();
+            System.out.println("Enter the vehicle name");
+            String vehicleName = input.nextLine();
+            System.out.println("Enter the fuel capacity of the vehicle");
+            double fuelCapacity = input.nextDouble();
+            System.out.println("Enter the storing capacity of the vehicle");
+            double storingCapacity = input.nextDouble();
+            System.out.println("Enter the id of the port you want to put the vehicle");
+            AdminGUI.displayPort();
+            Port port = ContainerPortManagementSystem.findPortById(input.nextLine());
+            Vehicle vehicle = VehicleFactory.createVehicle(vehicleType, vehicleName, fuelCapacity, storingCapacity, port); // chưa check điều kiện nếu vehicle null!!!
 
-        System.out.println(Separator.sep());
-        Vehicle vehicle = VehicleFactory.createVehicle(vehicleType, vehicleName, fuelCapacity, storingCapacity); // chưa check điều kiện nếu vehicle null!!!
-
-        Vector<Vehicle> vehicles = ContainerPortManagementSystem.getVehicles();
-        vehicles.add(vehicle);
-        System.out.println("Adding vehicle successfully");
+            Vector<Vehicle> vehicles = ContainerPortManagementSystem.getVehicles();
+            vehicles.add(vehicle);
+            System.out.println("Adding vehicle successfully");
+        }
     }
 
     public void createContainer() {
-        Scanner input = new Scanner(System.in);
+        if (ContainerPortManagementSystem.getPorts().isEmpty()) {
+            System.out.println("No port in the system. You have to create the Port first!");
+        } else {
+            Scanner input = new Scanner(System.in);
 
-        System.out.println(Separator.sep());
-        System.out.println("Select what Container you want to create");
-        AdminGUI.displayContainerType();
-        System.out.println(Separator.sep());
+            System.out.println(Separator.sep());
+            System.out.println("Select what Container you want to create");
+            AdminGUI.displayContainerType();
+            System.out.println(Separator.sep());
 
-        System.out.println("Enter the number associated with container type");
-        String containerType = input.nextLine().trim();
-        System.out.println("Enter the container weight");
-        double containerWeight = input.nextDouble();
+            System.out.println("Enter the number associated with container type");
+            String containerType = input.nextLine().trim();
+            System.out.println("Enter the container weight");
+            double containerWeight = input.nextDouble();
+            System.out.println("Enter the id of the port you want to put the vehicle");
+            AdminGUI.displayPort();
+            Port port  = ContainerPortManagementSystem.findPortById(input.nextLine());
 
-        Container container = ContainerFactory.createContainer(containerType, containerWeight); // chưa check điều kiện nếu container null!!!
+            Container container = ContainerFactory.createContainer(containerType, containerWeight, port); // chưa check điều kiện nếu container null!!!
 
-        Vector<Container> containers = ContainerPortManagementSystem.getContainers();
-        containers.add(container);
-        System.out.println(Separator.sep());
-        System.out.println("Adding container successfully");
-        System.out.println(Separator.sep());
-
+            Vector<Container> containers = ContainerPortManagementSystem.getContainers();
+            containers.add(container);
+            System.out.println(Separator.sep());
+            System.out.println("Adding container successfully");
+            System.out.println(Separator.sep());
+        }
     }
 
     public void createPort() throws IOException {

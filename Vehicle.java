@@ -9,4 +9,8 @@ public interface Vehicle {
     public String generateID();
 
     public String getID();
+
+    public Port getPort();
+
+    public void setPort(Port port);
 }

@@ -18,13 +18,13 @@ public class TankerTruck implements Vehicle, Truck, Serializable {
     }
 
     // initialize the constructor
-    public TankerTruck(String name, double fuelCapacity, double storingCapacity) {
+    public TankerTruck(String name, double fuelCapacity, double storingCapacity, Port port) {
         this.id = generateID();
         this.name = name;
         this.currentFuel = 0.0;
         this.fuelCapacity = fuelCapacity;
         this.storingCapacity = storingCapacity;
-        this.port = null;
+        this.port = port;
     }
 
     //Load the container to the vehicle

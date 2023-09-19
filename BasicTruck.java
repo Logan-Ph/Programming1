@@ -17,13 +17,13 @@ public class BasicTruck implements Vehicle, Truck, Serializable {
     }
 
     // initialize the constructor
-    public BasicTruck(String name, double fuelCapacity, double storingCapacity) {
+    public BasicTruck(String name, double fuelCapacity, double storingCapacity, Port port) {
         this.id = generateID();
         this.name = name;
         this.currentFuel = 0.0;
         this.fuelCapacity = fuelCapacity;
         this.storingCapacity = storingCapacity;
-        this.port = null;
+        this.port = port;
     }
 
     //Load the container to the vehicle

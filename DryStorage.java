@@ -5,10 +5,17 @@ public class DryStorage implements Container, Serializable {
     private double weight;
     private Vehicle vehicle;
 
-    public DryStorage( double weight) {
+    public void setPort(Port port) {
+        this.port = port;
+    }
+
+    private Port port;
+
+    public DryStorage( double weight, Port port) {
         this.id = generateID();
         this.weight = weight;
         this.vehicle = null;
+        this.port = port;
     }
 
     public DryStorage() {
@@ -34,5 +41,9 @@ public class DryStorage implements Container, Serializable {
     @Override
     public String generateID() {
         return IDFactory.generateID("Container");
+    }
+
+    public Port getPort() {
+        return port;
     }
 }

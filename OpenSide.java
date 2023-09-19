@@ -4,11 +4,13 @@ public class OpenSide implements Container, Serializable {
     private String id;
     private double weight;
     private Vehicle vehicle;
+    private Port port;
 
-    public OpenSide(double weight) {
+    public OpenSide(double weight, Port port) {
         this.id = generateID();
         this.weight = weight;
         this.vehicle = null;
+        this.port = port;
     }
 
     public OpenSide() {
@@ -32,5 +34,13 @@ public class OpenSide implements Container, Serializable {
     @Override
     public String generateID() {
         return IDFactory.generateID("container");
+    }
+
+    public Port getPort() {
+        return port;
+    }
+
+    public void setPort(Port port) {
+        this.port = port;
     }
 }

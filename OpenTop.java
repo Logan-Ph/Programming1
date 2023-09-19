@@ -4,8 +4,9 @@ public class OpenTop implements Container, Serializable {
     private String id;
     private double weight;
     private Vehicle vehicle;
+    private Port port;
 
-    public OpenTop( double weight) {
+    public OpenTop( double weight, Port port) {
         this.id = generateID();
         this.weight = weight;
         this.vehicle = null;
@@ -33,5 +34,13 @@ public class OpenTop implements Container, Serializable {
     @Override
     public String generateID() {
         return IDFactory.generateID("container");
+    }
+
+    public Port getPort() {
+        return port;
+    }
+
+    public void setPort(Port port) {
+        this.port = port;
     }
 }

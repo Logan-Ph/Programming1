@@ -5,10 +5,13 @@ public class Refrigerated implements Container, Serializable {
     private double weight;
     private Vehicle vehicle;
 
-    public Refrigerated(double weight) {
+    private Port port;
+
+    public Refrigerated(double weight, Port port) {
         this.id = generateID();
         this.weight = weight;
         this.vehicle = null;
+        this.port = port;
     }
 
     public Refrigerated() {
@@ -35,5 +38,11 @@ public class Refrigerated implements Container, Serializable {
         return IDFactory.generateID("container");
     }
 
+    public Port getPort() {
+        return port;
+    }
 
+    public void setPort(Port port) {
+        this.port = port;
+    }
 }

@@ -4,11 +4,13 @@ public class Liquid implements Container, Serializable {
     private String id;
     private double weight;
     private Vehicle vehicle;
+    private Port port;
 
-    public Liquid(double weight) {
+    public Liquid(double weight, Port port) {
         this.id = generateID();
         this.weight = weight;
         this.vehicle = null;
+        this.port = port;
     }
 
     public Liquid() {
@@ -33,5 +35,13 @@ public class Liquid implements Container, Serializable {
     @Override
     public String generateID() {
         return IDFactory.generateID("container");
+    }
+
+    public Port getPort() {
+        return port;
+    }
+
+    public void setPort(Port port) {
+        this.port = port;
     }
 }
