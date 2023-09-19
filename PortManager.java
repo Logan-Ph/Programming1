@@ -1,9 +1,9 @@
 import java.io.Serializable;
+import java.util.Scanner;
 
 public class PortManager implements User, Serializable {
     private final String password;
     private final String username;
-
     private Port port;
 
     public PortManager(String username, String password, Port port) {
@@ -39,5 +39,21 @@ public class PortManager implements User, Serializable {
     @Override
     public void operationCase(String opCase) {
 
+    }
+
+    public static User create(){
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter the new port manager username: ");
+        String username = input.nextLine();
+
+        if (ContainerPortManagementSystem.checkUsername(username)){
+            System.out.println("The user name has already exist. Please enter the username again");
+            username = input.nextLine();
+        }
+
+        System.out.print("Enter the new port manager password: ");
+        String password = input.nextLine();
+
+        return new PortManager(username,password,null);
     }
 }

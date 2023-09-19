@@ -130,4 +130,14 @@ public class BasicTruck implements Vehicle, Truck, Serializable {
     public double getFuelCapacity() {
         return fuelCapacity;
     }
+
+    @Override
+    public Vector<Container> getContainers() {
+        return containers;
+    }
+
+    @Override
+    public String toString() {
+        return "BasicTruck " + " - name: " + getName() + " - id: " + getID() + " - current storing capacity (kg): " + getCurrentStoringCapacity() + " - maximum storing capacity (kg): " + getStoringCapacity() + " - current fuel (L): " + getCurrentFuel() + " - maximum fuel capacity (L): " + getFuelCapacity();
+    }
 }

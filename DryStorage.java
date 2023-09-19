@@ -46,4 +46,9 @@ public class DryStorage implements Container, Serializable {
     public Port getPort() {
         return port;
     }
+
+    @Override
+    public String toString() {
+        return "DryStorage - id: " + getId() + " - weight: " + getWeight() + " - Port: " + getPort() + " - Vehicle: " + getVehicle();
+    }
 }

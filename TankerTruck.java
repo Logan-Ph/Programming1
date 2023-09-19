@@ -108,6 +108,12 @@ public class TankerTruck implements Vehicle, Truck, Serializable {
         this.port = port;
     }
 
+    @Override
+    public Vector<Container> getContainers() {
+        return containers;
+    }
+
+
     public String getId() {
         return id;
     }
@@ -130,5 +136,10 @@ public class TankerTruck implements Vehicle, Truck, Serializable {
 
     public double getFuelCapacity() {
         return fuelCapacity;
+    }
+
+    @Override
+    public String toString() {
+        return "TankerTruck " + " - name: " + getName() + " - id: " + getID() + " - current storing capacity (kg): " + getCurrentStoringCapacity() + " - maximum storing capacity (kg): " + getStoringCapacity() + " - current fuel (L): " + getCurrentFuel() + " - maximum fuel capacity (L): " + getFuelCapacity();
     }
 }

@@ -43,4 +43,9 @@ public class OpenTop implements Container, Serializable {
     public void setPort(Port port) {
         this.port = port;
     }
+
+    @Override
+    public String toString() {
+        return "OpenTop - id: " + getId() + " - weight: " + getWeight() + " - Port: " + getPort() + " - Vehicle: " + getVehicle();
+    }
 }

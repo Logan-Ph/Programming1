@@ -43,4 +43,9 @@ public class OpenSide implements Container, Serializable {
     public void setPort(Port port) {
         this.port = port;
     }
+
+    @Override
+    public String toString() {
+        return "OpenSide - id: " + getId() + " - weight: " + getWeight() + " - Vehicle: " + getVehicle();
+    }
 }

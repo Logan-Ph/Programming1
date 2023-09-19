@@ -1,5 +1,19 @@
+import java.util.Scanner;
+
 public class VehicleFactory {
-    public static Vehicle createVehicle(String vehicleType, String vehicleName, double fuelCapacity, double storingCapacity, Port port){
+    public static Vehicle createVehicle(Port port) {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter the vehicle name: ");
+        String vehicleName = input.nextLine();
+        System.out.print("Enter the fuel capacity of the vehicle (Gallon): ");
+        double fuelCapacity = Double.parseDouble(input.nextLine());
+        System.out.print("Enter the storing capacity of the vehicle (Kg): ");
+        double storingCapacity = Double.parseDouble(input.nextLine());
+        System.out.println("Vehicle type: ");
+        AdminGUI.displayVehicleType();
+        System.out.print("Enter the number associated with the vehicle type: ");
+        String vehicleType = input.nextLine();
+
         return switch (vehicleType) {
             case "1" -> new BasicTruck(vehicleName, fuelCapacity, storingCapacity, port);
             case "2" -> new ReeferTruck(vehicleName, fuelCapacity, storingCapacity, port);

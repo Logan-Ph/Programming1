@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class Liquid implements Container, Serializable {
+public class Liquid implements Container, Serializable{
     private String id;
     private double weight;
     private Vehicle vehicle;
@@ -44,4 +44,10 @@ public class Liquid implements Container, Serializable {
     public void setPort(Port port) {
         this.port = port;
     }
+
+    @Override
+    public String toString() {
+        return "Liquid - id: " + getId() + " - weight: " + getWeight() + " - Port: " + getPort() + " - Vehicle: " + getVehicle();
+    }
+
 }

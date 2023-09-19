@@ -26,6 +26,9 @@ public class Port implements Serializable {
         this.longitude = longitude;
         this.storingCapacity = storingCapacity;
         this.landingAbility = landingAbility;
+        this.vehicles = new Vector<>();
+        this.containers = new Vector<>();
+        this.trips = new Vector<>();
     }
 
     public void addContainer(Container container){
@@ -51,13 +54,29 @@ public class Port implements Serializable {
         return null;
     }
 
-    public void addVehicle(Vehicle vehicle){
-        vehicles.add(vehicle);
+    public boolean addVehicle(Vehicle vehicle){
+        if (LandingBehaviour.landing(this, vehicle)){
+            vehicles.add(vehicle);
+            return true;
+        }else {
+            System.out.println("This vehicle can not land at this port");
+            return false;
+        }
     }
 
     //Remove the container from the port
     public Vehicle removeVehicle(String id){
         Vehicle vehicle = findVehicleByID(id); // find the container in the port
+        try{
+            this.vehicles.remove(vehicle); // remove the container in the port
+            return vehicle;
+        }catch (NullPointerException e){
+            System.out.println("The vehicle does not exist in this Port!");
+        }
+        return null;
+    }
+
+    public Vehicle removeVehicle(Vehicle vehicle){
         try{
             this.vehicles.remove(vehicle); // remove the container in the port
             return vehicle;
@@ -76,17 +95,6 @@ public class Port implements Serializable {
     // This is used when adding new vehicle and the vehicle coordinate is 0,0; so we need to calculate the distance of the port to the root coordinate
     public double getDistance(){
         return Math.round(Math.sqrt(Math.pow(this.latitude,2) + Math.pow(this.latitude,2))*100)/100.0;
-    }
-
-    // Get all distance to all the ports
-    public void getAllDistance(){
-        // go with the for loop and using the 'getDistance' method at each port to print out
-        System.out.println("The distance to all ports");
-        for (Port port : ContainerPortManagementSystem.getPorts()){
-            if (port != this){
-                System.out.println(port.getId() + ": " + port.getDistance(this));
-            }
-        }
     }
 
     public double getCurrentStoringCapacity() {
@@ -165,12 +173,9 @@ public class Port implements Serializable {
         return null;
     }
 
-    public void displayTrip() {
-        trips.forEach(System.out::println);
-    }
-
     public void addTrip(Trip trip){
         this.trips.add(trip);
+
     }
 
     public boolean isLandingAbility() {
@@ -179,5 +184,18 @@ public class Port implements Serializable {
 
     public String generateID(){
         return IDFactory.generateID("port");
+    }
+
+    @Override
+    public String toString() {
+        return "Port{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", storingCapacity=" + storingCapacity +
+                ", landingAbility=" + landingAbility +
+                ", currentStoringCapacity=" + currentStoringCapacity +
+                '}';
     }
 }

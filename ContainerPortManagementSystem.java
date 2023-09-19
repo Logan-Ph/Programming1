@@ -13,6 +13,8 @@ public class ContainerPortManagementSystem {
     private static Vector<Container> containers = new Vector<>();
 
     public static void main(String[] args) throws IOException {
+//        users.add(new Admin("Admin", "admin123"));
+//        writeUser();
         Scanner input = new Scanner(System.in);
         String exit= "";
 
@@ -24,21 +26,25 @@ public class ContainerPortManagementSystem {
         while (!exit.equals("q")){
             User user = login();
             System.out.println(Separator.sep());
-            while (user!= null){
-                if (user instanceof Admin) {
-                    AdminGUI.display();
-                    System.out.println("Enter the number associated with the operation");
-                    String operation = input.nextLine();
-                    user.operationCase(operation);
-                    System.out.println("Enter 'x' to exit to login page or else to continue");
-                    if (input.nextLine().equals("x")){break;}
-                }else if (user instanceof PortManager){
-                    System.out.println("asdsdafasd");
-                    System.out.println("Enter 'x' to exit to login page or else to continue");
-                    if (input.nextLine().equals("x")){break;}
+
+            if (user == null){
+                System.out.println("Wrong username!");
+            }else {
+                while (true){
+                    if (user instanceof Admin) {
+                        AdminGUI.displayOperation();
+                        System.out.print("Enter the number associated with the operation or 'x' to exit: ");
+                        String operation = input.nextLine();
+                        if (operation.equals("x")){break;}
+                        user.operationCase(operation);
+                    }else if (user instanceof PortManager){
+                        System.out.println("asdsdafasd");
+                        System.out.println("Enter 'x' to exit to login page or else to continue");
+                        if (input.nextLine().equals("x")){break;}
+                    }
                 }
             }
-            System.out.println("Enter 'q' to end system or else to continue");
+            System.out.println("Enter 'q' to end system or else to continue login");
             exit = input.nextLine();
             System.out.println(Separator.sep());
         }
@@ -69,14 +75,15 @@ public class ContainerPortManagementSystem {
         return false;
     }
 
-    public static boolean checkCoordinatePort(double latitude, double longitude){
+    public static boolean checkPortInfo(double latitude, double longitude, String portName){
         for (Port port: getPorts()){
-            if (port.getLatitude() == latitude && port.getLongitude() == longitude){
+            if ((port.getLatitude() == latitude && port.getLongitude() == longitude)|| port.getName().equals(portName)){
                 return true;
             }
         }
         return false;
     }
+
 
     private static User login() {
         Scanner input = new Scanner(System.in);
@@ -137,32 +144,39 @@ public class ContainerPortManagementSystem {
         return vehicles;
     }
 
+    public static String getPortHistoryFilePath(Port port) throws IOException{
+        return new File(FileSystems.getDefault()
+                .getPath("")
+                .toAbsolutePath()
+                .toString().concat("/Programming1/PortManagementSystem/PortHistory/" + port.getId())).getCanonicalPath();
+    }
+
     public static String getPortFilePath() throws IOException {
         return new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
-                .toString().concat("\\Programming1\\PortManagementSystem\\Ports.txt")).getCanonicalPath();
+                .toString().concat("/Programming1/PortManagementSystem/Ports.txt")).getCanonicalPath();
     }
 
     public static String getUserFilePath() throws IOException {
         return new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
-                .toString().concat("\\Programming1\\PortManagementSystem\\Users.txt")).getCanonicalPath();
+                .toString().concat("/Programming1/PortManagementSystem/Users.txt")).getCanonicalPath();
     }
 
     public static String getVehicleFilePath() throws IOException {
         return new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
-                .toString().concat("\\Programming1\\PortManagementSystem\\Vehicles.txt")).getCanonicalPath();
+                .toString().concat("/Programming1/PortManagementSystem/Vehicles.txt")).getCanonicalPath();
     }
 
     public static String getContainerFilePath() throws IOException {
         return new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
-                .toString().concat("\\Programming1\\PortManagementSystem\\Containers.txt")).getCanonicalPath();
+                .toString().concat("/Programming1/PortManagementSystem/Containers.txt")).getCanonicalPath();
     }
 
     //check if the time exceeds 7 days
@@ -180,7 +194,7 @@ public class ContainerPortManagementSystem {
             containerOut.close();
             System.out.println("Writing Container successfully");
         } catch (IOException e) {
-           e.printStackTrace();
+            System.out.println("The 'Containers.txt' file does not exist");
         }
     }
 

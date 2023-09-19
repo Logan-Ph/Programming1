@@ -128,4 +128,14 @@ public class Ship implements Vehicle, Serializable {
     public double getFuelCapacity() {
         return fuelCapacity;
     }
+
+    @Override
+    public Vector<Container> getContainers() {
+        return containers;
+    }
+
+    @Override
+    public String toString() {
+        return "Ship " + " - name: " + getName() + " - id: " + getID() + " - current storing capacity (kg): " + getCurrentStoringCapacity() + " - maximum storing capacity (kg): " + getStoringCapacity() + " - current fuel (L): " + getCurrentFuel() + " - maximum fuel capacity (L): " + getFuelCapacity();
+    }
 }

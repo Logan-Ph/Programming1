@@ -45,4 +45,9 @@ public class Refrigerated implements Container, Serializable {
     public void setPort(Port port) {
         this.port = port;
     }
+
+    @Override
+    public String toString() {
+        return "Refrigerated - id: " + getId() + " - weight: " + getWeight() + " - Port: " + getPort() + " - Vehicle: " + getVehicle();
+    }
 }

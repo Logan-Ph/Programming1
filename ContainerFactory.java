@@ -1,5 +1,16 @@
+import java.util.Scanner;
+
 public class ContainerFactory {
-    public static Container createContainer(String containerType, double weight, Port port){
+    public static Container createContainer(Port port){
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter the weight of the container (kg): ");
+        double weight = Double.parseDouble(input.nextLine());
+
+        System.out.println("Container type:");
+        AdminGUI.displayContainerType();
+        System.out.print("Enter number associated to the container type: ");
+        String containerType = input.nextLine();
+
         return switch (containerType) {
             case "1" -> new DryStorage(weight, port);
             case "2" -> new Liquid(weight, port);
