@@ -22,6 +22,7 @@ public class Ship implements Vehicle, Serializable {
         this.fuelCapacity = fuelCapacity;
         this.storingCapacity = storingCapacity;
         this.port = port;
+        this.containers = new Vector<>();
     }
 
     //Load the container to the vehicle
@@ -138,4 +139,5 @@ public class Ship implements Vehicle, Serializable {
     public String toString() {
         return "Ship" + " - name: " + getName() + " - id: " + getID() + " - current storing capacity (kg): " + getCurrentStoringCapacity() + " - maximum storing capacity (kg): " + getStoringCapacity() + " - current fuel (Gallon): " + getCurrentFuel() + " - maximum fuel capacity (Gallon): " + getFuelCapacity();
     }
+
 }

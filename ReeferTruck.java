@@ -23,6 +23,7 @@ public class ReeferTruck implements Vehicle, Truck, Serializable {
         this.fuelCapacity = fuelCapacity;
         this.storingCapacity = storingCapacity;
         this.port = port;
+        this.containers = new Vector<>();
     }
 
     //Load the container to the vehicle

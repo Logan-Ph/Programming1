@@ -181,6 +181,9 @@ public class Port implements Serializable {
         return IDFactory.generateID("port");
     }
 
+    public void setCurrentStoringCapacity(double currentStoringCapacity) {
+        this.currentStoringCapacity = currentStoringCapacity;
+    }
     @Override
     public String toString() {
         return "Port{" +
