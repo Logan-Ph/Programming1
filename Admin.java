@@ -19,6 +19,7 @@ public record Admin(String username, String password) implements User, Serializa
         switch (opCase) {
             case "1" -> portOperation();
             case "2" -> createPortManager();
+            case "3" -> displayWeightOfContainerType(ContainerPortManagementSystem.getContainers());
             default -> System.out.println("You have to choose the number associated with the operation");
         }
     }
@@ -34,7 +35,7 @@ public record Admin(String username, String password) implements User, Serializa
 //            case "7" -> ;
 //            case "8" -> ;
 //            case "9" -> ;
-//            case "10" -> ;
+            case "10" -> displayWeightOfContainerType(port.getContainers());
 //            case "11" -> ;
 //            case "12" -> ;
 //            case "13" -> ;
@@ -168,8 +169,8 @@ public record Admin(String username, String password) implements User, Serializa
         }
     }
 
-    public static void displayWeightOfContainerType() {
-        HashMap<String, Double> weightOfContainerType = new HashMap<String, Double>();
+    public static void displayWeightOfContainerType(Vector<Container> containers) {
+        HashMap<String, Double> weightOfContainerType = new HashMap<>();
 
         double openSideTotalWeight = 0.0;
         double liquidTotalWeight = 0.0;
@@ -177,7 +178,7 @@ public record Admin(String username, String password) implements User, Serializa
         double refrigeratedTotalWeight = 0.0;
         double openTopTotalWeight = 0.0;
 
-        for (Container container : ContainerPortManagementSystem.getContainers()) {
+        for (Container container : containers) {
             if (container instanceof OpenSide) {
                 openSideTotalWeight += container.getWeight();
                 weightOfContainerType.put("Open Side",openSideTotalWeight);
@@ -196,10 +197,11 @@ public record Admin(String username, String password) implements User, Serializa
             }
         }
 
-        // Print the total weight for each type of container
-        weightOfContainerType.entrySet().forEach(entry->{
-            System.out.println(entry.getKey() + " = " + entry.getValue());
-        });
-
+        if (weightOfContainerType.size() != 0){
+            // Print the total weight for each type of container
+            weightOfContainerType.forEach((key, value) -> System.out.println(key + " = " + value));
+        }else {
+            System.out.println("There are no Containers to display!");
+        }
     }
 }

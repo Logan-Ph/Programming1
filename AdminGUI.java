@@ -4,6 +4,7 @@ public class AdminGUI {
         System.out.println("Select the operation");
         System.out.println("1: Operation on Port");
         System.out.println("2: Add new port manager and port");
+        System.out.println("3: Display weight of each type of container");
         System.out.println(Separator.sep());
     }
 
