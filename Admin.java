@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -18,6 +19,7 @@ public record Admin(String username, String password) implements User, Serializa
         switch (opCase) {
             case "1" -> portOperation();
             case "2" -> createPortManager();
+            case "3" -> displayWeightOfContainerType(ContainerPortManagementSystem.getContainers());
             default -> System.out.println("You have to choose the number associated with the operation");
         }
     }
@@ -33,7 +35,7 @@ public record Admin(String username, String password) implements User, Serializa
 //            case "7" -> ;
 //            case "8" -> ;
 //            case "9" -> ;
-//            case "10" -> ;
+            case "10" -> displayWeightOfContainerType(port.getContainers());
 //            case "11" -> ;
 //            case "12" -> ;
 //            case "13" -> ;
@@ -72,6 +74,8 @@ public record Admin(String username, String password) implements User, Serializa
         Port port = PortFactory.createPort(); // create Port
         User portManager = PortManager.create(); // create Port manager
         PortFactory.createPortHistoryFile(port); // create Port history
+        port.setPortManager(portManager);
+        ((PortManager) portManager).setPort(port);
         ContainerPortManagementSystem.getPorts().add(port); // add Port to the system
         ContainerPortManagementSystem.getUsers().add(portManager); // add Port manager to the system
     }
@@ -80,6 +84,7 @@ public record Admin(String username, String password) implements User, Serializa
         Container container = ContainerFactory.createContainer(port);
         port.addContainer(container);
         ContainerPortManagementSystem.getContainers().add(container);
+        System.out.println("Adding container into this port successfully");
     }
 
     public void createVehicle(Port port) {
@@ -161,6 +166,42 @@ public record Admin(String username, String password) implements User, Serializa
                 System.out.println("The vehicle can not land at that port");
                 System.out.println("Sending vehicle unsuccessfully");
             }
+        }
+    }
+
+    public static void displayWeightOfContainerType(Vector<Container> containers) {
+        HashMap<String, Double> weightOfContainerType = new HashMap<>();
+
+        double openSideTotalWeight = 0.0;
+        double liquidTotalWeight = 0.0;
+        double dryStorageTotalWeight = 0.0;
+        double refrigeratedTotalWeight = 0.0;
+        double openTopTotalWeight = 0.0;
+
+        for (Container container : containers) {
+            if (container instanceof OpenSide) {
+                openSideTotalWeight += container.getWeight();
+                weightOfContainerType.put("Open Side",openSideTotalWeight);
+            } else if (container instanceof Liquid) {
+                liquidTotalWeight += container.getWeight();
+                weightOfContainerType.put("Liquid",liquidTotalWeight);
+            } else if (container instanceof DryStorage) {
+                dryStorageTotalWeight += container.getWeight();
+                weightOfContainerType.put("DryStorage",dryStorageTotalWeight);
+            } else if (container instanceof Refrigerated) {
+                refrigeratedTotalWeight += container.getWeight();
+                weightOfContainerType.put("Refrigerated",refrigeratedTotalWeight);
+            } else if (container instanceof OpenTop) {
+                openTopTotalWeight += container.getWeight();
+                weightOfContainerType.put("OpenTop",openTopTotalWeight);
+            }
+        }
+
+        if (weightOfContainerType.size() != 0){
+            // Print the total weight for each type of container
+            weightOfContainerType.forEach((key, value) -> System.out.println(key + " = " + value));
+        }else {
+            System.out.println("There are no Containers to display!");
         }
     }
 }
