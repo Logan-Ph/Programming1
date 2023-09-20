@@ -167,93 +167,70 @@ public record Admin(String username, String password) implements User, Serializa
         // print vehicle and container in the port
         Scanner scanner = new Scanner(System.in);
         System.out.println("List of vehicle in the port:");
-        Vector<Vehicle> vehicles = port.getVehicles();
-        for (Vehicle v : vehicles) {
+        for (Vehicle v : port.getVehicles()) {
             System.out.println(v);
         }
         System.out.println("List of container in the port:");
-        Vector<Container> containers = port.getContainers();
-        for (Container c : containers) {
+        for (Container c : port.getContainers()) {
             System.out.println(c);
         }
-        boolean validVehicle;
-        boolean validContainer;
-        String inputVehicleID;
-        String inputContainerID;
+        boolean validInput;
+        String inputID;
         Vehicle chosenVehicle;
         Container chosenContainer;
         do {
             System.out.println("Enter vehicle ID to load container:");
-            inputVehicleID = scanner.nextLine();
-            try {
-                chosenVehicle = port.findVehicleByID(inputVehicleID);
-                validVehicle = true;
-            } catch (NullPointerException e) {
-                validVehicle = false;
+            inputID = scanner.nextLine();
+            chosenVehicle = port.findVehicleByID(inputID);
+            validInput = (chosenVehicle != null);
+            if (!validInput) {
                 System.out.println("Vehicle does not exist in this port.");
             }
-        } while (!validVehicle);
-        chosenVehicle = port.findVehicleByID(inputVehicleID);
+        } while (!validInput);
         do {
-            System.out.println("Choose container ID to load to vehicle:");
-            inputContainerID = scanner.nextLine();
-            try {
-                chosenContainer = port.findContainerByID(inputContainerID);
-                validContainer = true;
-            } catch (NullPointerException e) {
-                validContainer = false;
+            System.out.println("Enter container ID to load to vehicle:");
+            inputID = scanner.nextLine();
+            chosenContainer = port.findContainerByID(inputID);
+            validInput = (chosenContainer != null);
+            if (!validInput) {
                 System.out.println("Container does not exist in this port.");
             }
-        } while (!validContainer);
-        chosenContainer = port.findContainerByID(inputContainerID);
+        } while (!validInput);
         chosenVehicle.load(chosenContainer);
         System.out.println("Container loaded.");
     }
     public void unloadContainer(Port port) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("List of vehicle in the port:");
-        Vector<Vehicle> vehicles = port.getVehicles();
-        for (Vehicle v: vehicles) {
+        for (Vehicle v: port.getVehicles()) {
             System.out.println(v);
         }
-        boolean validVehicle;
-        boolean validContainer;
-        String inputVehicleID;
-        String inputContainerID;
-        Vector<Container> containers;
+        boolean validInput;
+        String inputID;
         Vehicle chosenVehicle = null;
-        Container chosenContainer;
+        Container chosenContainer = null;
         do {
-            System.out.println("Choose vehicle to unload container:");
-            inputVehicleID = scanner.nextLine();
-            try {
-                chosenVehicle = port.findVehicleByID(inputVehicleID);
-                validVehicle = true;
-            } catch (NullPointerException e){
-                validVehicle = false;
-                System.out.println("Vehicle does not exist in this port or does not have container.");
+            System.out.println("Enter vehicle ID to unload container:");
+            inputID = scanner.nextLine();
+            chosenVehicle = port.findVehicleByID(inputID);
+            validInput = (chosenVehicle != null);
+            if (!validInput) {
+                System.out.println("Vehicle does not exist in this port.");
             }
-            if (chosenVehicle.getContainers().isEmpty()) {
-                validVehicle = false;
-                System.out.println("Vehicle does not have containers.");
-            }
-        } while(!validVehicle);
-        containers = chosenVehicle.getContainers();
+        } while (!validInput);
         System.out.println("List of containers in the vehicle:");
-        for (Container c:containers) {
+        for (Container c: chosenVehicle.getContainers()) {
             System.out.println(c);
         }
         do {
-            System.out.println("Choose container ID to unload:");
-            inputContainerID = scanner.nextLine();
-            if (chosenVehicle.getContainers().contains(ContainerPortManagementSystem.findContainerById(inputContainerID))) {
-                validContainer = true;
-            } else {
-                validContainer = false;
+            System.out.println("Enter container ID to unload:");
+            inputID = scanner.nextLine();
+            validInput = chosenVehicle.getContainers().contains(ContainerPortManagementSystem.findContainerById(inputID));
+            if (!validInput) {
                 System.out.println("Container does not exist in this vehicle.");
             }
-        } while (!validContainer);
-        chosenVehicle.unLoad(inputContainerID);
+        } while (!validInput);
+        chosenVehicle.unLoad(inputID);
         System.out.println("Container unloaded.");
     }
 }
