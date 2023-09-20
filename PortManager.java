@@ -65,11 +65,6 @@ public class PortManager implements User, Serializable {
     }
 
 
-
-
-
-
-
     public void createContainer(Port port) {
         Container container = ContainerFactory.createContainer(port);
         port.addContainer(container);

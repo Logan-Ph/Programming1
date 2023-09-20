@@ -14,8 +14,8 @@ public class ContainerPortManagementSystem {
     private static Vector<Container> containers = new Vector<>();
 
     public static void main(String[] args) throws IOException {
-        users.add(new Admin("Admin", "admin123"));
-        writeUser();
+//        users.add(new Admin("Admin", "admin123"));
+//        writeUser();
 
         Scanner input = new Scanner(System.in);
         String exit= "";
@@ -45,6 +45,8 @@ public class ContainerPortManagementSystem {
                         String operation = input.nextLine();
                         if (operation.equals("x")){break;}
                         user.operationCase(operation);
+                        System.out.println("Enter 'x' to exit to login page or else to continue");
+                        if (input.nextLine().equals("x")){break;}
                     }
                 }
             }

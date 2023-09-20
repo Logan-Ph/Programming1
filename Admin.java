@@ -73,6 +73,8 @@ public record Admin(String username, String password) implements User, Serializa
         Port port = PortFactory.createPort(); // create Port
         User portManager = PortManager.create(); // create Port manager
         PortFactory.createPortHistoryFile(port); // create Port history
+        port.setPortManager(portManager);
+        ((PortManager) portManager).setPort(port);
         ContainerPortManagementSystem.getPorts().add(port); // add Port to the system
         ContainerPortManagementSystem.getUsers().add(portManager); // add Port manager to the system
     }

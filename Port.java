@@ -91,7 +91,6 @@ public class Port implements Serializable {
         return Math.round(Math.sqrt(Math.pow(this.latitude - port.latitude,2) + Math.pow(this.longitude - port.longitude,2))*100)/100.0;
     }
 
-
     public double getCurrentStoringCapacity() {
         return currentStoringCapacity;
     }
