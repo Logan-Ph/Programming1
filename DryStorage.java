@@ -40,7 +40,7 @@ public class DryStorage implements Container, Serializable {
 
     @Override
     public String generateID() {
-        return IDFactory.generateID("Container");
+        return IDFactory.generateID("container");
     }
 
     public Port getPort() {
@@ -49,6 +49,6 @@ public class DryStorage implements Container, Serializable {
 
     @Override
     public String toString() {
-        return "DryStorage - id: " + getId() + " - weight: " + getWeight() + " - Port: " + getPort() + " - Vehicle: " + getVehicle();
+        return "DryStorage - id: " + getId() + " - weight (Kg): " + getWeight() + " - Vehicle: " + getVehicle();
     }
 }

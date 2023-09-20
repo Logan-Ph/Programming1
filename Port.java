@@ -91,11 +91,6 @@ public class Port implements Serializable {
         return Math.round(Math.sqrt(Math.pow(this.latitude - port.latitude,2) + Math.pow(this.longitude - port.longitude,2))*100)/100.0;
     }
 
-    // Get distance form the start
-    // This is used when adding new vehicle and the vehicle coordinate is 0,0; so we need to calculate the distance of the port to the root coordinate
-    public double getDistance(){
-        return Math.round(Math.sqrt(Math.pow(this.latitude,2) + Math.pow(this.latitude,2))*100)/100.0;
-    }
 
     public double getCurrentStoringCapacity() {
         return currentStoringCapacity;

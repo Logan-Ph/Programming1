@@ -46,6 +46,6 @@ public class OpenSide implements Container, Serializable {
 
     @Override
     public String toString() {
-        return "OpenSide - id: " + getId() + " - weight: " + getWeight() + " - Vehicle: " + getVehicle();
+        return "OpenSide - id: " + getId() + " - weight (Kg): " + getWeight() + " - Vehicle: " + getVehicle();
     }
 }

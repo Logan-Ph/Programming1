@@ -47,7 +47,7 @@ public class Liquid implements Container, Serializable{
 
     @Override
     public String toString() {
-        return "Liquid - id: " + getId() + " - weight: " + getWeight() + " - Port: " + getPort() + " - Vehicle: " + getVehicle();
+        return "Liquid - id: " + getId() + " - weight (Kg): " + getWeight() + " - Vehicle: " + getVehicle();
     }
 
 }

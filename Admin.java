@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Scanner;
+import java.util.Vector;
 
 public record Admin(String username, String password) implements User, Serializable {
 
@@ -83,10 +84,10 @@ public record Admin(String username, String password) implements User, Serializa
 
     public void createVehicle(Port port) {
         Vehicle vehicle = VehicleFactory.createVehicle(port);
-        if(port.addVehicle(vehicle)){
+        if (port.addVehicle(vehicle)) {
             ContainerPortManagementSystem.getVehicles().add(vehicle);
             System.out.println("Adding vehicle successfully");
-        }else {
+        } else {
             System.out.println("Adding vehicle unsuccessfully");
         }
     }
@@ -95,55 +96,70 @@ public record Admin(String username, String password) implements User, Serializa
         Scanner input = new Scanner(System.in);
         System.out.println("Current Container(s) in the port: " + port.getName());
         AdminGUI.displayContainerInPort(port);
-        System.out.print("Enter the container id associated to remove: ");
-        Container container = port.removeContainer(input.nextLine());
-        try {
-            ContainerPortManagementSystem.getContainers().remove(container);
-            System.out.println("Remove container successfully");
-        } catch (NullPointerException e) {
-            System.out.println("Remove container unsuccessfully");
+        if (port.getContainers().isEmpty()) {
+            System.out.println("There are no container in the port");
+        } else {
+            System.out.print("Enter the container id associated to remove: ");
+            Container container = port.removeContainer(input.nextLine());
+            try {
+                ContainerPortManagementSystem.getContainers().remove(container);
+                System.out.println("Remove container successfully");
+            } catch (NullPointerException e) {
+                System.out.println("Remove container unsuccessfully");
+            }
         }
     }
 
     public void removeVehicle(Port port) {
         Scanner input = new Scanner(System.in);
-        System.out.println("Current Vehicle(s) in the port " + port.getName());
+        System.out.println("Current Vehicle(s) in the port: " + port.getName());
         AdminGUI.displayVehicleInPort(port);
         System.out.print("Enter the vehicle id associated to remove: ");
         Vehicle vehicle = port.removeVehicle(input.nextLine());
         try {
             ContainerPortManagementSystem.getVehicles().remove(vehicle);
+            if (vehicle.getContainers() != null) {
+                vehicle.getContainers().forEach(container -> ContainerPortManagementSystem.getContainers().remove(container));
+            }
             System.out.println("Remove vehicle successfully");
         } catch (NullPointerException e) {
             System.out.println("Remove vehicle unsuccessfully");
         }
     }
 
-    public void sendVehicle(Port port){
+    public void sendVehicle(Port port) {
         Scanner input = new Scanner(System.in);
         System.out.println("Distance to all Port(s) in the system:");
         AdminGUI.displayPortWithDistance(port);
-        System.out.print("Enter the destination port id associated to send the vehicle to: ");
+        System.out.print("Enter the destination port id: ");
         Port destinationPort = ContainerPortManagementSystem.findPortById(input.nextLine());
-        if (destinationPort == null){
+
+        if (destinationPort == null) {
             System.out.println("The port does not exist in the system");
             System.out.println("Sending vehicle unsuccessfully");
-        }else {
+        } else {
             AdminGUI.displayContainerAndVehicleInPort(port);
             System.out.print("Enter the vehicle id associated for sending: ");
             Vehicle vehicle = port.findVehicleByID(input.nextLine());
-            if (vehicle == null){
+            if (vehicle == null) {
                 System.out.println("The vehicle does not exist in the port");
                 System.out.println("Sending vehicle unsuccessfully");
             } else if (vehicle.calculateFuelConsumption(destinationPort) < vehicle.getCurrentFuel()) {
                 System.out.println("The vehicle cannot drive to the port with the current fuel capacity");
                 System.out.println("Please refuel the vehicle or change to another vehicle");
-            } else if (LandingBehaviour.landing(port,vehicle)){
-                Trip trip = new Trip(port,destinationPort,false);
+            } else if (LandingBehaviour.landing(destinationPort, vehicle)) {
+                Trip trip = new Trip(port, destinationPort, false);
                 destinationPort.addTrip(trip);
                 port.addTrip(trip);
                 port.removeVehicle(vehicle);
                 System.out.println("Sending vehicle successfully");
+            } else if (vehicle.getContainers() == null) {
+                System.out.println("The vehicle is empty. You have to load container into vehicle");
+                System.out.println("Sending vehicle unsuccessfully");
+            }
+            else {
+                System.out.println("The vehicle can not land at that port");
+                System.out.println("Sending vehicle unsuccessfully");
             }
         }
     }

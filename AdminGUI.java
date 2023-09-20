@@ -17,7 +17,7 @@ public class AdminGUI {
     public static void displayPortWithDistance(Port port) {
         for (Port p : ContainerPortManagementSystem.getPorts()) {
             if (p != port){
-                System.out.println("Distance to port " + p.getName() + ": " + port.getDistance(p));
+                System.out.println("    " + p.getName() + " - "+ p.getId() +": " + port.getDistance(p) + "km");
             }
         }
     }
@@ -39,7 +39,13 @@ public class AdminGUI {
 
     public static void displayContainerAndVehicleInPort(Port port){
         for (Vehicle vehicle : port.getVehicles()) {
+            if (vehicle == null){
+                continue;
+            }
             System.out.println(vehicle);
+            if (vehicle.getContainers() == null){
+                continue;
+            }
             for (Container container: vehicle.getContainers()){
                 System.out.println("    "+container);
             }

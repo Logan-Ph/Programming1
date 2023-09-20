@@ -93,13 +93,13 @@ public class BasicTruck implements Vehicle, Truck, Serializable {
     @Override
     public double calculateFuelConsumption(Port port) {
         double totalFuelConsumption = 0.0;
-        for (Container container: containers){
-            totalFuelConsumption += container.getWeight()*CalculateFuelBehaviour.calculateFuelConsumption(container,this);
-        }
-        if (this.port != null){
+        try {
+            for (Container container: containers){
+                totalFuelConsumption += container.getWeight()*CalculateFuelBehaviour.calculateFuelConsumption(container,this);
+            }
             return totalFuelConsumption*this.port.getDistance(port);
-        }else {
-            return totalFuelConsumption*port.getDistance();
+        }catch (NullPointerException e){
+            return 1.0;
         }
     }
 
@@ -138,6 +138,6 @@ public class BasicTruck implements Vehicle, Truck, Serializable {
 
     @Override
     public String toString() {
-        return "BasicTruck " + " - name: " + getName() + " - id: " + getID() + " - current storing capacity (kg): " + getCurrentStoringCapacity() + " - maximum storing capacity (kg): " + getStoringCapacity() + " - current fuel (L): " + getCurrentFuel() + " - maximum fuel capacity (L): " + getFuelCapacity();
+        return "BasicTruck " + " - name: " + getName() + " - id: " + getID() + " - current storing capacity (kg): " + getCurrentStoringCapacity() + " - maximum storing capacity (kg): " + getStoringCapacity() + " - current fuel (Gallon): " + getCurrentFuel() + " - maximum fuel capacity (Gallon): " + getFuelCapacity();
     }
 }
