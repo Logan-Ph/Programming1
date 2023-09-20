@@ -15,6 +15,9 @@ public class ContainerPortManagementSystem {
     public static void main(String[] args) throws IOException {
 //        users.add(new Admin("Admin", "admin123"));
 //        writeUser();
+        Trip trip1 = new Trip();
+
+
         Scanner input = new Scanner(System.in);
         String exit= "";
 

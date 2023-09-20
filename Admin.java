@@ -1,6 +1,10 @@
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
+import java.nio.file.FileSystems;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
+import java.util.Vector;
 
 public record Admin(String username, String password) implements User, Serializable {
 
@@ -35,7 +39,7 @@ public record Admin(String username, String password) implements User, Serializa
 //            case "10" -> ;
 //            case "11" -> ;
 //            case "12" -> ;
-//            case "13" -> ;
+            case "13" -> listTripsBetweenDays(port);
 //            case "14" -> ;
             default -> System.out.println("You have to choose the number associated with the operation");
         }
@@ -145,6 +149,52 @@ public record Admin(String username, String password) implements User, Serializa
                 port.removeVehicle(vehicle);
                 System.out.println("Sending vehicle successfully");
             }
+        }
+    }
+
+    public static void listTripsBetweenDays(Port port){
+        Scanner scanner = new Scanner(System.in);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM yyyy");
+        System.out.println("Enter the start day: ");
+        LocalDate startDay = LocalDate.parse(scanner.nextLine() + " 10 2023", dtf);
+
+        System.out.println("Enter the end day: ");
+        LocalDate endDay = LocalDate.parse(scanner.nextLine() + " 10 2023", dtf);
+
+        port.listAllTripFromDayAToB(startDay, endDay).forEach(System.out::println);
+    }
+
+    public static void main(String[] args) {
+        Port portA = new Port("RMIT", 20, 30, 550, true);
+        Port portB = new Port("RMIT1", 30, 40, 500, true);
+        Trip trip1 = new Trip( portA, portB, false);
+        Trip trip2 = new Trip( portA, portB, true);
+        Trip trip3 = new Trip( portA, portB, false);
+        Trip trip4 = new Trip( portA, portB, true);
+        trip2.setArrivalDate("20");
+        trip1.setArrivalDate("10");
+        trip3.setArrivalDate("12");
+        trip4.setArrivalDate("15");
+        Vector<Trip> trips = new Vector<>();
+        trips.add(trip1);
+        trips.add(trip2);
+        trips.add(trip3);
+        trips.add(trip4);
+        trips.forEach(System.out::println);
+
+        Scanner scanner = new Scanner(System.in);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM yyyy");
+        System.out.println("Enter the start day: ");
+        LocalDate startDay = LocalDate.parse(scanner.nextLine() + " 10 2023", dtf);
+
+        System.out.println("Enter the end day: ");
+        LocalDate endDay = LocalDate.parse(scanner.nextLine() + " 10 2023", dtf);
+
+        for (Trip currentTrip : trips) {
+            System.out.println(currentTrip);
+            if ((startDay.isAfter(currentTrip.getArrivalDate()) && endDay.isBefore(currentTrip.getArrivalDate()) && currentTrip.getArrivalPort() == portA)
+                    || (startDay.isAfter(currentTrip.getDepartureDate()) && endDay.isBefore(currentTrip.getDepartureDate()) && currentTrip.getDeparturePort() == portA))
+                System.out.println(currentTrip);
         }
     }
 }

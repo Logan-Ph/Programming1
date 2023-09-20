@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Trip implements Serializable {
     private String id;
@@ -32,6 +33,11 @@ public class Trip implements Serializable {
 
     public void setArrivalDate() {
         this.arrivalDate = LocalDate.now();
+    }
+    public void setArrivalDate(String date) {
+        date += " 10 2023";
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM yyyy");
+        this.arrivalDate = LocalDate.parse(date, dtf);
     }
 
     public void setStatus(boolean status) {
