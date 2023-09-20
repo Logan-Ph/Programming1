@@ -7,14 +7,16 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public class ContainerPortManagementSystem {
+
     private static Vector<Vehicle> vehicles = new Vector<>();
     private static Vector<Port> ports = new Vector<>();
     private static Vector<User> users = new Vector<>();
     private static Vector<Container> containers = new Vector<>();
 
     public static void main(String[] args) throws IOException {
-//        users.add(new Admin("Admin", "admin123"));
-//        writeUser();
+        users.add(new Admin("Admin", "admin123"));
+        writeUser();
+
         Scanner input = new Scanner(System.in);
         String exit= "";
 
@@ -38,9 +40,11 @@ public class ContainerPortManagementSystem {
                         if (operation.equals("x")){break;}
                         user.operationCase(operation);
                     }else if (user instanceof PortManager){
-                        System.out.println("asdsdafasd");
-                        System.out.println("Enter 'x' to exit to login page or else to continue");
-                        if (input.nextLine().equals("x")){break;}
+                        PortManagerGUI.displayPortOperation();
+                        System.out.print("Enter the number associated with the operation or 'x' to exit: ");
+                        String operation = input.nextLine();
+                        if (operation.equals("x")){break;}
+                        user.operationCase(operation);
                     }
                 }
             }

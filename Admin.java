@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -80,6 +81,7 @@ public record Admin(String username, String password) implements User, Serializa
         Container container = ContainerFactory.createContainer(port);
         port.addContainer(container);
         ContainerPortManagementSystem.getContainers().add(container);
+        System.out.println("Adding container into this port successfully");
     }
 
     public void createVehicle(Port port) {
@@ -162,5 +164,40 @@ public record Admin(String username, String password) implements User, Serializa
                 System.out.println("Sending vehicle unsuccessfully");
             }
         }
+    }
+
+    public static void displayWeightOfContainerType() {
+        HashMap<String, Double> weightOfContainerType = new HashMap<String, Double>();
+
+        double openSideTotalWeight = 0.0;
+        double liquidTotalWeight = 0.0;
+        double dryStorageTotalWeight = 0.0;
+        double refrigeratedTotalWeight = 0.0;
+        double openTopTotalWeight = 0.0;
+
+        for (Container container : ContainerPortManagementSystem.getContainers()) {
+            if (container instanceof OpenSide) {
+                openSideTotalWeight += container.getWeight();
+                weightOfContainerType.put("Open Side",openSideTotalWeight);
+            } else if (container instanceof Liquid) {
+                liquidTotalWeight += container.getWeight();
+                weightOfContainerType.put("Liquid",liquidTotalWeight);
+            } else if (container instanceof DryStorage) {
+                dryStorageTotalWeight += container.getWeight();
+                weightOfContainerType.put("DryStorage",dryStorageTotalWeight);
+            } else if (container instanceof Refrigerated) {
+                refrigeratedTotalWeight += container.getWeight();
+                weightOfContainerType.put("Refrigerated",refrigeratedTotalWeight);
+            } else if (container instanceof OpenTop) {
+                openTopTotalWeight += container.getWeight();
+                weightOfContainerType.put("OpenTop",openTopTotalWeight);
+            }
+        }
+
+        // Print the total weight for each type of container
+        weightOfContainerType.entrySet().forEach(entry->{
+            System.out.println(entry.getKey() + " = " + entry.getValue());
+        });
+
     }
 }
