@@ -1,6 +1,7 @@
 
 import java.io.Serializable;
 
+import java.util.Scanner;
 import java.util.Vector;
 
 public class TankerTruck implements Vehicle, Truck, Serializable {
@@ -25,18 +26,21 @@ public class TankerTruck implements Vehicle, Truck, Serializable {
         this.fuelCapacity = fuelCapacity;
         this.storingCapacity = storingCapacity;
         this.port = port;
+        this.containers = new Vector<>();
     }
 
     //Load the container to the vehicle
     @Override
-    public void load(Container container) {
+    public boolean load(Container container) {
         if (LoadContainerBehavior.load(container, this) && getCurrentStoringCapacity() + container.getWeight() <= getStoringCapacity()) { // check if that vehicle can load the container or if the container weight exceed the storing capacity
             this.containers.add(container);
             currentStoringCapacity += container.getWeight();
+            return true;
         } else {
             System.out.println("This vehicle cannot carry this container!");
             System.out.println("The current storing capacity of this vehicle is: " + getCurrentStoringCapacity());
             System.out.println("The maximum storing capacity of this vehicle is: " + getStoringCapacity());
+            return false;
         }
     }
 
@@ -61,6 +65,18 @@ public class TankerTruck implements Vehicle, Truck, Serializable {
         Container container = findContainerByID(id);
         try {
             this.containers.remove(container); // remove the container from the ArrayList
+            currentStoringCapacity-=container.getWeight();
+            return container;
+        } catch (Exception e) {
+            System.out.println("There is no matching ID container!"); // Throw exception if the container doesn't exist in the ArrayList
+            return null;
+        }
+    }
+
+    public Container unLoad(Container container) {
+        try {
+            this.containers.remove(container); // remove the container from the ArrayList
+            currentStoringCapacity-=container.getWeight();
             return container;
         } catch (Exception e) {
             System.out.println("There is no matching ID container!"); // Throw exception if the container doesn't exist in the ArrayList
@@ -81,13 +97,28 @@ public class TankerTruck implements Vehicle, Truck, Serializable {
 
     //Refueling the vehicle
     @Override
-    public void refueling(double fuel) {
+    public boolean refueling() {
+        Scanner input = new Scanner(System.in);
+        double fuel;
+        System.out.print("Enter the amount you want to refuel: ");
+        try {
+            fuel = Double.parseDouble(input.nextLine());
+        }catch (RuntimeException e){
+            System.out.println("The amount must be a number");
+            return false;
+        }
+        if (fuel<0){
+            System.out.println("The amount can not be negative");
+        }
+
         if (getCurrentFuel() + fuel > fuelCapacity) { // check if it does not exceed the fuel capacity
             System.out.println("You can not refuel more than the fuel capacity of this vehicle!");
             System.out.println("The current fuel of the vehicle is: "+getCurrentFuel());
             System.out.println("The maximum fuel capacity of the vehicle is: "+getFuelCapacity());
+            return false;
         } else {
             currentFuel += fuel;
+            return true;
         }
     }
 

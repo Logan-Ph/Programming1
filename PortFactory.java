@@ -7,50 +7,46 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public class PortFactory {
-    public static Port createPort(){
+    public static Port createPort() {
         Scanner input = new Scanner(System.in);
         boolean existed = false;
         boolean landingAbility;
-        double longitude,latitude, storingCapacity;
+        double longitude, latitude, storingCapacity;
         String portName;
 
-        while (true){
-            if (existed){
-                System.out.println("The port information existed. Please enter again!");
-            }
-            System.out.println("Current port(s) in the system: ");
-            AdminGUI.displayPort();
-            System.out.print("Enter the new port name: ");
-            portName = input.nextLine();
+        System.out.println("Current port(s) in the system: ");
+        AdminGUI.displayPort();
+        System.out.print("Enter the new port name: ");
+        portName = input.nextLine();
+        try {
             System.out.print("Enter the new port longitude: ");
             longitude = Double.parseDouble(input.nextLine());
             System.out.print("Enter the new port latitude: ");
-            latitude =  Double.parseDouble(input.nextLine());
+            latitude = Double.parseDouble(input.nextLine());
             System.out.print("Enter the new port storing capacity (Kg): ");
-            storingCapacity =  Double.parseDouble(input.nextLine());
+            storingCapacity = Double.parseDouble(input.nextLine());
+        } catch (RuntimeException e) {
+            System.out.println("You have to enter the number");
+            return null;
+        }
+
+        try {
             System.out.println("Enter the port landing ability ('true' or 'false')");
             System.out.println("If 'true' the truck can land at this port");
-            landingAbility =  Boolean.parseBoolean(input.nextLine());
-            input.reset();
-            if (ContainerPortManagementSystem.checkPortInfo(latitude,longitude,portName)){
-                existed = true;
-            }else {
-                break;
+            String landing = input.nextLine();
+            if (landing.equals("true") || landing.equals("false")) {
+                landingAbility = Boolean.parseBoolean(landing);
+            } else {
+                return null;
             }
+        } catch (RuntimeException e) {
+            System.out.println("You have to enter 'true' or 'false'");
+            return null;
         }
-        return new Port(portName,latitude,longitude,storingCapacity,landingAbility);
-    }
 
-    public static void createPortHistoryFile(Port port) throws IOException {
-        File file = new File(new File(FileSystems.getDefault()
-                .getPath("")
-                .toAbsolutePath()
-                .toString().concat("/Programming1/PortManagementSystem/PortHistory/" + port.getId() + ".txt")).getCanonicalPath());
-        boolean result = file.createNewFile();
-        if (result) {
-            System.out.println("File create successfully " + file.getCanonicalPath());
-        } else {
-            System.out.println("File already exist at location: " + file.getCanonicalPath());
+        if (ContainerPortManagementSystem.checkPortInfo(latitude, longitude, portName)) {
+            return null;
         }
+        return new Port(portName, latitude, longitude, storingCapacity, landingAbility);
     }
 }

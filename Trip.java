@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Trip implements Serializable {
     private String id;
@@ -11,12 +12,15 @@ public class Trip implements Serializable {
     private Port arrivalPort;
     private boolean status;
 
-    public Trip(Port departurePort, Port arrivalPort, boolean status) {
+    private double amountFuel;
+
+    public Trip(Vehicle vehicle,Port departurePort, Port arrivalPort, boolean status, double amountFuel) {
         id = generateID();
         this.departureDate = LocalDate.now();
         this.departurePort = departurePort;
         this.arrivalPort = arrivalPort;
         this.status = status;
+        this.vehicle = vehicle;
     }
 
     public Trip() {
@@ -46,6 +50,10 @@ public class Trip implements Serializable {
 
     public void sendTrip(String portID){
 
+    }
+
+    public double getAmountFuel() {
+        return amountFuel;
     }
 
     public Vehicle getVehicle() {

@@ -11,7 +11,6 @@ public class Refrigerated implements Container, Serializable {
         this.id = generateID();
         this.weight = weight;
         this.vehicle = null;
-        this.port = port;
     }
 
     public Refrigerated() {

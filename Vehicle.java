@@ -1,11 +1,13 @@
 import java.util.Vector;
 
 public interface Vehicle {
-    public void load(Container container);
+    public boolean load(Container container);
 
     public Container unLoad(String id);
 
-    public void refueling(double fuel);
+    public Container unLoad(Container container);
+
+    public boolean refueling();
 
     public double calculateFuelConsumption(Port port);
 

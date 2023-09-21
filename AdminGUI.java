@@ -22,6 +22,10 @@ public class AdminGUI {
         }
     }
 
+    public static void displayContainerInVehicle(Vehicle vehicle){
+        vehicle.getContainers().forEach(System.out::println);
+    }
+
     public static void displayContainerInPort(Port port) {
         for (Container container : port.getContainers()) {
             System.out.println(container);
@@ -38,6 +42,10 @@ public class AdminGUI {
     }
 
     public static void displayContainerAndVehicleInPort(Port port){
+        System.out.println("Unloaded container:");
+        displayContainerInPort(port);
+
+        System.out.println("Loaded container:");
         for (Vehicle vehicle : port.getVehicles()) {
             if (vehicle == null){
                 continue;
@@ -52,7 +60,16 @@ public class AdminGUI {
         }
     }
 
+    public static void displayTripInPort(Port port) {
+        for(Trip trip: port.getTrips()) {
+            if (trip.getArrivalPort() == port && !trip.getStatus()) {
+                System.out.println(trip);
+            }
+        }
+    }
+
     public static void displayVehicleType() {
+        System.out.println(Separator.sep());
         System.out.println("1: Basic Truck");
         System.out.println("2: Reefer Truck");
         System.out.println("3: Tanker Truck");
@@ -61,6 +78,7 @@ public class AdminGUI {
     }
 
     public static void displayPortOperation() {
+        System.out.println(Separator.sep());
         System.out.println("1: Add new container");
         System.out.println("2: Add new vehicle");
         System.out.println("3: Remove vehicle ");
@@ -74,6 +92,7 @@ public class AdminGUI {
         System.out.println("11: Display how much fuel used in a day");
         System.out.println("12: Display all trip in a day");
         System.out.println("13: Display all trip between 2 days");
+        System.out.println("14: Confirm trip");
         System.out.println(Separator.sep());
 
     }
