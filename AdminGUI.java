@@ -1,5 +1,19 @@
 public class AdminGUI {
 
+    public static void display() {
+        System.out.println("------------------------------------------------");
+        System.out.println("| COSC2081 GROUP ASSIGNMENT                    |");
+        System.out.println("| CONTAINER PORT MANAGEMENT SYSTEM             |");
+        System.out.println("| Instructor: Mr. Minh Vu & Dr. Phong Ngo      |");
+        System.out.println("| Group: Group Name                            |");
+        System.out.println("| s3975979 Pham Phuoc Sang                     |");
+        System.out.println("| s3978387 Cao Nguyen Hai Linh                 |");
+        System.out.println("| s3978486 Nguyen Ngoc Thanh Mai               |");
+        System.out.println("| s3978798 Tran Pham Khanh Doan                |");
+        System.out.println("------------------------------------------------");
+
+    }
+
     public static void displayOperation() {
         System.out.println("Select the operation");
         System.out.println("1: Operation on Port");
@@ -93,6 +107,7 @@ public class AdminGUI {
         System.out.println("12: Display all trip in a day");
         System.out.println("13: Display all trip between 2 days");
         System.out.println("14: Confirm trip");
+        System.out.println("15: Remove port");
         System.out.println(Separator.sep());
 
     }

@@ -1,6 +1,3 @@
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Vector;
@@ -111,7 +108,7 @@ public class Port implements Serializable {
         for (Trip currentTrip : this.getTrips()) {
             System.out.println(currentTrip);
 
-            if ((!currentTrip.getStatus() && currentTrip.getDepartureDate().isAfter(startTime) && currentTrip.getDepartureDate().isBefore(endTime)) || (currentTrip.getStatus() && ((currentTrip.getArrivalDate().isAfter(startTime) && currentTrip.getArrivalDate().isBefore(endTime)) || (currentTrip.getDepartureDate().isBefore(endTime) && currentTrip.getDepartureDate().isAfter(startTime))))){
+            if ((!currentTrip.getStatus() && currentTrip.getDepartureDate().isAfter(startTime) && currentTrip.getDepartureDate().isBefore(endTime)) || (currentTrip.getStatus() && ((currentTrip.getArrivalDate().isAfter(startTime) && currentTrip.getArrivalDate().isBefore(endTime)) || (currentTrip.getDepartureDate().isBefore(endTime) && currentTrip.getDepartureDate().isAfter(startTime))))) {
                 listTripOut.add(currentTrip);
             }
         }
@@ -122,23 +119,23 @@ public class Port implements Serializable {
         Vector<Trip> listTripOut = new Vector<>();
         for (Trip currentTrip : this.getTrips()) {
             System.out.println(currentTrip);
-            if ((currentTrip.getStatus() && (currentTrip.getArrivalDate().isEqual(date) || currentTrip.getDepartureDate().isEqual(date))) || (!currentTrip.getStatus() && currentTrip.getDepartureDate().isEqual(date))){
+            if ((currentTrip.getStatus() && (currentTrip.getArrivalDate().isEqual(date) || currentTrip.getDepartureDate().isEqual(date))) || (!currentTrip.getStatus() && currentTrip.getDepartureDate().isEqual(date))) {
                 listTripOut.add(currentTrip);
             }
         }
         return listTripOut;
     }
 
-    public double amountFuelUsedInDay(LocalDate date){
+    public double amountFuelUsedInDay(LocalDate date) {
         Vector<Trip> trips;
         trips = listAllTripInDay(date);
         double amountFuel = 0;
-        if (trips.isEmpty()){
+        if (trips.isEmpty()) {
             return 0;
-        }else {
-            for (Trip trip:trips){
-                if (trip.getDeparturePort() == this){
-                    amountFuel+= trip.getAmountFuel();
+        } else {
+            for (Trip trip : trips) {
+                if (trip.getDeparturePort() == this) {
+                    amountFuel += trip.getAmountFuel();
                 }
             }
             return amountFuel;
@@ -205,16 +202,25 @@ public class Port implements Serializable {
 
     public void confirmTrip(String id) {
         Trip trip = findTripById(id);
-        if (trip.getArrivalPort() == this && !trip.getStatus()) {
-            try {
+        try {
+            if (trip.getArrivalPort() == this && !trip.getStatus()) {
                 trip.setStatus(true);
                 trip.setArrivalDate();
-            } catch (NullPointerException e) {
-                System.out.println("The trip does not exist");
+            } else {
+                System.out.println("There are no trip to confirm");
             }
-        } else {
-            System.out.println("There are no trip to confirm");
+        } catch (NullPointerException e) {
+            System.out.println("The trip does not exist");
         }
+    }
+
+    public boolean checkTrip() {
+        for (Trip trip : trips) {
+            if (!trip.getStatus() && trip.getArrivalPort() == this) {
+                return true; // return true if there is any trip to confirm
+            }
+        }
+        return false;
     }
 
     public Container findContainerByID(String id) {
@@ -237,7 +243,6 @@ public class Port implements Serializable {
 
     public void addTrip(Trip trip) {
         this.trips.add(trip);
-        System.out.println("Adding trip successfully");
     }
 
     public boolean isLandingAbility() {
