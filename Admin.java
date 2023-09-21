@@ -94,6 +94,7 @@ public record Admin(String username, String password) implements User, Serializa
         Scanner input = new Scanner(System.in);
         System.out.println("List of trips: ");
         AdminGUI.displayTripInPort(port);
+        System.out.println("Enter the trip id associated to confirm");
         port.confirmTrip(input.nextLine());
     }
 
