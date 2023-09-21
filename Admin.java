@@ -39,7 +39,7 @@ public record Admin(String username, String password) implements User, Serializa
             case "9" -> unloadContainer(port);
             case "10" -> displayWeightOfContainerType(port.getContainers());
 //            case "11" -> ;
-//            case "12" -> ;
+            case "12" -> ;
             case "13" -> listTripsBetweenDays(port);
             case "14" -> confirmTrip(port);
             default -> System.out.println("You have to choose the number associated with the operation");
@@ -288,6 +288,9 @@ public record Admin(String username, String password) implements User, Serializa
 
         port.listAllTripFromDayAToB(startDay, endDay).forEach(System.out::println);
     }
+
+
+
 }
 
 

@@ -20,7 +20,7 @@ public class PortManagerGUI{
 
     public static void displayContainerType() {
         System.out.println("1: Dry Storage");
-        System.out.println("2: liquid");
+        System.out.println("2: Liquid");        // edit format thui
         System.out.println("3: Open Top");
         System.out.println("4: Open Side");
         System.out.println("5: Refrigerated");
