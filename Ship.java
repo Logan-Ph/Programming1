@@ -27,14 +27,16 @@ public class Ship implements Vehicle, Serializable {
 
     //Load the container to the vehicle
     @Override
-    public void load(Container container) {
+    public boolean load(Container container) {
         if (getCurrentStoringCapacity() + container.getWeight() <= getStoringCapacity()) { // check if that vehicle can load the container or if the container weight exceed the storing capacity
             this.containers.add(container);
             currentStoringCapacity += container.getWeight();
+            return true;
         } else {
             System.out.println("This vehicle cannot carry this container!");
             System.out.println("The current storing capacity of this vehicle is: "+getCurrentStoringCapacity());
             System.out.println("The maximum storing capacity of this vehicle is: "+getStoringCapacity());
+            return false;
         }
     }
 
@@ -59,6 +61,18 @@ public class Ship implements Vehicle, Serializable {
         Container container = findContainerByID(id);
         try {
             this.containers.remove(container); // remove the container from the ArrayList
+            currentStoringCapacity-=container.getWeight();
+            return container;
+        } catch (Exception e) {
+            System.out.println("There is no matching ID container!"); // Throw exception if the container doesn't exist in the ArrayList
+            return null;
+        }
+    }
+
+    public Container unLoad(Container container) {
+        try {
+            this.containers.remove(container); // remove the container from the ArrayList
+            currentStoringCapacity-=container.getWeight();
             return container;
         } catch (Exception e) {
             System.out.println("There is no matching ID container!"); // Throw exception if the container doesn't exist in the ArrayList

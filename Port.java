@@ -1,4 +1,8 @@
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Vector;
 
 // con method add vehicle, vaf remove vehicle=
@@ -31,14 +35,16 @@ public class Port implements Serializable {
         this.trips = new Vector<>();
     }
 
-    public void addContainer(Container container){
+    public boolean addContainer(Container container){
         if (container.getWeight() + getCurrentStoringCapacity() <= getStoringCapacity()){
             this.containers.add(container);
             currentStoringCapacity += container.getWeight();
+            return true;
         }else {
             System.out.println("Can not add this container to the port!");
             System.out.println("The current storing capacity of this port is: " + getCurrentStoringCapacity());
             System.out.println("The maximum storing capacity of this port is: " + getStoringCapacity());
+            return false;
         }
     }
 
@@ -47,6 +53,20 @@ public class Port implements Serializable {
         Container container = findContainerByID(id); // find the container in the port
         try{
             this.containers.remove(container); // remove the container in the port
+            currentStoringCapacity -= container.getWeight();
+            container.setPort(null);
+            return container;
+        }catch (NullPointerException e){
+            System.out.println("The container does not exist in this Port!");
+        }
+        return null;
+    }
+
+    public Container removeContainer(Container container){
+        try{
+            this.containers.remove(container); // remove the container in the port
+            currentStoringCapacity -= container.getWeight();
+            container.setPort(null);
             return container;
         }catch (NullPointerException e){
             System.out.println("The container does not exist in this Port!");
@@ -84,6 +104,17 @@ public class Port implements Serializable {
             System.out.println("The vehicle does not exist in this Port!");
         }
         return null;
+    }
+
+    public Vector<Trip> listAllTripFromDayAToB(LocalDate startTime, LocalDate endTime){
+        Vector<Trip> listTripOut = new Vector<>();
+        for (Trip currentTrip : this.getTrips()) {
+            System.out.println(currentTrip);
+            if ((startTime.isAfter(currentTrip.getArrivalDate()) && endTime.isBefore(currentTrip.getArrivalDate()) && currentTrip.getArrivalPort() == this)
+                    || (startTime.isAfter(currentTrip.getDepartureDate()) && endTime.isBefore(currentTrip.getDepartureDate()) && currentTrip.getDeparturePort() == this))
+                listTripOut.add(currentTrip);
+        }
+        return listTripOut;
     }
 
     // Get distance to other port
@@ -140,12 +171,20 @@ public class Port implements Serializable {
         return null;
     }
 
+    public Vector<Trip> getTrips() {
+        return trips;
+    }
+
     public void confirmTrip(String id){
         Trip trip = findTripById(id);
-        try{
-            this.trips.remove(trip);
-        }catch (NullPointerException e){
-            System.out.println("The trip does not exist");
+        if (trip.getArrivalPort() == this && !trip.getStatus()){
+            try{
+                this.trips.remove(trip);
+            }catch (NullPointerException e){
+                System.out.println("The trip does not exist");
+            }
+        }else {
+            System.out.println("There are no trip to confirm");
         }
     }
 
@@ -169,7 +208,15 @@ public class Port implements Serializable {
 
     public void addTrip(Trip trip){
         this.trips.add(trip);
-
+        System.out.println("Adding trip successfully");
+//        try {
+//            ObjectOutputStream portHistoryOut = new ObjectOutputStream(new FileOutputStream(ContainerPortManagementSystem.getPortHistoryFilePath(this)));
+//            portHistoryOut.writeObject(getTrips());
+//            portHistoryOut.close();
+//            System.out.println("Writing Port history successfully");
+//        } catch (IOException e) {
+//            System.out.printf("The '%s.txt' file does not exist!", getId());
+//        }
     }
 
     public boolean isLandingAbility() {

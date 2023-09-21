@@ -1,9 +1,11 @@
 import java.util.Vector;
 
 public interface Vehicle {
-    public void load(Container container);
+    public boolean load(Container container);
 
     public Container unLoad(String id);
+
+    public Container unLoad(Container container);
 
     public void refueling(double fuel);
 

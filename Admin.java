@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -35,11 +37,11 @@ public record Admin(String username, String password) implements User, Serializa
 //            case "7" -> ;
             case "8" -> loadContainer(port);
             case "9" -> unloadContainer(port);
-//          case "10" -> displayWeightOfContainerType(port.getContainers());
+            case "10" -> displayWeightOfContainerType(port.getContainers());
 //            case "11" -> ;
 //            case "12" -> ;
-//            case "13" -> ;
-//            case "14" -> ;
+            case "13" -> listTripsBetweenDays(port);
+            case "14" -> confirmTrip(port);
             default -> System.out.println("You have to choose the number associated with the operation");
         }
     }
@@ -70,26 +72,39 @@ public record Admin(String username, String password) implements User, Serializa
         }
     }
 
+    public void confirmTrip(Port port) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("List of trips: ");
+        AdminGUI.displayTripInPort(port);
+        port.confirmTrip(input.nextLine());
+    }
+
     public void createPortManager() throws IOException {
         Port port = PortFactory.createPort(); // create Port
-        User portManager = PortManager.create(); // create Port manager
-        PortFactory.createPortHistoryFile(port); // create Port history
-        port.setPortManager(portManager);
-        ((PortManager) portManager).setPort(port);
-        ContainerPortManagementSystem.getPorts().add(port); // add Port to the system
-        ContainerPortManagementSystem.getUsers().add(portManager); // add Port manager to the system
+        if (port != null) {
+            User portManager = PortManager.create(); // create Port manager
+            port.setPortManager(portManager);
+            ((PortManager) portManager).setPort(port);
+            ContainerPortManagementSystem.getPorts().add(port); // add Port to the system
+            ContainerPortManagementSystem.getUsers().add(portManager); // add Port manager to the system
+        } else {
+            System.out.println("Port and port manager created unsuccessfully!");
+        }
     }
 
     public void createContainer(Port port) {
         Container container = ContainerFactory.createContainer(port);
-        port.addContainer(container);
-        ContainerPortManagementSystem.getContainers().add(container);
-        System.out.println("Adding container into this port successfully");
+        if (container!= null && port.addContainer(container)){
+            ContainerPortManagementSystem.getContainers().add(container);
+            System.out.println("Adding container into this port successfully");
+        }else {
+            System.out.println("Adding container unsuccessful");
+        }
     }
 
     public void createVehicle(Port port) {
         Vehicle vehicle = VehicleFactory.createVehicle(port);
-        if (port.addVehicle(vehicle)) {
+        if (vehicle != null && port.addVehicle(vehicle)) {
             ContainerPortManagementSystem.getVehicles().add(vehicle);
             System.out.println("Adding vehicle successfully");
         } else {
@@ -143,7 +158,7 @@ public record Admin(String username, String password) implements User, Serializa
             System.out.println("The port does not exist in the system");
             System.out.println("Sending vehicle unsuccessfully");
         } else {
-            AdminGUI.displayContainerAndVehicleInPort(port);
+            AdminGUI.displayVehicleInPort(port);
             System.out.print("Enter the vehicle id associated for sending: ");
             Vehicle vehicle = port.findVehicleByID(input.nextLine());
             if (vehicle == null) {
@@ -153,7 +168,7 @@ public record Admin(String username, String password) implements User, Serializa
                 System.out.println("The vehicle cannot drive to the port with the current fuel capacity");
                 System.out.println("Please refuel the vehicle or change to another vehicle");
             } else if (LandingBehaviour.landing(destinationPort, vehicle)) {
-                Trip trip = new Trip(port, destinationPort, false);
+                Trip trip = new Trip(vehicle, port, destinationPort, false);
                 destinationPort.addTrip(trip);
                 port.addTrip(trip);
                 port.removeVehicle(vehicle);
@@ -167,6 +182,7 @@ public record Admin(String username, String password) implements User, Serializa
             }
         }
     }
+
     public static void displayWeightOfContainerType(Vector<Container> containers) {
         HashMap<String, Double> weightOfContainerType = new HashMap<>();
 
@@ -179,98 +195,99 @@ public record Admin(String username, String password) implements User, Serializa
         for (Container container : containers) {
             if (container instanceof OpenSide) {
                 openSideTotalWeight += container.getWeight();
-                weightOfContainerType.put("Open Side",openSideTotalWeight);
+                weightOfContainerType.put("Open Side", openSideTotalWeight);
             } else if (container instanceof Liquid) {
                 liquidTotalWeight += container.getWeight();
-                weightOfContainerType.put("Liquid",liquidTotalWeight);
+                weightOfContainerType.put("Liquid", liquidTotalWeight);
             } else if (container instanceof DryStorage) {
                 dryStorageTotalWeight += container.getWeight();
-                weightOfContainerType.put("DryStorage",dryStorageTotalWeight);
+                weightOfContainerType.put("DryStorage", dryStorageTotalWeight);
             } else if (container instanceof Refrigerated) {
                 refrigeratedTotalWeight += container.getWeight();
-                weightOfContainerType.put("Refrigerated",refrigeratedTotalWeight);
+                weightOfContainerType.put("Refrigerated", refrigeratedTotalWeight);
             } else if (container instanceof OpenTop) {
                 openTopTotalWeight += container.getWeight();
-                weightOfContainerType.put("OpenTop",openTopTotalWeight);
+                weightOfContainerType.put("OpenTop", openTopTotalWeight);
             }
         }
 
-        if (weightOfContainerType.size() != 0){
+        if (!weightOfContainerType.isEmpty()) {
             // Print the total weight for each type of container
             weightOfContainerType.forEach((key, value) -> System.out.println(key + " = " + value));
-        }else {
+        } else {
             System.out.println("There are no Containers to display!");
         }
     }
+
     public void loadContainer(Port port) {
         // print vehicle and container in the port
         Scanner scanner = new Scanner(System.in);
-        System.out.println("List of vehicle in the port:");
-        for (Vehicle v : port.getVehicles()) {
-            System.out.println(v);
-        }
-        System.out.println("List of container in the port:");
-        for (Container c : port.getContainers()) {
-            System.out.println(c);
-        }
-        boolean validInput;
-        String inputID;
-        Vehicle chosenVehicle;
-        Container chosenContainer;
-        do {
-            System.out.println("Enter vehicle ID to load container:");
-            inputID = scanner.nextLine();
-            chosenVehicle = port.findVehicleByID(inputID);
-            validInput = (chosenVehicle != null);
-            if (!validInput) {
-                System.out.println("Vehicle does not exist in this port.");
+        if (port.getContainers().isEmpty() || port.getVehicles().isEmpty()) {
+            System.out.println("There are no container or vehicle in the port");
+        } else {
+            System.out.println("List of vehicle in the port:");
+            AdminGUI.displayVehicleInPort(port);
+            System.out.println("Enter the id of the vehicle");
+            Vehicle vehicle = port.findVehicleByID(scanner.nextLine());
+
+            System.out.println("List of container in the port:");
+            AdminGUI.displayContainerInPort(port);
+            System.out.println("Enter the id of the container");
+            Container container = port.findContainerByID(scanner.nextLine());
+
+            if (vehicle == null || container == null) {
+                System.out.println("The vehicle or the container does not exist in the system");
+            } else if (vehicle.load(container)) {
+                container.setVehicle(vehicle);
+                port.removeContainer(container);
+                container.setPort(null);
+                System.out.println("Loaded successfully");
             }
-        } while (!validInput);
-        do {
-            System.out.println("Enter container ID to load to vehicle:");
-            inputID = scanner.nextLine();
-            chosenContainer = port.findContainerByID(inputID);
-            validInput = (chosenContainer != null);
-            if (!validInput) {
-                System.out.println("Container does not exist in this port.");
-            }
-        } while (!validInput);
-        chosenVehicle.load(chosenContainer);
-        System.out.println("Container loaded.");
+        }
     }
+
     public void unloadContainer(Port port) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("List of vehicle in the port:");
-        for (Vehicle v: port.getVehicles()) {
-            System.out.println(v);
-        }
-        boolean validInput;
-        String inputID;
-        Vehicle chosenVehicle = null;
-        Container chosenContainer = null;
-        do {
+        if (port.getVehicles() != null){
+            System.out.println("List of vehicle in the port:");
+            AdminGUI.displayVehicleInPort(port);
             System.out.println("Enter vehicle ID to unload container:");
-            inputID = scanner.nextLine();
-            chosenVehicle = port.findVehicleByID(inputID);
-            validInput = (chosenVehicle != null);
-            if (!validInput) {
-                System.out.println("Vehicle does not exist in this port.");
+            Vehicle chosenVehicle = port.findVehicleByID(scanner.nextLine());
+            if (chosenVehicle == null){
+                System.out.println("The vehicle does not exist in this port");
+            } else if (chosenVehicle.getContainers() == null){
+                System.out.println("The vehicle does not have any container to unload!");
+            }else {
+                System.out.println("List of containers in the vehicle:");
+                AdminGUI.displayContainerInVehicle(chosenVehicle);
+                System.out.println("Enter container ID to unload:");
+                Container container = chosenVehicle.unLoad(scanner.nextLine());
+                if (container == null){
+                    System.out.println("The container does not exist ");
+                }else {
+                    if (port.addContainer(container)){
+                        container.setPort(port);
+                        container.setVehicle(null);
+                        System.out.println("Unload container successfully");
+                    }
+                }
             }
-        } while (!validInput);
-        System.out.println("List of containers in the vehicle:");
-        for (Container c: chosenVehicle.getContainers()) {
-            System.out.println(c);
+        }else {
+            System.out.println("Unload container unsuccessfully");
         }
-        do {
-            System.out.println("Enter container ID to unload:");
-            inputID = scanner.nextLine();
-            validInput = chosenVehicle.getContainers().contains(ContainerPortManagementSystem.findContainerById(inputID));
-            if (!validInput) {
-                System.out.println("Container does not exist in this vehicle.");
-            }
-        } while (!validInput);
-        chosenVehicle.unLoad(inputID);
-        System.out.println("Container unloaded.");
+    }
+
+    public static void listTripsBetweenDays(Port port) {
+        Scanner scanner = new Scanner(System.in);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM yyyy");
+        System.out.println("Enter the start day: ");
+        LocalDate startDay = LocalDate.parse(scanner.nextLine() + " 10 2023", dtf);
+
+        System.out.println("Enter the end day: ");
+        LocalDate endDay = LocalDate.parse(scanner.nextLine() + " 10 2023", dtf);
+
+        port.listAllTripFromDayAToB(startDay, endDay).forEach(System.out::println);
     }
 }
+
 
