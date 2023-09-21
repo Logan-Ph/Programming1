@@ -38,7 +38,7 @@ public class ContainerPortManagementSystem {
                         if (operation.equals("x")){break;}
                         user.operationCase(operation);
                     }else if (user instanceof PortManager){
-                        PortManagerGUI.displayPortOperation();
+                        PortManagerGUI.displayOperationForPortManager();
                         System.out.print("Enter the number associated with the operation or 'x' to exit: ");
                         String operation = input.nextLine();
                         if (operation.equals("x")){break;}
