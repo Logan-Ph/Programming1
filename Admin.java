@@ -187,20 +187,20 @@ public record Admin(String username, String password) implements User, Serializa
                 weightOfContainerType.put("Liquid",liquidTotalWeight);
             } else if (container instanceof DryStorage) {
                 dryStorageTotalWeight += container.getWeight();
-                weightOfContainerType.put("DryStorage",dryStorageTotalWeight);
+                weightOfContainerType.put("Dry Storage",dryStorageTotalWeight);
             } else if (container instanceof Refrigerated) {
                 refrigeratedTotalWeight += container.getWeight();
                 weightOfContainerType.put("Refrigerated",refrigeratedTotalWeight);
             } else if (container instanceof OpenTop) {
                 openTopTotalWeight += container.getWeight();
-                weightOfContainerType.put("OpenTop",openTopTotalWeight);
+                weightOfContainerType.put("Open Top",openTopTotalWeight);
             }
         }
 
         if (weightOfContainerType.size() != 0){
             // Print the total weight for each type of container
             weightOfContainerType.forEach((key, value) -> System.out.println(key + " = " + value));
-        }else {
+        } else {
             System.out.println("There are no Containers to display!");
         }
     }

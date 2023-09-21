@@ -66,10 +66,11 @@ public class PortManager implements User, Serializable {
 
 
     public void createContainer(Port port) {
-        Container container = ContainerFactory.createContainer(port);
-        port.addContainer(container);
-        ContainerPortManagementSystem.getContainers().add(container);
-        System.out.println("Adding container into this port successfully");
+            Container container = ContainerFactory.createContainer(port);
+            port.addContainer(container);
+            ContainerPortManagementSystem.getContainers().add(container);
+            System.out.println("Adding container into this port successfully");
+
 
 //        getPort();
 //        try {
@@ -92,7 +93,9 @@ public class PortManager implements User, Serializable {
             System.out.print("Enter the container id associated to remove: ");
             Container container = port.removeContainer(input.nextLine());
             try {
-                ContainerPortManagementSystem.getContainers().remove(container);
+                if(input.nextLine() == container.getId()) {
+                    ContainerPortManagementSystem.getContainers().remove(container);
+                };
                 System.out.println("Remove container successfully");
             } catch (NullPointerException e) {
                 System.out.println("Remove container unsuccessfully");
