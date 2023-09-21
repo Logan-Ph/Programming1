@@ -1,7 +1,6 @@
 import java.io.*;
 import java.nio.file.FileSystems;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 import java.util.Vector;
@@ -16,11 +15,10 @@ public class ContainerPortManagementSystem {
     public static void main(String[] args) throws IOException {
 //        users.add(new Admin("Admin", "admin123"));
 //        writeUser();
-
         Scanner input = new Scanner(System.in);
         String exit= "";
 
-        SystemGUI.display();
+        AdminGUI.display();
         System.out.println(Separator.sep());
         systemInitialization();
         System.out.println(Separator.sep());
@@ -63,6 +61,7 @@ public class ContainerPortManagementSystem {
         readPort();
         readVehicle();
         readContainer();
+        clearPortHistory();
     }
 
     private static void endSystem() {
@@ -70,6 +69,7 @@ public class ContainerPortManagementSystem {
         writeUser();
         writeVehicle();
         writeContainer();
+        clearPortHistory();
     }
 
     public static boolean checkUsername(String username){
@@ -89,7 +89,6 @@ public class ContainerPortManagementSystem {
         }
         return false;
     }
-
 
     private static User login() {
         Scanner input = new Scanner(System.in);
@@ -116,15 +115,6 @@ public class ContainerPortManagementSystem {
         return null;
     }
 
-    public static Vehicle findVehicleById(String id){
-        for(Vehicle vehicle: getVehicles()){
-            if (vehicle.getID().equals(id)){
-                return vehicle;
-            }
-        }
-        return null;
-    }
-
     public static Port findPortById(String id){
         for(Port port: getPorts()){
             if (port.getId().equals(id)){
@@ -132,6 +122,20 @@ public class ContainerPortManagementSystem {
             }
         }
         return null;
+    }
+
+    public static void clearPortHistory(){
+        for (Port port:getPorts()){
+            for (int i = port.getTrips().size()-1; i>=0; i--){
+                if (port.getTrips().get(i).getStatus() && validateTime(port.getTrips().get(i).getArrivalDate())){
+                    port.getTrips().subList(0,i+1).clear();
+                    break;
+                }else if (!port.getTrips().get(i).getStatus() && validateTime(port.getTrips().get(i).getDepartureDate())){
+                    port.getTrips().subList(0,i+1).clear();
+                    break;
+                }
+            }
+        }
     }
 
     public static Vector<Container> getContainers() {
@@ -148,13 +152,6 @@ public class ContainerPortManagementSystem {
 
     public static Vector<Vehicle> getVehicles() {
         return vehicles;
-    }
-
-    public static String getPortHistoryFilePath(Port port) throws IOException{
-        return new File(FileSystems.getDefault()
-                .getPath("")
-                .toAbsolutePath()
-                .toString().concat("/Programming1/PortManagementSystem/PortHistory/" + port.getId())).getCanonicalPath();
     }
 
     public static String getPortFilePath() throws IOException {
@@ -186,11 +183,8 @@ public class ContainerPortManagementSystem {
     }
 
     //check if the time exceeds 7 days
-    public boolean validateTime(String date){
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM yyyy");
-        LocalDate priorDate = LocalDate.parse(date, dtf);
-        LocalDate thisDate = LocalDate.now();
-        return (ChronoUnit.DAYS.between(priorDate, thisDate)) >= 7;
+    public static boolean validateTime(LocalDate priorDate){
+        return (ChronoUnit.DAYS.between(priorDate, LocalDate.now())) >= 7;
     }
 
     private static void writeContainer() {

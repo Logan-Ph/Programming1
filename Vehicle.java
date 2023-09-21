@@ -7,7 +7,7 @@ public interface Vehicle {
 
     public Container unLoad(Container container);
 
-    public void refueling(double fuel);
+    public boolean refueling();
 
     public double calculateFuelConsumption(Port port);
 

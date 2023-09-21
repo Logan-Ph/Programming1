@@ -20,7 +20,7 @@ public record Admin(String username, String password) implements User, Serializa
     public void operationCase(String opCase) throws IOException {
         switch (opCase) {
             case "1" -> portOperation();
-            case "2" -> createPortManager();
+            case "2" -> createPortAndPortManager();
             case "3" -> displayWeightOfContainerType(ContainerPortManagementSystem.getContainers());
             default -> System.out.println("You have to choose the number associated with the operation");
         }
@@ -34,14 +34,15 @@ public record Admin(String username, String password) implements User, Serializa
             case "4" -> removeContainer(port);
             case "5" -> AdminGUI.displayContainerAndVehicleInPort(port);
             case "6" -> sendVehicle(port);
-//            case "7" -> ;
+            case "7" -> refuelVehicle(port);
             case "8" -> loadContainer(port);
             case "9" -> unloadContainer(port);
             case "10" -> displayWeightOfContainerType(port.getContainers());
-//            case "11" -> ;
-            case "12" -> ;
+            case "11" -> amountFuelUsedInDay(port);
+            case "12" -> listTripsInDay(port);
             case "13" -> listTripsBetweenDays(port);
             case "14" -> confirmTrip(port);
+            case "15" -> removePortAndPortManager(port);
             default -> System.out.println("You have to choose the number associated with the operation");
         }
     }
@@ -64,11 +65,28 @@ public record Admin(String username, String password) implements User, Serializa
                         break;
                     } else {
                         portOperationCase(opCase, port);
+                        if (opCase.equals("15")){
+                            return;
+                        }
                     }
                 }
             } else {
                 System.out.println("The port does not exist in the system");
             }
+        }
+    }
+
+    public void refuelVehicle(Port port){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Vehicles in port: ");
+        AdminGUI.displayVehicleInPort(port);
+        System.out.println("Enter the id for the vehicle to refuel: ");
+        Vehicle vehicle = port.findVehicleByID(input.nextLine());
+        if (vehicle == null){
+            System.out.println("The vehicle does not exist in the port");
+        }else {
+            vehicle.refueling();
+            System.out.println("Refuelling the vehicle successfully");
         }
     }
 
@@ -79,7 +97,7 @@ public record Admin(String username, String password) implements User, Serializa
         port.confirmTrip(input.nextLine());
     }
 
-    public void createPortManager() throws IOException {
+    public void createPortAndPortManager(){
         Port port = PortFactory.createPort(); // create Port
         if (port != null) {
             User portManager = PortManager.create(); // create Port manager
@@ -168,7 +186,7 @@ public record Admin(String username, String password) implements User, Serializa
                 System.out.println("The vehicle cannot drive to the port with the current fuel capacity");
                 System.out.println("Please refuel the vehicle or change to another vehicle");
             } else if (LandingBehaviour.landing(destinationPort, vehicle)) {
-                Trip trip = new Trip(vehicle, port, destinationPort, false);
+                Trip trip = new Trip(vehicle, port, destinationPort, false, vehicle.calculateFuelConsumption(destinationPort));
                 destinationPort.addTrip(trip);
                 port.addTrip(trip);
                 port.removeVehicle(vehicle);
@@ -210,7 +228,6 @@ public record Admin(String username, String password) implements User, Serializa
                 weightOfContainerType.put("OpenTop", openTopTotalWeight);
             }
         }
-
         if (!weightOfContainerType.isEmpty()) {
             // Print the total weight for each type of container
             weightOfContainerType.forEach((key, value) -> System.out.println(key + " = " + value));
@@ -277,20 +294,94 @@ public record Admin(String username, String password) implements User, Serializa
         }
     }
 
-    public static void listTripsBetweenDays(Port port) {
+    public void listTripsBetweenDays(Port port) {
         Scanner scanner = new Scanner(System.in);
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM yyyy");
-        System.out.println("Enter the start day: ");
-        LocalDate startDay = LocalDate.parse(scanner.nextLine() + " 10 2023", dtf);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd M yyyy");
+        LocalDate startDay,endDay;
+        Vector<Trip> trips;
+        try {
+            System.out.println("Enter the start day (You need to enter only day, NOT MONTH OR YEAR): ");
+            startDay = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
+        }catch (RuntimeException e){
+            System.out.println("The day is invalid");
+            return;
+        }
 
-        System.out.println("Enter the end day: ");
-        LocalDate endDay = LocalDate.parse(scanner.nextLine() + " 10 2023", dtf);
-
-        port.listAllTripFromDayAToB(startDay, endDay).forEach(System.out::println);
+        try {
+            System.out.println("Enter the end day (You need to enter only day, NOT MONTH OR YEAR): ");
+            endDay = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
+        }catch (RuntimeException e){
+            System.out.println("The day is invalid");
+            return;
+        }
+        trips = port.listAllTripFromDayAToB(startDay, endDay);
+        if (trips==null){
+            System.out.println("No trips found");
+        }
+        else {
+            trips.forEach(System.out::println);
+        }
     }
 
+    public void listTripsInDay(Port port) {
+        Scanner scanner = new Scanner(System.in);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd M yyyy");
+        LocalDate date;
+        Vector<Trip> trips;
+        try {
+            System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR): ");
+            date = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
+        }catch (RuntimeException e){
+            System.out.println("The day is invalid");
+            return;
+        }
+        trips = port.listAllTripInDay(date);
+        if (trips==null){
+            System.out.println("No trips found");
+        }
+        else {
+            trips.forEach(System.out::println);
+        }
+    }
 
+    public void amountFuelUsedInDay(Port port){
+        Scanner scanner = new Scanner(System.in);
+        LocalDate date;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd M yyyy");
+        try {
+            System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR): ");
+            date = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
+        }catch (RuntimeException e){
+            System.out.println("The day is invalid");
+            return;
+        }
+        System.out.println("The amount of fuel used in this day: " + port.amountFuelUsedInDay(date));
+    }
 
+    public void removePortAndPortManager(Port port){
+        Scanner input = new Scanner(System.in);
+        if(!port.checkTrip()){
+            System.out.println("Are you sure you want to delete this Port ?");
+            System.out.println("Enter 'x' to delete or else to exit");
+            String confirm = input.nextLine();
+            if (confirm.equals("x")){
+                ContainerPortManagementSystem.getPorts().remove(port);
+                Vector<Trip> trips = port.getTrips();
+                for (Trip trip: trips){
+                    if (trip.getArrivalPort()!=port){
+                        trip.getArrivalPort().getTrips().remove(trip);
+                    }
+                    else {
+                        trip.getDeparturePort().getTrips().remove(trip);
+                    }
+                }
+                ContainerPortManagementSystem.getUsers().remove(port.getUser());
+                System.out.println("Remove port and port manager successfully");
+            }
+        }else {
+            System.out.println("You cannot delete this port. There are more vehicles are coming to this port, you need to confirm first");
+        }
+    }
 }
 
 

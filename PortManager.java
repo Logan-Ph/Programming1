@@ -1,7 +1,6 @@
+import java.io.IOException;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Scanner;
-import java.util.Vector;
 
 public class PortManager implements User, Serializable {
     private final String password;
@@ -47,7 +46,6 @@ public class PortManager implements User, Serializable {
         }
     }
 
-
     public static User create(){
         Scanner input = new Scanner(System.in);
         System.out.print("Enter the new port manager username: ");
@@ -63,7 +61,6 @@ public class PortManager implements User, Serializable {
 
         return new PortManager(username,password,null);
     }
-
 
     public void createContainer(Port port) {
         Container container = ContainerFactory.createContainer(port);
@@ -89,6 +86,7 @@ public class PortManager implements User, Serializable {
             }
         }
     }
+
     public void loadContainer() {
         // print vehicle and container in the port
         Scanner scanner = new Scanner(System.in);
@@ -125,6 +123,7 @@ public class PortManager implements User, Serializable {
         chosenVehicle.load(chosenContainer);
         System.out.println("Container loaded.");
     }
+
     public void unloadContainer() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("List of vehicle in the port:");
@@ -158,22 +157,5 @@ public class PortManager implements User, Serializable {
         } while (!validInput);
         chosenVehicle.unLoad(inputID);
         System.out.println("Container unloaded.");
-    }
-
-    public Vector<Vehicle> getListAllVehicleInADay(LocalDate day) {
-        Vector<Trip> listAllTrip = port.getTrips();
-        Vector<Vehicle> listVehicleInADay = port.getVehicles(); // Vehicle in port
-        for(Trip tripCome : listAllTrip)
-        {
-            if(tripCome.getDeparturePort()== port && tripCome.getDepartureDate().equals(day))
-                listVehicleInADay.add(tripCome.getVehicle()); // Vehicle out this date
-        }
-        for(Trip tripOut : listAllTrip)
-        {
-            if(tripOut.getArrivalPort()== port && tripOut.getDepartureDate().equals(day))
-                listVehicleInADay.add(tripOut.getVehicle()); // Vehicle come this date
-        }
-
-        return listVehicleInADay;
     }
 }
