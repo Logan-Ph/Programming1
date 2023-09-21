@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Vector;
 
 public class BasicTruck implements Vehicle, Truck, Serializable {
@@ -95,13 +96,28 @@ public class BasicTruck implements Vehicle, Truck, Serializable {
 
     //Refueling the vehicle
     @Override
-    public void refueling(double fuel) {
+    public boolean refueling() {
+        Scanner input = new Scanner(System.in);
+        double fuel;
+        System.out.print("Enter the amount you want to refuel: ");
+        try {
+            fuel = Double.parseDouble(input.nextLine());
+        }catch (RuntimeException e){
+            System.out.println("The amount must be a number");
+            return false;
+        }
+        if (fuel<0){
+            System.out.println("The amount can not be negative");
+        }
+
         if (getCurrentFuel() + fuel > fuelCapacity) { // check if it does not exceed the fuel capacity
             System.out.println("You can not refuel more than the fuel capacity of this vehicle!");
             System.out.println("The current fuel of the vehicle is: "+getCurrentFuel());
             System.out.println("The maximum fuel capacity of the vehicle is: "+getFuelCapacity());
+            return false;
         } else {
             currentFuel += fuel;
+            return true;
         }
     }
 

@@ -34,12 +34,12 @@ public record Admin(String username, String password) implements User, Serializa
             case "4" -> removeContainer(port);
             case "5" -> AdminGUI.displayContainerAndVehicleInPort(port);
             case "6" -> sendVehicle(port);
-//            case "7" -> ;
+            case "7" -> refuelVehicle(port);
             case "8" -> loadContainer(port);
             case "9" -> unloadContainer(port);
             case "10" -> displayWeightOfContainerType(port.getContainers());
-//            case "11" -> ;
-//            case "12" -> ;
+            case "11" -> amountFuelUsedInDay(port);
+            case "12" -> listTripsInDay(port);
             case "13" -> listTripsBetweenDays(port);
             case "14" -> confirmTrip(port);
             default -> System.out.println("You have to choose the number associated with the operation");
@@ -72,6 +72,19 @@ public record Admin(String username, String password) implements User, Serializa
         }
     }
 
+    public void refuelVehicle(Port port){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Vehicles in port: ");
+        AdminGUI.displayVehicleInPort(port);
+        System.out.println("Enter the id for the vehicle to refuel: ");
+        Vehicle vehicle = port.findVehicleByID(input.nextLine());
+        if (vehicle == null){
+            System.out.println("The vehicle does not exist in the port");
+        }else {
+            vehicle.refueling();
+        }
+    }
+
     public void confirmTrip(Port port) {
         Scanner input = new Scanner(System.in);
         System.out.println("List of trips: ");
@@ -79,7 +92,7 @@ public record Admin(String username, String password) implements User, Serializa
         port.confirmTrip(input.nextLine());
     }
 
-    public void createPortManager() throws IOException {
+    public void createPortManager(){
         Port port = PortFactory.createPort(); // create Port
         if (port != null) {
             User portManager = PortManager.create(); // create Port manager
@@ -168,7 +181,7 @@ public record Admin(String username, String password) implements User, Serializa
                 System.out.println("The vehicle cannot drive to the port with the current fuel capacity");
                 System.out.println("Please refuel the vehicle or change to another vehicle");
             } else if (LandingBehaviour.landing(destinationPort, vehicle)) {
-                Trip trip = new Trip(vehicle, port, destinationPort, false);
+                Trip trip = new Trip(vehicle, port, destinationPort, false, vehicle.calculateFuelConsumption(destinationPort));
                 destinationPort.addTrip(trip);
                 port.addTrip(trip);
                 port.removeVehicle(vehicle);
@@ -277,17 +290,73 @@ public record Admin(String username, String password) implements User, Serializa
         }
     }
 
-    public static void listTripsBetweenDays(Port port) {
+    public void listTripsBetweenDays(Port port) {
         Scanner scanner = new Scanner(System.in);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM yyyy");
-        System.out.println("Enter the start day: ");
-        LocalDate startDay = LocalDate.parse(scanner.nextLine() + " 10 2023", dtf);
+        LocalDate startDay,endDay;
+        Vector<Trip> trips;
+        try {
+            System.out.println("Enter the start day (You need to enter only day, NOT MONTH OR YEAR): ");
+            startDay = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getDayOfMonth() + " " + LocalDate.now().getYear(), dtf);
+        }catch (RuntimeException e){
+            System.out.println("The day is invalid");
+            return;
+        }
 
-        System.out.println("Enter the end day: ");
-        LocalDate endDay = LocalDate.parse(scanner.nextLine() + " 10 2023", dtf);
+        try {
+            System.out.println("Enter the end day (You need to enter only day, NOT MONTH OR YEAR): ");
+            endDay = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getDayOfMonth() + " " + LocalDate.now().getYear(), dtf);
+        }catch (RuntimeException e){
+            System.out.println("The day is invalid");
+            return;
+        }
 
-        port.listAllTripFromDayAToB(startDay, endDay).forEach(System.out::println);
+        trips = port.listAllTripFromDayAToB(startDay, endDay);
+        if (trips==null){
+            System.out.println("No trips found");
+        }
+        else {
+            trips.forEach(System.out::println);
+        }
     }
+
+    public void listTripsInDay(Port port) {
+        Scanner scanner = new Scanner(System.in);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM yyyy");
+        LocalDate date;
+        Vector<Trip> trips;
+        try {
+            System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR): ");
+            date = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getDayOfMonth() + " " + LocalDate.now().getYear(), dtf);
+        }catch (RuntimeException e){
+            System.out.println("The day is invalid");
+            return;
+        }
+        trips = port.listAllTripInDay(date);
+        if (trips==null){
+            System.out.println("No trips found");
+        }
+        else {
+            trips.forEach(System.out::println);
+        }
+    }
+
+    public void amountFuelUsedInDay(Port port){
+        Scanner scanner = new Scanner(System.in);
+        LocalDate date;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM yyyy");
+
+        try {
+            System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR): ");
+            date = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getDayOfMonth() + " " + LocalDate.now().getYear(), dtf);
+        }catch (RuntimeException e){
+            System.out.println("The day is invalid");
+            return;
+        }
+
+        System.out.println("The amount of fuel used in this day: " + port.amountFuelUsedInDay(date));
+    }
+
 }
 
 
