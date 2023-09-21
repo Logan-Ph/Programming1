@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Scanner;
 
@@ -45,9 +46,6 @@ public class PortManager implements User, Serializable {
         }
     }
 
-
-
-
     public static User create(){
         Scanner input = new Scanner(System.in);
         System.out.print("Enter the new port manager username: ");
@@ -63,7 +61,6 @@ public class PortManager implements User, Serializable {
 
         return new PortManager(username,password,null);
     }
-
 
     public void createContainer(Port port) {
         Container container = ContainerFactory.createContainer(port);
@@ -89,6 +86,7 @@ public class PortManager implements User, Serializable {
             }
         }
     }
+
     public void loadContainer() {
         // print vehicle and container in the port
         Scanner scanner = new Scanner(System.in);
@@ -125,6 +123,7 @@ public class PortManager implements User, Serializable {
         chosenVehicle.load(chosenContainer);
         System.out.println("Container loaded.");
     }
+
     public void unloadContainer() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("List of vehicle in the port:");
