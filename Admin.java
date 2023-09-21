@@ -1,4 +1,4 @@
-import java.io.IOException;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.time.LocalDate;
@@ -17,7 +17,7 @@ public record Admin(String username, String password) implements User, Serializa
     }
 
     @Override
-    public void operationCase(String opCase) throws IOException {
+    public void operationCase(String opCase){
         switch (opCase) {
             case "1" -> portOperation();
             case "2" -> createPortAndPortManager();
