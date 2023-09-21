@@ -12,7 +12,9 @@ public class Trip implements Serializable {
     private Port arrivalPort;
     private boolean status;
 
-    public Trip(Vehicle vehicle,Port departurePort, Port arrivalPort, boolean status) {
+    private double amountFuel;
+
+    public Trip(Vehicle vehicle,Port departurePort, Port arrivalPort, boolean status, double amountFuel) {
         id = generateID();
         this.departureDate = LocalDate.now();
         this.departurePort = departurePort;
@@ -35,11 +37,6 @@ public class Trip implements Serializable {
     public void setArrivalDate() {
         this.arrivalDate = LocalDate.now();
     }
-    public void setArrivalDate(String date) {
-        date += " 10 2023";
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM yyyy");
-        this.arrivalDate = LocalDate.parse(date, dtf);
-    }
 
     public void setStatus(boolean status) {
         this.status = status;
@@ -53,6 +50,10 @@ public class Trip implements Serializable {
 
     public void sendTrip(String portID){
 
+    }
+
+    public double getAmountFuel() {
+        return amountFuel;
     }
 
     public Vehicle getVehicle() {
