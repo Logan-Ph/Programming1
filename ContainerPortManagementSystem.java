@@ -12,13 +12,13 @@ public class ContainerPortManagementSystem {
     private static Vector<User> users = new Vector<>();
     private static Vector<Container> containers = new Vector<>();
 
-    public static void main(String[] args) throws IOException {
+    public static void run() throws IOException {
 //        users.add(new Admin("Admin", "admin123"));
 //        writeUser();
         Scanner input = new Scanner(System.in);
         String exit= "";
 
-        AdminGUI.display();
+        GUI.display();
         System.out.println(Separator.sep());
         systemInitialization();
         System.out.println(Separator.sep());
@@ -32,19 +32,17 @@ public class ContainerPortManagementSystem {
             }else {
                 while (true){
                     if (user instanceof Admin) {
-                        AdminGUI.displayOperation();
+                        GUI.displayOperation();
                         System.out.print("Enter the number associated with the operation or 'x' to exit: ");
                         String operation = input.nextLine();
                         if (operation.equals("x")){break;}
                         user.operationCase(operation);
                     }else if (user instanceof PortManager){
-                        PortManagerGUI.displayPortOperation();
+                        GUI.displayOperationForPortManager();
                         System.out.print("Enter the number associated with the operation or 'x' to exit: ");
                         String operation = input.nextLine();
                         if (operation.equals("x")){break;}
                         user.operationCase(operation);
-                        System.out.println("Enter 'x' to exit to login page or else to continue");
-                        if (input.nextLine().equals("x")){break;}
                     }
                 }
             }
@@ -101,15 +99,6 @@ public class ContainerPortManagementSystem {
         for (User user : users) {
             if (user.username().equals(username) && user.password().equals(password)) {
                 return user;
-            }
-        }
-        return null;
-    }
-
-    public static Container findContainerById(String id){
-        for (Container container: getContainers()){
-            if (container.getId().equals(id)){
-                return container;
             }
         }
         return null;

@@ -1,27 +1,25 @@
 import java.util.Vector;
 
 public interface Vehicle {
-    public boolean load(Container container);
+    boolean load(Container container);
 
-    public Container unLoad(String id);
+    Container unLoad(String id);
 
-    public Container unLoad(Container container);
+    boolean refueling();
 
-    public boolean refueling();
+    double calculateFuelConsumption(Port port);
 
-    public double calculateFuelConsumption(Port port);
+    double getCurrentStoringCapacity();
 
-    public double getCurrentStoringCapacity();
+    String generateID();
 
-    public String generateID();
+    String getID();
 
-    public String getID();
+    Port getPort();
 
-    public Port getPort();
+    void setPort(Port port);
 
-    public void setPort(Port port);
+    Vector<Container> getContainers();
 
-    public Vector<Container> getContainers();
-
-    public double getCurrentFuel();
+    double getCurrentFuel();
 }

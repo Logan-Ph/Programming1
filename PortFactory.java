@@ -15,7 +15,7 @@ public class PortFactory {
         String portName;
 
         System.out.println("Current port(s) in the system: ");
-        AdminGUI.displayPort();
+        GUI.displayPort();
         System.out.print("Enter the new port name: ");
         portName = input.nextLine();
         try {

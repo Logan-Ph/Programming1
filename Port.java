@@ -59,16 +59,14 @@ public class Port implements Serializable {
         return null;
     }
 
-    public Container removeContainer(Container container) {
+    public void removeContainer(Container container) {
         try {
             this.containers.remove(container); // remove the container in the port
             currentStoringCapacity -= container.getWeight();
             container.setPort(null);
-            return container;
         } catch (NullPointerException e) {
             System.out.println("The container does not exist in this Port!");
         }
-        return null;
     }
 
     public boolean addVehicle(Vehicle vehicle) {
@@ -89,26 +87,22 @@ public class Port implements Serializable {
             return vehicle;
         } catch (NullPointerException e) {
             System.out.println("The vehicle does not exist in this Port!");
+            return null;
         }
-        return null;
     }
 
-    public Vehicle removeVehicle(Vehicle vehicle) {
+    public void removeVehicle(Vehicle vehicle) {
         try {
             this.vehicles.remove(vehicle); // remove the container in the port
-            return vehicle;
         } catch (NullPointerException e) {
             System.out.println("The vehicle does not exist in this Port!");
         }
-        return null;
     }
 
     public Vector<Trip> listAllTripFromDayAToB(LocalDate startTime, LocalDate endTime) {
         Vector<Trip> listTripOut = new Vector<>();
         for (Trip currentTrip : this.getTrips()) {
-            System.out.println(currentTrip);
-
-            if ((!currentTrip.getStatus() && currentTrip.getDepartureDate().isAfter(startTime) && currentTrip.getDepartureDate().isBefore(endTime)) || (currentTrip.getStatus() && ((currentTrip.getArrivalDate().isAfter(startTime) && currentTrip.getArrivalDate().isBefore(endTime)) || (currentTrip.getDepartureDate().isBefore(endTime) && currentTrip.getDepartureDate().isAfter(startTime))))) {
+            if ((!currentTrip.getStatus() && (currentTrip.getDepartureDate().isAfter(startTime)||currentTrip.getDepartureDate().isEqual(startTime)) && (currentTrip.getDepartureDate().isBefore(endTime))||currentTrip.getDepartureDate().isEqual(endTime)) || (currentTrip.getStatus() && (((currentTrip.getArrivalDate().isAfter(startTime)||currentTrip.getArrivalDate().isEqual(startTime)) && (currentTrip.getArrivalDate().isBefore(endTime)||currentTrip.getArrivalDate().isEqual(endTime))) || ((currentTrip.getDepartureDate().isBefore(endTime)||currentTrip.getDepartureDate().isEqual(endTime)) && (currentTrip.getDepartureDate().isAfter(startTime)||currentTrip.getDepartureDate().isEqual(startTime)))))) {
                 listTripOut.add(currentTrip);
             }
         }
@@ -118,7 +112,6 @@ public class Port implements Serializable {
     public Vector<Trip> listAllTripInDay(LocalDate date) {
         Vector<Trip> listTripOut = new Vector<>();
         for (Trip currentTrip : this.getTrips()) {
-            System.out.println(currentTrip);
             if ((currentTrip.getStatus() && (currentTrip.getArrivalDate().isEqual(date) || currentTrip.getDepartureDate().isEqual(date))) || (!currentTrip.getStatus() && currentTrip.getDepartureDate().isEqual(date))) {
                 listTripOut.add(currentTrip);
             }
@@ -206,6 +199,9 @@ public class Port implements Serializable {
             if (trip.getArrivalPort() == this && !trip.getStatus()) {
                 trip.setStatus(true);
                 trip.setArrivalDate();
+                System.out.println("Confirm the trip successfully");
+                trip.getVehicle().setPort(this);
+                this.getVehicles().add(trip.getVehicle());
             } else {
                 System.out.println("There are no trip to confirm");
             }
@@ -251,10 +247,6 @@ public class Port implements Serializable {
 
     public String generateID() {
         return IDFactory.generateID("port");
-    }
-
-    public void setCurrentStoringCapacity(double currentStoringCapacity) {
-        this.currentStoringCapacity = currentStoringCapacity;
     }
 
     @Override

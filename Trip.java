@@ -76,6 +76,7 @@ public class Trip implements Serializable {
                 ", departurePort=" + departurePort +
                 ", arrivalPort=" + arrivalPort +
                 ", status=" + status +
+                ", amountFuel=" + amountFuel +
                 '}';
     }
 }
