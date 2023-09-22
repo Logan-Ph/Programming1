@@ -4,18 +4,15 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public class BasicTruck implements Vehicle, Truck, Serializable {
-    private String id;
-    private String name;
+    private final String id;
+    private final String name;
     private double currentFuel;
-    private double fuelCapacity;
-    private double storingCapacity;
+    private final double fuelCapacity;
+    private final double storingCapacity;
     private double currentStoringCapacity;
 
     private Vector<Container> containers;
     private Port port;
-
-    public BasicTruck() {
-    }
 
     // initialize the constructor
     public BasicTruck(String name, double fuelCapacity, double storingCapacity, Port port) {

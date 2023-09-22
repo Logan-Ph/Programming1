@@ -59,16 +59,14 @@ public class Port implements Serializable {
         return null;
     }
 
-    public Container removeContainer(Container container) {
+    public void removeContainer(Container container) {
         try {
             this.containers.remove(container); // remove the container in the port
             currentStoringCapacity -= container.getWeight();
             container.setPort(null);
-            return container;
         } catch (NullPointerException e) {
             System.out.println("The container does not exist in this Port!");
         }
-        return null;
     }
 
     public boolean addVehicle(Vehicle vehicle) {
@@ -93,21 +91,17 @@ public class Port implements Serializable {
         return null;
     }
 
-    public Vehicle removeVehicle(Vehicle vehicle) {
+    public void removeVehicle(Vehicle vehicle) {
         try {
             this.vehicles.remove(vehicle); // remove the container in the port
-            return vehicle;
         } catch (NullPointerException e) {
             System.out.println("The vehicle does not exist in this Port!");
         }
-        return null;
     }
 
     public Vector<Trip> listAllTripFromDayAToB(LocalDate startTime, LocalDate endTime) {
         Vector<Trip> listTripOut = new Vector<>();
         for (Trip currentTrip : this.getTrips()) {
-            System.out.println(currentTrip);
-
             if ((!currentTrip.getStatus() && currentTrip.getDepartureDate().isAfter(startTime) && currentTrip.getDepartureDate().isBefore(endTime)) || (currentTrip.getStatus() && ((currentTrip.getArrivalDate().isAfter(startTime) && currentTrip.getArrivalDate().isBefore(endTime)) || (currentTrip.getDepartureDate().isBefore(endTime) && currentTrip.getDepartureDate().isAfter(startTime))))) {
                 listTripOut.add(currentTrip);
             }

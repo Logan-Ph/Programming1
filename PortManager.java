@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -9,7 +8,7 @@ import java.util.Vector;
 public class PortManager implements User, Serializable {
     private final String password;
     private final String username;
-    private static Port port;
+    private Port port;
 
     public PortManager(String username, String password, Port port) {
         this.password = password;
@@ -78,9 +77,12 @@ public class PortManager implements User, Serializable {
 
     public void createContainer() {
         Container container = ContainerFactory.createContainer(port);
-        port.addContainer(container);
-        ContainerPortManagementSystem.getContainers().add(container);
-        System.out.println("Adding container into this port successfully");
+        if (container!= null && port.addContainer(container)){
+            ContainerPortManagementSystem.getContainers().add(container);
+            System.out.println("Adding container into this port successfully");
+        }else {
+            System.out.println("Adding container unsuccessful");
+        }
     }
 
     public void removeContainer() {
@@ -230,7 +232,7 @@ public class PortManager implements User, Serializable {
         }
     }
 
-    public static void displayWeightOfContainerType() {
+    public void displayWeightOfContainerType() {
         HashMap<String, Double> weightOfContainerType = new HashMap<>();
 
         double openSideTotalWeight = 0.0;
