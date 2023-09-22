@@ -10,7 +10,7 @@ public class ContainerFactory {
             weight = Double.parseDouble(input.nextLine());
 
             System.out.println("Container type:");
-            AdminGUI.displayContainerType();
+            GUI.displayContainerType();
             System.out.print("Enter number associated to the container type: ");
             containerType = input.nextLine();
         }catch (RuntimeException e){

@@ -45,7 +45,7 @@ public class PortManager implements User, Serializable {
         switch (opCase) {
             case "1" -> createContainer();
             case "2" -> removeContainer();
-            case "3" -> AdminGUI.displayContainerAndVehicleInPort(port);
+            case "3" -> GUI.displayContainerAndVehicleInPort(port);
             case "4" -> sendVehicle();
             case "5" -> refuelVehicle();
             case "6" -> loadContainer();
@@ -84,20 +84,22 @@ public class PortManager implements User, Serializable {
             System.out.println("Adding container unsuccessful");
         }
     }
-
     public void removeContainer() {
         Scanner input = new Scanner(System.in);
         System.out.println("Current Container(s) in the port: " + port.getName());
-        AdminGUI.displayContainerInPort(port);
+        GUI.displayContainerInPort(port);
         if (port.getContainers().isEmpty()) {
             System.out.println("There are no container in the port");
         } else {
             System.out.print("Enter the container id associated to remove: ");
             Container container = port.removeContainer(input.nextLine());
             try {
+                if (container == null){
+                    return;
+                }
                 ContainerPortManagementSystem.getContainers().remove(container);
                 System.out.println("Remove container successfully");
-            } catch (NullPointerException e) {
+            } catch (NullPointerException | AssertionError e) {
                 System.out.println("Remove container unsuccessfully");
             }
         }
@@ -106,129 +108,114 @@ public class PortManager implements User, Serializable {
     public void loadContainer() {
         // print vehicle and container in the port
         Scanner scanner = new Scanner(System.in);
-        System.out.println("List of vehicle in the port:");
-        for (Vehicle v : this.port.getVehicles()) {
-            System.out.println(v);
-        }
-        System.out.println("List of container in the port:");
-        for (Container c : this.port.getContainers()) {
-            System.out.println(c);
-        }
-        boolean validInput;
-        String inputID;
-        Vehicle chosenVehicle;
-        Container chosenContainer;
-        do {
-            System.out.println("Enter vehicle ID to load container:");
-            inputID = scanner.nextLine();
-            chosenVehicle = this.port.findVehicleByID(inputID);
-            validInput = (chosenVehicle != null);
-            if (!validInput) {
-                System.out.println("Vehicle does not exist in this port.");
+        if (port.getContainers().isEmpty() || port.getVehicles().isEmpty()) {
+            System.out.println("There are no container or vehicle in the port");
+        } else {
+            try{
+                System.out.println("List of vehicle in the port:");
+                GUI.displayVehicleInPort(port);
+                System.out.println("Enter the id of the vehicle");
+                Vehicle vehicle = port.findVehicleByID(scanner.nextLine());
+
+                System.out.println("List of container in the port:");
+                GUI.displayContainerInPort(port);
+                System.out.println("Enter the id of the container");
+                Container container = port.findContainerByID(scanner.nextLine());
+
+                if (vehicle.load(container)) {
+                    container.setVehicle(vehicle);
+                    port.removeContainer(container);
+                    container.setPort(null);
+                    System.out.println("Loaded successfully");
+                }
+            }catch (NullPointerException e){
+                System.out.println("The vehicle or the container does not exist in the system");
+                System.out.println("Loaded unsuccessfully");
             }
-        } while (!validInput);
-        do {
-            System.out.println("Enter container ID to load to vehicle:");
-            inputID = scanner.nextLine();
-            chosenContainer = this.port.findContainerByID(inputID);
-            validInput = (chosenContainer != null);
-            if (!validInput) {
-                System.out.println("Container does not exist in this port.");
-            }
-        } while (!validInput);
-        chosenVehicle.load(chosenContainer);
-        System.out.println("Container loaded.");
+        }
     }
 
     public void unloadContainer() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("List of vehicle in the port:");
-        for (Vehicle v: this.port.getVehicles()) {
-            System.out.println(v);
-        }
-        boolean validInput;
-        String inputID;
-        Vehicle chosenVehicle = null;
-        Container chosenContainer = null;
-        do {
-            System.out.println("Enter vehicle ID to unload container:");
-            inputID = scanner.nextLine();
-            chosenVehicle = this.port.findVehicleByID(inputID);
-            validInput = (chosenVehicle != null);
-            if (!validInput) {
-                System.out.println("Vehicle does not exist in this port.");
+        if (port.getVehicles() != null){
+            try {
+                System.out.println("List of vehicle in the port: ");
+                GUI.displayVehicleInPort(port);
+                System.out.println("Enter the vehicle ID to unload container: ");
+                Vehicle chosenVehicle = port.findVehicleByID(scanner.nextLine());
+                if (chosenVehicle.getContainers() == null) {
+                    System.out.println("The vehicle does not have any container to unload!");
+                } else {
+                    System.out.println("List of containers in the vehicle:");
+                    GUI.displayContainerInVehicle(chosenVehicle);
+                    System.out.println("Enter container ID to unload:");
+                    Container container = chosenVehicle.unLoad(scanner.nextLine());
+                    if (port.addContainer(container)) {
+                        container.setPort(port);
+                        container.setVehicle(null);
+                        System.out.println("Unload container successfully");
+                    }
+                }
+            }catch (NullPointerException e){
+                System.out.println("The container or the the vehicle does not exist in this port");
+                System.out.println("Unload container unsuccessfully");
             }
-        } while (!validInput);
-        System.out.println("List of containers in the vehicle:");
-        for (Container c: chosenVehicle.getContainers()) {
-            System.out.println(c);
         }
-        do {
-            System.out.println("Enter container ID to unload:");
-            inputID = scanner.nextLine();
-            validInput = chosenVehicle.getContainers().contains(ContainerPortManagementSystem.findContainerById(inputID));
-            if (!validInput) {
-                System.out.println("Container does not exist in this vehicle.");
-            }
-        } while (!validInput);
-        chosenVehicle.unLoad(inputID);
-        System.out.println("Container unloaded.");
     }
 
     public void refuelVehicle(){
         Scanner input = new Scanner(System.in);
         System.out.println("Vehicles in port: ");
-        AdminGUI.displayVehicleInPort(port);
+        GUI.displayVehicleInPort(port);
         System.out.println("Enter the id for the vehicle to refuel: ");
         Vehicle vehicle = port.findVehicleByID(input.nextLine());
         if (vehicle == null){
             System.out.println("The vehicle does not exist in the port");
         }else {
-            vehicle.refueling();
-            System.out.println("Refuelling the vehicle successfully");
+            if (vehicle.refueling()){
+                System.out.println("Refuelling the vehicle successfully");
+            }
         }
     }
 
     public void confirmTrip() {
         Scanner input = new Scanner(System.in);
         System.out.println("List of trips: ");
-        AdminGUI.displayTripInPort(port);
+        GUI.displayTripInPort(port);
+        System.out.println("Enter the trip id associated to confirm");
         port.confirmTrip(input.nextLine());
     }
 
     public void sendVehicle() {
         Scanner input = new Scanner(System.in);
         System.out.println("Distance to all Port(s) in the system:");
-        AdminGUI.displayPortWithDistance(port);
+        GUI.displayPortWithDistance(port);
         System.out.print("Enter the destination port id: ");
         Port destinationPort = ContainerPortManagementSystem.findPortById(input.nextLine());
-
-        if (destinationPort == null) {
-            System.out.println("The port does not exist in the system");
+        try {
+            GUI.displayVehicleInPort(port);
+        } catch (NullPointerException e) {
+            System.out.println("The port does not exist");
             System.out.println("Sending vehicle unsuccessfully");
-        } else {
-            AdminGUI.displayVehicleInPort(port);
-            System.out.print("Enter the vehicle id associated for sending: ");
-            Vehicle vehicle = port.findVehicleByID(input.nextLine());
-            if (vehicle == null) {
-                System.out.println("The vehicle does not exist in the port");
-                System.out.println("Sending vehicle unsuccessfully");
-            } else if (vehicle.calculateFuelConsumption(destinationPort) < vehicle.getCurrentFuel()) {
+            return;
+        }
+        System.out.print("Enter the vehicle id associated for sending: ");
+        Vehicle vehicle = port.findVehicleByID(input.nextLine());
+        try {
+            if (vehicle.calculateFuelConsumption(destinationPort) > vehicle.getCurrentFuel()){
                 System.out.println("The vehicle cannot drive to the port with the current fuel capacity");
                 System.out.println("Please refuel the vehicle or change to another vehicle");
             } else if (LandingBehaviour.landing(destinationPort, vehicle)) {
                 Trip trip = new Trip(vehicle, port, destinationPort, false, vehicle.calculateFuelConsumption(destinationPort));
+                assert destinationPort != null;
                 destinationPort.addTrip(trip);
                 port.addTrip(trip);
                 port.removeVehicle(vehicle);
                 System.out.println("Sending vehicle successfully");
-            } else if (vehicle.getContainers() == null) {
-                System.out.println("The vehicle is empty. You have to load container into vehicle");
-                System.out.println("Sending vehicle unsuccessfully");
-            } else {
-                System.out.println("The vehicle can not land at that port");
-                System.out.println("Sending vehicle unsuccessfully");
             }
+        }catch (NullPointerException e){
+            System.out.println("The vehicle does not exist in this port");
+            System.out.println("Sending vehicle unsuccessfully");
         }
     }
 

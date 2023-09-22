@@ -17,7 +17,7 @@ public record Admin(String username, String password) implements User, Serializa
     }
 
     @Override
-    public void operationCase(String opCase){
+    public void operationCase(String opCase) {
         switch (opCase) {
             case "1" -> portOperation();
             case "2" -> createPortAndPortManager();
@@ -32,7 +32,7 @@ public record Admin(String username, String password) implements User, Serializa
             case "2" -> createVehicle(port);
             case "3" -> removeVehicle(port);
             case "4" -> removeContainer(port);
-            case "5" -> AdminGUI.displayContainerAndVehicleInPort(port);
+            case "5" -> GUI.displayContainerAndVehicleInPort(port);
             case "6" -> sendVehicle(port);
             case "7" -> refuelVehicle(port);
             case "8" -> loadContainer(port);
@@ -53,19 +53,19 @@ public record Admin(String username, String password) implements User, Serializa
             System.out.println("There are no Port in the system. You have to create the port first");
         } else {
             System.out.println("Current Port(s) in the system");
-            AdminGUI.displayPort();
+            GUI.displayPort();
             System.out.print("Enter the port id associated: ");
             Port port = ContainerPortManagementSystem.findPortById(input.nextLine());
             if (port != null) {
                 while (true) {
-                    AdminGUI.displayPortOperation();
+                    GUI.displayPortOperation();
                     System.out.print("Enter the associated number with the operation or 'x' to exit: ");
                     String opCase = input.nextLine();
                     if (opCase.equals("x")) {
                         break;
                     } else {
                         portOperationCase(opCase, port);
-                        if (opCase.equals("15")){
+                        if (opCase.equals("15")) {
                             return;
                         }
                     }
@@ -76,29 +76,30 @@ public record Admin(String username, String password) implements User, Serializa
         }
     }
 
-    public void refuelVehicle(Port port){
+    public void refuelVehicle(Port port) {
         Scanner input = new Scanner(System.in);
         System.out.println("Vehicles in port: ");
-        AdminGUI.displayVehicleInPort(port);
+        GUI.displayVehicleInPort(port);
         System.out.println("Enter the id for the vehicle to refuel: ");
         Vehicle vehicle = port.findVehicleByID(input.nextLine());
-        if (vehicle == null){
+        if (vehicle == null) {
             System.out.println("The vehicle does not exist in the port");
-        }else {
-            vehicle.refueling();
-            System.out.println("Refuelling the vehicle successfully");
+        } else {
+            if (vehicle.refueling()) {
+                System.out.println("Refuelling the vehicle successfully");
+            }
         }
     }
 
     public void confirmTrip(Port port) {
         Scanner input = new Scanner(System.in);
         System.out.println("List of trips: ");
-        AdminGUI.displayTripInPort(port);
+        GUI.displayTripInPort(port);
         System.out.println("Enter the trip id associated to confirm");
         port.confirmTrip(input.nextLine());
     }
 
-    public void createPortAndPortManager(){
+    public void createPortAndPortManager() {
         Port port = PortFactory.createPort(); // create Port
         if (port != null) {
             User portManager = PortManager.create(); // create Port manager
@@ -113,10 +114,10 @@ public record Admin(String username, String password) implements User, Serializa
 
     public void createContainer(Port port) {
         Container container = ContainerFactory.createContainer(port);
-        if (container!= null && port.addContainer(container)){
+        if (container != null && port.addContainer(container)) {
             ContainerPortManagementSystem.getContainers().add(container);
             System.out.println("Adding container into this port successfully");
-        }else {
+        } else {
             System.out.println("Adding container unsuccessful");
         }
     }
@@ -134,34 +135,44 @@ public record Admin(String username, String password) implements User, Serializa
     public void removeContainer(Port port) {
         Scanner input = new Scanner(System.in);
         System.out.println("Current Container(s) in the port: " + port.getName());
-        AdminGUI.displayContainerInPort(port);
+        GUI.displayContainerInPort(port);
         if (port.getContainers().isEmpty()) {
             System.out.println("There are no container in the port");
         } else {
             System.out.print("Enter the container id associated to remove: ");
             Container container = port.removeContainer(input.nextLine());
             try {
+                if (container == null){
+                    return;
+                }
                 ContainerPortManagementSystem.getContainers().remove(container);
                 System.out.println("Remove container successfully");
-            } catch (NullPointerException e) {
+            } catch (NullPointerException | AssertionError e) {
                 System.out.println("Remove container unsuccessfully");
             }
         }
     }
 
     public void removeVehicle(Port port) {
+        if (port.getVehicles() == null){
+            System.out.println("There are no vehicle in the port");
+            return;
+        }
         Scanner input = new Scanner(System.in);
         System.out.println("Current Vehicle(s) in the port: " + port.getName());
-        AdminGUI.displayVehicleInPort(port);
+        GUI.displayVehicleInPort(port);
         System.out.print("Enter the vehicle id associated to remove: ");
-        Vehicle vehicle = port.removeVehicle(input.nextLine());
         try {
+            Vehicle vehicle = port.removeVehicle(input.nextLine());
+            if (vehicle == null){
+                return;
+            }
             ContainerPortManagementSystem.getVehicles().remove(vehicle);
             if (vehicle.getContainers() != null) {
                 vehicle.getContainers().forEach(container -> ContainerPortManagementSystem.getContainers().remove(container));
             }
             System.out.println("Remove vehicle successfully");
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | AssertionError e) {
             System.out.println("Remove vehicle unsuccessfully");
         }
     }
@@ -169,36 +180,33 @@ public record Admin(String username, String password) implements User, Serializa
     public void sendVehicle(Port port) {
         Scanner input = new Scanner(System.in);
         System.out.println("Distance to all Port(s) in the system:");
-        AdminGUI.displayPortWithDistance(port);
+        GUI.displayPortWithDistance(port);
         System.out.print("Enter the destination port id: ");
         Port destinationPort = ContainerPortManagementSystem.findPortById(input.nextLine());
-
-        if (destinationPort == null) {
-            System.out.println("The port does not exist in the system");
+        try {
+            GUI.displayVehicleInPort(port);
+        } catch (NullPointerException e) {
+            System.out.println("The port does not exist");
             System.out.println("Sending vehicle unsuccessfully");
-        } else {
-            AdminGUI.displayVehicleInPort(port);
-            System.out.print("Enter the vehicle id associated for sending: ");
-            Vehicle vehicle = port.findVehicleByID(input.nextLine());
-            if (vehicle == null) {
-                System.out.println("The vehicle does not exist in the port");
-                System.out.println("Sending vehicle unsuccessfully");
-            } else if (vehicle.calculateFuelConsumption(destinationPort) > vehicle.getCurrentFuel()) {
-                System.out.println("The vehicle cannot drive to the port with the current fuel capacity");
-                System.out.println("Please refuel the vehicle or change to another vehicle");
-            } else if (LandingBehaviour.landing(destinationPort, vehicle)) {
-                Trip trip = new Trip(vehicle, port, destinationPort, false, vehicle.calculateFuelConsumption(destinationPort));
-                destinationPort.addTrip(trip);
-                port.addTrip(trip);
-                port.removeVehicle(vehicle);
-                System.out.println("Sending vehicle successfully");
-            } else if (vehicle.getContainers() == null) {
-                System.out.println("The vehicle is empty. You have to load container into vehicle");
-                System.out.println("Sending vehicle unsuccessfully");
-            } else {
-                System.out.println("The vehicle can not land at that port");
-                System.out.println("Sending vehicle unsuccessfully");
-            }
+            return;
+        }
+        System.out.print("Enter the vehicle id associated for sending: ");
+        Vehicle vehicle = port.findVehicleByID(input.nextLine());
+        try {
+              if (vehicle.calculateFuelConsumption(destinationPort) > vehicle.getCurrentFuel()){
+                  System.out.println("The vehicle cannot drive to the port with the current fuel capacity");
+                  System.out.println("Please refuel the vehicle or change to another vehicle");
+              } else if (LandingBehaviour.landing(destinationPort, vehicle)) {
+                  Trip trip = new Trip(vehicle, port, destinationPort, false, vehicle.calculateFuelConsumption(destinationPort));
+                  assert destinationPort != null;
+                  destinationPort.addTrip(trip);
+                  port.addTrip(trip);
+                  port.removeVehicle(vehicle);
+                  System.out.println("Sending vehicle successfully");
+              }
+        }catch (NullPointerException e){
+            System.out.println("The vehicle does not exist in this port");
+            System.out.println("Sending vehicle unsuccessfully");
         }
     }
 
@@ -243,23 +251,26 @@ public record Admin(String username, String password) implements User, Serializa
         if (port.getContainers().isEmpty() || port.getVehicles().isEmpty()) {
             System.out.println("There are no container or vehicle in the port");
         } else {
-            System.out.println("List of vehicle in the port:");
-            AdminGUI.displayVehicleInPort(port);
-            System.out.println("Enter the id of the vehicle");
-            Vehicle vehicle = port.findVehicleByID(scanner.nextLine());
+            try{
+                System.out.println("List of vehicle in the port:");
+                GUI.displayVehicleInPort(port);
+                System.out.println("Enter the id of the vehicle");
+                Vehicle vehicle = port.findVehicleByID(scanner.nextLine());
 
-            System.out.println("List of container in the port:");
-            AdminGUI.displayContainerInPort(port);
-            System.out.println("Enter the id of the container");
-            Container container = port.findContainerByID(scanner.nextLine());
+                System.out.println("List of container in the port:");
+                GUI.displayContainerInPort(port);
+                System.out.println("Enter the id of the container");
+                Container container = port.findContainerByID(scanner.nextLine());
 
-            if (vehicle == null || container == null) {
+                if (vehicle.load(container)) {
+                    container.setVehicle(vehicle);
+                    port.removeContainer(container);
+                    container.setPort(null);
+                    System.out.println("Loaded successfully");
+                }
+            }catch (NullPointerException e){
                 System.out.println("The vehicle or the container does not exist in the system");
-            } else if (vehicle.load(container)) {
-                container.setVehicle(vehicle);
-                port.removeContainer(container);
-                container.setPort(null);
-                System.out.println("Loaded successfully");
+                System.out.println("Loaded unsuccessfully");
             }
         }
     }
@@ -267,43 +278,40 @@ public record Admin(String username, String password) implements User, Serializa
     public void unloadContainer(Port port) {
         Scanner scanner = new Scanner(System.in);
         if (port.getVehicles() != null){
-            System.out.println("List of vehicle in the port:");
-            AdminGUI.displayVehicleInPort(port);
-            System.out.println("Enter vehicle ID to unload container:");
-            Vehicle chosenVehicle = port.findVehicleByID(scanner.nextLine());
-            if (chosenVehicle == null){
-                System.out.println("The vehicle does not exist in this port");
-            } else if (chosenVehicle.getContainers() == null){
-                System.out.println("The vehicle does not have any container to unload!");
-            }else {
-                System.out.println("List of containers in the vehicle:");
-                AdminGUI.displayContainerInVehicle(chosenVehicle);
-                System.out.println("Enter container ID to unload:");
-                Container container = chosenVehicle.unLoad(scanner.nextLine());
-                if (container == null){
-                    System.out.println("The container does not exist ");
-                }else {
-                    if (port.addContainer(container)){
+            try {
+                System.out.println("List of vehicle in the port: ");
+                GUI.displayVehicleInPort(port);
+                System.out.println("Enter the vehicle ID to unload container: ");
+                Vehicle chosenVehicle = port.findVehicleByID(scanner.nextLine());
+                if (chosenVehicle.getContainers() == null) {
+                    System.out.println("The vehicle does not have any container to unload!");
+                } else {
+                    System.out.println("List of containers in the vehicle:");
+                    GUI.displayContainerInVehicle(chosenVehicle);
+                    System.out.println("Enter container ID to unload:");
+                    Container container = chosenVehicle.unLoad(scanner.nextLine());
+                    if (port.addContainer(container)) {
                         container.setPort(port);
                         container.setVehicle(null);
                         System.out.println("Unload container successfully");
                     }
                 }
+            }catch (NullPointerException e){
+                System.out.println("The container or the the vehicle does not exist in this port");
+                System.out.println("Unload container unsuccessfully");
             }
-        }else {
-            System.out.println("Unload container unsuccessfully");
         }
     }
 
     public void listTripsBetweenDays(Port port) {
         Scanner scanner = new Scanner(System.in);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd M yyyy");
-        LocalDate startDay,endDay;
+        LocalDate startDay, endDay;
         Vector<Trip> trips;
         try {
             System.out.println("Enter the start day (You need to enter only day, NOT MONTH OR YEAR): ");
             startDay = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             System.out.println("The day is invalid");
             return;
         }
@@ -311,15 +319,14 @@ public record Admin(String username, String password) implements User, Serializa
         try {
             System.out.println("Enter the end day (You need to enter only day, NOT MONTH OR YEAR): ");
             endDay = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             System.out.println("The day is invalid");
             return;
         }
         trips = port.listAllTripFromDayAToB(startDay, endDay);
-        if (trips==null){
+        if (trips == null) {
             System.out.println("No trips found");
-        }
-        else {
+        } else {
             trips.forEach(System.out::println);
         }
     }
@@ -332,54 +339,52 @@ public record Admin(String username, String password) implements User, Serializa
         try {
             System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR): ");
             date = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             System.out.println("The day is invalid");
             return;
         }
         trips = port.listAllTripInDay(date);
-        if (trips==null){
+        if (trips == null) {
             System.out.println("No trips found");
-        }
-        else {
+        } else {
             trips.forEach(System.out::println);
         }
     }
 
-    public void amountFuelUsedInDay(Port port){
+    public void amountFuelUsedInDay(Port port) {
         Scanner scanner = new Scanner(System.in);
         LocalDate date;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd M yyyy");
         try {
             System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR): ");
             date = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             System.out.println("The day is invalid");
             return;
         }
         System.out.println("The amount of fuel used in this day: " + port.amountFuelUsedInDay(date));
     }
 
-    public void removePortAndPortManager(Port port){
+    public void removePortAndPortManager(Port port) {
         Scanner input = new Scanner(System.in);
-        if(!port.checkTrip()){
+        if (!port.checkTrip()) {
             System.out.println("Are you sure you want to delete this Port ?");
             System.out.println("Enter 'x' to delete or else to exit");
             String confirm = input.nextLine();
-            if (confirm.equals("x")){
+            if (confirm.equals("x")) {
                 ContainerPortManagementSystem.getPorts().remove(port);
                 Vector<Trip> trips = port.getTrips();
-                for (Trip trip: trips){
-                    if (trip.getArrivalPort()!=port){
+                for (Trip trip : trips) {
+                    if (trip.getArrivalPort() != port) {
                         trip.getArrivalPort().getTrips().remove(trip);
-                    }
-                    else {
+                    } else {
                         trip.getDeparturePort().getTrips().remove(trip);
                     }
                 }
                 ContainerPortManagementSystem.getUsers().remove(port.getUser());
                 System.out.println("Remove port and port manager successfully");
             }
-        }else {
+        } else {
             System.out.println("You cannot delete this port. There are more vehicles are coming to this port, you need to confirm first");
         }
     }

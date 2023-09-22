@@ -13,7 +13,7 @@ public class VehicleFactory {
             System.out.print("Enter the storing capacity of the vehicle (Kg): ");
             storingCapacity = Double.parseDouble(input.nextLine());
             System.out.println("Vehicle type: ");
-            AdminGUI.displayVehicleType();
+            GUI.displayVehicleType();
             System.out.print("Enter the number associated with the vehicle type: ");
             vehicleType = input.nextLine();
         }catch (RuntimeException e){

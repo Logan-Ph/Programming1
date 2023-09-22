@@ -3,17 +3,14 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public class Ship implements Vehicle, Serializable {
-    private String id;
-    private String name;
+    private final String id;
+    private final String name;
     private double currentFuel;
-    private double fuelCapacity;
-    private double storingCapacity;
+    private final double fuelCapacity;
+    private final double storingCapacity;
     private double currentStoringCapacity;
     private Vector<Container> containers;
     private Port port;
-
-    public Ship() {
-    }
 
     // initialize the constructor
     public Ship(String name, double fuelCapacity, double storingCapacity, Port port) {
@@ -60,17 +57,6 @@ public class Ship implements Vehicle, Serializable {
     @Override
     public Container unLoad(String id) {
         Container container = findContainerByID(id);
-        try {
-            this.containers.remove(container); // remove the container from the ArrayList
-            currentStoringCapacity-=container.getWeight();
-            return container;
-        } catch (Exception e) {
-            System.out.println("There is no matching ID container!"); // Throw exception if the container doesn't exist in the ArrayList
-            return null;
-        }
-    }
-
-    public Container unLoad(Container container) {
         try {
             this.containers.remove(container); // remove the container from the ArrayList
             currentStoringCapacity-=container.getWeight();
@@ -167,7 +153,7 @@ public class Ship implements Vehicle, Serializable {
 
     @Override
     public String toString() {
-        return "Ship" + " - name: " + getName() + " - id: " + getID() + " - current storing capacity (kg): " + getCurrentStoringCapacity() + " - maximum storing capacity (kg): " + getStoringCapacity() + " - current fuel (Gallon): " + getCurrentFuel() + " - maximum fuel capacity (Gallon): " + getFuelCapacity();
+        return "Ship" + " - name: " + getName() + " - id: " + getID() + " - current storing capacity (kg): " + getCurrentStoringCapacity() + " - maximum storing capacity (kg): " + getStoringCapacity() + " - current fuel (Gallon): " + getCurrentFuel() + " - maximum fuel capacity (Gallon): " + getFuelCapacity() + " - current port: " + getPort();
     }
 
 }
