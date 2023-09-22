@@ -183,7 +183,7 @@ public record Admin(String username, String password) implements User, Serializa
             if (vehicle == null) {
                 System.out.println("The vehicle does not exist in the port");
                 System.out.println("Sending vehicle unsuccessfully");
-            } else if (vehicle.calculateFuelConsumption(destinationPort) < vehicle.getCurrentFuel()) {
+            } else if (vehicle.calculateFuelConsumption(destinationPort) > vehicle.getCurrentFuel()) {
                 System.out.println("The vehicle cannot drive to the port with the current fuel capacity");
                 System.out.println("Please refuel the vehicle or change to another vehicle");
             } else if (LandingBehaviour.landing(destinationPort, vehicle)) {

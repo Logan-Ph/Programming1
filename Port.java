@@ -118,7 +118,6 @@ public class Port implements Serializable {
     public Vector<Trip> listAllTripInDay(LocalDate date) {
         Vector<Trip> listTripOut = new Vector<>();
         for (Trip currentTrip : this.getTrips()) {
-            System.out.println(currentTrip);
             if ((currentTrip.getStatus() && (currentTrip.getArrivalDate().isEqual(date) || currentTrip.getDepartureDate().isEqual(date))) || (!currentTrip.getStatus() && currentTrip.getDepartureDate().isEqual(date))) {
                 listTripOut.add(currentTrip);
             }
@@ -251,10 +250,6 @@ public class Port implements Serializable {
 
     public String generateID() {
         return IDFactory.generateID("port");
-    }
-
-    public void setCurrentStoringCapacity(double currentStoringCapacity) {
-        this.currentStoringCapacity = currentStoringCapacity;
     }
 
     @Override

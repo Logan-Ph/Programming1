@@ -11,7 +11,6 @@ public class AdminGUI {
         System.out.println("| s3978486 Nguyen Ngoc Thanh Mai               |");
         System.out.println("| s3978798 Tran Pham Khanh Doan                |");
         System.out.println("------------------------------------------------");
-
     }
 
     public static void displayOperation() {
