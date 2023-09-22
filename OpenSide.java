@@ -7,6 +7,6 @@ public class OpenSide extends Container implements Serializable {
 
     @Override
     public String toString() {
-        return "Open Side - id: " + getId() + " - weight (Kg): " + getWeight() + " - Vehicle: " + getVehicle();
+        return "Open Side - id: " + getID() + " - weight (Kg): " + getWEIGHT() + " - Vehicle: " + getVehicle();
     }
 }

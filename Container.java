@@ -1,23 +1,23 @@
 public abstract class Container {
 
-    private final String id;
-    private final double weight;
+    private final String ID;
+    private final double WEIGHT;
     private Vehicle vehicle;
     private Port port;
 
     public Container( double weight, Port port) {
-        this.id = generateID();
-        this.weight = weight;
+        this.ID = generateID();
+        this.WEIGHT = weight;
         this.vehicle = null;
         this.port = port;
     }
 
-    public String getId() {
-        return id;
+    public String getID() {
+        return ID;
     }
 
-    public double getWeight() {
-        return weight;
+    public double getWEIGHT() {
+        return WEIGHT;
     }
 
     public Vehicle getVehicle() {

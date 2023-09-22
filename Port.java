@@ -33,9 +33,9 @@ public class Port implements Serializable {
     }
 
     public boolean addContainer(Container container) {
-        if (container.getWeight() + getCurrentStoringCapacity() <= getStoringCapacity()) {
+        if (container.getWEIGHT() + getCurrentStoringCapacity() <= getStoringCapacity()) {
             this.containers.add(container);
-            currentStoringCapacity += container.getWeight();
+            currentStoringCapacity += container.getWEIGHT();
             return true;
         } else {
             System.out.println("Can not add this container to the port!");
@@ -50,7 +50,7 @@ public class Port implements Serializable {
         Container container = findContainerByID(id); // find the container in the port
         try {
             this.containers.remove(container); // remove the container in the port
-            currentStoringCapacity -= container.getWeight();
+            currentStoringCapacity -= container.getWEIGHT();
             container.setPort(null);
             return container;
         } catch (NullPointerException e) {
@@ -62,7 +62,7 @@ public class Port implements Serializable {
     public void removeContainer(Container container) {
         try {
             this.containers.remove(container); // remove the container in the port
-            currentStoringCapacity -= container.getWeight();
+            currentStoringCapacity -= container.getWEIGHT();
             container.setPort(null);
         } catch (NullPointerException e) {
             System.out.println("The container does not exist in this Port!");
@@ -182,7 +182,7 @@ public class Port implements Serializable {
 
     public Trip findTripById(String id) {
         for (Trip trip : this.trips) {
-            if (trip.getId().equals(id)) {
+            if (trip.getID().equals(id)) {
                 return trip;
             }
         }
@@ -200,8 +200,8 @@ public class Port implements Serializable {
                 trip.setStatus(true);
                 trip.setArrivalDate();
                 System.out.println("Confirm the trip successfully");
-                trip.getVehicle().setPort(this);
-                this.getVehicles().add(trip.getVehicle());
+                trip.getVEHICLE().setPort(this);
+                this.getVehicles().add(trip.getVEHICLE());
             } else {
                 System.out.println("There are no trip to confirm");
             }
@@ -221,7 +221,7 @@ public class Port implements Serializable {
 
     public Container findContainerByID(String id) {
         for (Container container : this.containers) {
-            if (container.getId().equals(id)) {
+            if (container.getID().equals(id)) {
                 return container;
             }
         }

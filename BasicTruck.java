@@ -1,7 +1,4 @@
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Vector;
 
 public class BasicTruck extends Truck implements Vehicle, Serializable {
     public BasicTruck(String name, double fuelCapacity, double storingCapacity, Port port) {
@@ -10,6 +7,6 @@ public class BasicTruck extends Truck implements Vehicle, Serializable {
 
     @Override
     public String toString() {
-        return "Basic Truck" + " - name: " + getName() + " - id: " + getID() + " - current storing capacity (kg): " + getCurrentStoringCapacity() + " - maximum storing capacity (kg): " + getStoringCapacity() + " - current fuel (Gallon): " + getCurrentFuel() + " - maximum fuel capacity (Gallon): " + getFuelCapacity() + " - current port: " + getPort();
+        return "Basic Truck" + " - name: " + getNAME() + " - id: " + getID() + " - current storing capacity (kg): " + getCurrentStoringCapacity() + " - maximum storing capacity (kg): " + getStoringCapacity() + " - current fuel (Gallon): " + getCurrentFuel() + " - maximum fuel capacity (Gallon): " + getFuelCapacity() + " - current port: " + getPort();
     }
 }

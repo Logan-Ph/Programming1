@@ -7,6 +7,6 @@ public class OpenTop extends Container implements Serializable {
 
     @Override
     public String toString() {
-        return "Open Top - id: " + getId() + " - weight (Kg): " + getWeight() + " - Vehicle: " + getVehicle();
+        return "Open Top - id: " + getID() + " - weight (Kg): " + getWEIGHT() + " - Vehicle: " + getVehicle();
     }
 }

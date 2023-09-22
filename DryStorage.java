@@ -7,6 +7,6 @@ public class DryStorage extends Container implements Serializable {
 
     @Override
     public String toString() {
-        return "Dry Storage - id: " + getId() + " - weight (Kg): " + getWeight() + " - Vehicle: " + getVehicle();
+        return "Dry Storage - id: " + getID() + " - weight (Kg): " + getWEIGHT() + " - Vehicle: " + getVehicle();
     }
 }

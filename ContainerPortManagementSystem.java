@@ -13,8 +13,8 @@ public class ContainerPortManagementSystem {
     private static Vector<Container> containers = new Vector<>();
 
     public static void run() throws IOException {
-//        users.add(new Admin("Admin", "admin123"));
-//        writeUser();
+        users.add(new Admin("Admin", "admin123"));
+        writeUser();
         Scanner input = new Scanner(System.in);
         String exit= "";
 

@@ -230,19 +230,19 @@ public class PortManager implements User, Serializable {
 
         for (Container container : port.getContainers()) {
             if (container instanceof OpenSide) {
-                openSideTotalWeight += container.getWeight();
+                openSideTotalWeight += container.getWEIGHT();
                 weightOfContainerType.put("Open Side", openSideTotalWeight);
             } else if (container instanceof Liquid) {
-                liquidTotalWeight += container.getWeight();
+                liquidTotalWeight += container.getWEIGHT();
                 weightOfContainerType.put("Liquid", liquidTotalWeight);
             } else if (container instanceof DryStorage) {
-                dryStorageTotalWeight += container.getWeight();
+                dryStorageTotalWeight += container.getWEIGHT();
                 weightOfContainerType.put("DryStorage", dryStorageTotalWeight);
             } else if (container instanceof Refrigerated) {
-                refrigeratedTotalWeight += container.getWeight();
+                refrigeratedTotalWeight += container.getWEIGHT();
                 weightOfContainerType.put("Refrigerated", refrigeratedTotalWeight);
             } else if (container instanceof OpenTop) {
-                openTopTotalWeight += container.getWeight();
+                openTopTotalWeight += container.getWEIGHT();
                 weightOfContainerType.put("OpenTop", openTopTotalWeight);
             }
         }

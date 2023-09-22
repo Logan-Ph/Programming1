@@ -7,6 +7,6 @@ public class Refrigerated extends Container implements Serializable {
 
     @Override
     public String toString() {
-        return "Refrigerated - id: " + getId() + " - weight (Kg): " + getWeight() + " - Vehicle: " + getVehicle();
+        return "Refrigerated - id: " + getID() + " - weight (Kg): " + getWEIGHT() + " - Vehicle: " + getVehicle();
     }
 }

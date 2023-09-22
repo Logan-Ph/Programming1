@@ -7,7 +7,7 @@ public class Liquid extends Container implements Serializable{
 
     @Override
     public String toString() {
-        return "Liquid - id: " + getId() + " - weight (Kg): " + getWeight() + " - Vehicle: " + getVehicle();
+        return "Liquid - id: " + getID() + " - weight (Kg): " + getWEIGHT() + " - Vehicle: " + getVehicle();
     }
 
 }
