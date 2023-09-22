@@ -1,4 +1,4 @@
-import java.io.IOException;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.time.LocalDate;
@@ -17,7 +17,7 @@ public record Admin(String username, String password) implements User, Serializa
     }
 
     @Override
-    public void operationCase(String opCase) throws IOException {
+    public void operationCase(String opCase){
         switch (opCase) {
             case "1" -> portOperation();
             case "2" -> createPortAndPortManager();
@@ -94,6 +94,7 @@ public record Admin(String username, String password) implements User, Serializa
         Scanner input = new Scanner(System.in);
         System.out.println("List of trips: ");
         AdminGUI.displayTripInPort(port);
+        System.out.println("Enter the trip id associated to confirm");
         port.confirmTrip(input.nextLine());
     }
 
@@ -182,7 +183,7 @@ public record Admin(String username, String password) implements User, Serializa
             if (vehicle == null) {
                 System.out.println("The vehicle does not exist in the port");
                 System.out.println("Sending vehicle unsuccessfully");
-            } else if (vehicle.calculateFuelConsumption(destinationPort) < vehicle.getCurrentFuel()) {
+            } else if (vehicle.calculateFuelConsumption(destinationPort) > vehicle.getCurrentFuel()) {
                 System.out.println("The vehicle cannot drive to the port with the current fuel capacity");
                 System.out.println("Please refuel the vehicle or change to another vehicle");
             } else if (LandingBehaviour.landing(destinationPort, vehicle)) {

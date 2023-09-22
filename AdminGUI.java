@@ -11,7 +11,6 @@ public class AdminGUI {
         System.out.println("| s3978486 Nguyen Ngoc Thanh Mai               |");
         System.out.println("| s3978798 Tran Pham Khanh Doan                |");
         System.out.println("------------------------------------------------");
-
     }
 
     public static void displayOperation() {
@@ -109,12 +108,11 @@ public class AdminGUI {
         System.out.println("14: Confirm trip");
         System.out.println("15: Remove port");
         System.out.println(Separator.sep());
-
     }
 
     public static void displayContainerType() {
         System.out.println("1: Dry Storage");
-        System.out.println("2: liquid");
+        System.out.println("2: Liquid");
         System.out.println("3: Open Top");
         System.out.println("4: Open Side");
         System.out.println("5: Refrigerated");

@@ -4,9 +4,19 @@ public class PortManagerGUI{
     }
 
 
-    public static void displayPortOperation() {
+    public static void displayOperationForPortManager() {
         System.out.println("1: Add new container");
         System.out.println("2: Remove container");
+        System.out.println("3: Display all vehicle and container");
+        System.out.println("4: Send vehicle");
+        System.out.println("5: Refuel vehicle");
+        System.out.println("6: Load container");
+        System.out.println("7: Unload container");
+        System.out.println("8: Display weight of each type of container");
+        System.out.println("9: Display how much fuel used in a day");
+        System.out.println("10: Display all trip in a day");
+        System.out.println("11: Display all trip between 2 days");
+        System.out.println("12: Confirm trip");
         System.out.println(Separator.sep());
     }
 
