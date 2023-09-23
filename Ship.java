@@ -152,18 +152,6 @@ public class Ship implements Vehicle, Serializable {
     }
 
     @Override
-    public void setStoringCapacity() {
-        Scanner input = new Scanner(System.in);
-        try {
-            System.out.print("Enter the new storing capacity of the vehicle (kg): ");
-            storingCapacity = Double.parseDouble(input.nextLine());
-            System.out.println("Update vehicle storing capacity successfully.");
-        } catch (RuntimeException e) {
-            System.out.println("Vehicle weight must be a number.");
-        }
-    }
-
-    @Override
     public void setName() {
         Scanner input = new Scanner(System.in);
         System.out.println("Enter new port name: ");

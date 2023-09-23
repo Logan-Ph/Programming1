@@ -34,6 +34,8 @@ public class GUI {
         System.out.println("Select the operation");
         System.out.println("1: Operation on Port");
         System.out.println("2: Add new port manager and port");
+        System.out.println("3: Display total weight of container types");
+        System.out.println("4: Update account");
         System.out.println(Separator.sep());
     }
 

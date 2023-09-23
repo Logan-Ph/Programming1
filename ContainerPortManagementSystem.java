@@ -13,8 +13,6 @@ public class ContainerPortManagementSystem {
     private static Vector<Container> containers = new Vector<>();
 
     public static void run() throws IOException {
-//        users.add(new Admin("Admin", "admin123"));
-//        writeUser();
         Scanner input = new Scanner(System.in);
         String exit= "";
 
@@ -22,6 +20,13 @@ public class ContainerPortManagementSystem {
         System.out.println(Separator.sep());
         systemInitialization();
         System.out.println(Separator.sep());
+
+        if (users.isEmpty()) {
+            System.out.println("Because user admin does not exist in the system, you have to create new admin account.");
+            users.add(Admin.create());
+            System.out.println("Create admin successfully.");
+            System.out.println(Separator.sep());
+        }
 
         while (!exit.equals("q")){
             User user = login();

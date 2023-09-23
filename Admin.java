@@ -6,7 +6,24 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.Vector;
 
-public record Admin(String username, String password) implements User, Serializable {
+public class Admin implements User, Serializable {
+    private String password;
+    private String username;
+
+    public Admin(String username, String password) {
+        this.password = password;
+        this.username = username;
+    }
+
+    @Override
+    public String password() {
+        return password;
+    }
+
+    @Override
+    public String username() {
+        return username;
+    }
 
     @Override
     public String toString() {
@@ -22,6 +39,7 @@ public record Admin(String username, String password) implements User, Serializa
             case "1" -> portOperation();
             case "2" -> createPortAndPortManager();
             case "3" -> displayWeightOfContainerType(ContainerPortManagementSystem.getContainers());
+            case "4" -> updateAdmin();
             default -> System.out.println("You have to choose the number associated with the operation");
         }
     }
@@ -49,6 +67,52 @@ public record Admin(String username, String password) implements User, Serializa
             case "19" -> updatePortManager(port);
             default -> System.out.println("You have to choose the number associated with the operation");
         }
+    }
+
+    public static User create() {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter the new admin username: ");
+        String username = input.nextLine().strip();
+
+        if (ContainerPortManagementSystem.checkUsername(username)){
+            System.out.println("The user name has already exist. Please enter the username again");
+            username = input.nextLine().strip();
+        }
+
+        System.out.print("Enter the new admin password: ");
+        String password = input.nextLine();
+
+        return new Admin(username,password);
+    }
+    @Override
+    public void setUsername(String username) {this.username = username;}
+
+    @Override
+    public void setPassword(String password) {this.password = password;}
+
+    public void updateAdmin() {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Choose attributes to update: 1. Username | 2. Password: ");
+        String chosenAttribute = input.nextLine();
+        switch (chosenAttribute) {
+            case "1" -> {
+                System.out.print("Enter the new admin username: ");
+                String username = input.nextLine().strip();
+                if (ContainerPortManagementSystem.checkUsername(username)) {
+                    System.out.println("The user name has already exist.");
+                } else {
+                    this.setUsername(username);
+                }
+                System.out.println("Update username successfully");
+            }
+            case "2" -> {
+                System.out.print("Enter the new admin password: ");
+                this.setPassword(input.next().strip());
+                System.out.println("Update password successfully");
+            }
+            default -> System.out.println("You have to choose the number associated with the attribute.");
+        }
+
     }
 
     private void portOperation() {
@@ -119,13 +183,7 @@ public record Admin(String username, String password) implements User, Serializa
         if (vehicle == null) {
             System.out.println("The vehicle does not exist in the port");
         } else {
-            System.out.print("Choose attributes to update: 1. Name | 2. Storing Capacity: ");
-            String chosenAttribute = input.nextLine();
-            switch (chosenAttribute) {
-                case "1" -> vehicle.setName();
-                case "2" -> vehicle.setStoringCapacity();
-                default -> System.out.println("You have to choose the number associated with the attribute.");
-            }
+            vehicle.setName();
         }
     }
 
