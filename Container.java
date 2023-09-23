@@ -1,13 +1,12 @@
 import java.util.*;
 public abstract class Container {
-
     private final String id;
     private double weight;
     private Vehicle vehicle;
     private Port port;
 
     public Container( double weight, Port port) {
-        this.id = generateID();
+        this.id = generateID(); // generate the ID
         this.weight = weight;
         this.vehicle = null;
         this.port = port;
@@ -31,7 +30,7 @@ public abstract class Container {
 
     public String generateID() {
         return IDFactory.generateID("container");
-    }
+    } // using the IDFactory to generate the ID
 
     public Port getPort() {
         return port;

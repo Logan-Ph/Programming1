@@ -7,23 +7,23 @@ import java.util.Vector;
 
 public class ContainerPortManagementSystem {
 
-    private static Vector<Vehicle> vehicles = new Vector<>();
-    private static Vector<Port> ports = new Vector<>();
-    private static Vector<User> users = new Vector<>();
-    private static Vector<Container> containers = new Vector<>();
+    private static Vector<Vehicle> vehicles = new Vector<>(); // instantiate vehicle vector
+    private static Vector<Port> ports = new Vector<>(); // instantiate vehicle vector
+    private static Vector<User> users = new Vector<>(); // instantiate vehicle vector
+    private static Vector<Container> containers = new Vector<>(); // instantiate vehicle vector
 
     public static void run() throws IOException {
         Scanner input = new Scanner(System.in);
         String exit= "";
 
-        GUI.display();
+        GUI.display(); // display the GUI of the system
         System.out.println(Separator.sep());
-        systemInitialization();
+        systemInitialization(); // initialize the system
         System.out.println(Separator.sep());
 
         if (users.isEmpty()) {
             System.out.println("Because user admin does not exist in the system, you have to create new admin account.");
-            users.add(Admin.create());
+            users.add(Admin.create()); // create User admin if there are no user in the system
             System.out.println("Create admin successfully.");
             System.out.println(Separator.sep());
         }
@@ -60,19 +60,19 @@ public class ContainerPortManagementSystem {
     }
 
     private static void systemInitialization() {
-        readUser();
-        readPort();
-        readVehicle();
-        readContainer();
-        clearPortHistory();
+        readUser(); // load the user into variable
+        readPort(); // load port into variable
+        readVehicle(); // load vehicle into variable
+        readContainer(); // load container into variable
+        clearPortHistory(); // clear the port history if the port history exceeds 7 days
     }
 
     private static void endSystem() {
-        writePort();
-        writeUser();
-        writeVehicle();
-        writeContainer();
-        clearPortHistory();
+        writePort(); // write the port into the text file
+        writeUser(); // write the user into the text file
+        writeVehicle(); // write the vehicle into the text file
+        writeContainer(); // write the container into the text file
+        clearPortHistory(); // clear the port history if the port history exceeds 7 days
     }
 
     public static boolean checkUsername(String username){
@@ -84,6 +84,7 @@ public class ContainerPortManagementSystem {
         return false;
     }
 
+    // check if the port info has existed in the system
     public static boolean checkPortInfo(double latitude, double longitude, String portName){
         for (Port port: getPorts()){
             if ((port.getLatitude() == latitude && port.getLongitude() == longitude)|| port.getName().equals(portName)){
@@ -98,12 +99,12 @@ public class ContainerPortManagementSystem {
         Vector<User> users = getUsers();
 
         System.out.println("Please enter the username");
-        String username = input.nextLine().strip();
+        String username = input.nextLine().strip(); // get the username from the user
         System.out.println("Please enter the password");
-        String password = input.nextLine().strip();
+        String password = input.nextLine().strip(); // get the password from the user
         for (User user : users) {
             if (user.username().equals(username) && user.password().equals(password)) {
-                return user;
+                return user; // return the user if matching the password or username
             }
         }
         return null;
@@ -112,7 +113,7 @@ public class ContainerPortManagementSystem {
     public static Port findPortById(String id){
         for(Port port: getPorts()){
             if (port.getId().equals(id)){
-                return port;
+                return port; // return the port if it's matching the ID
             }
         }
         return null;
@@ -121,10 +122,10 @@ public class ContainerPortManagementSystem {
     public static void clearPortHistory(){
         for (Port port:getPorts()){
             for (int i = port.getTrips().size()-1; i>=0; i--){
-                if (port.getTrips().get(i).getStatus() && validateTime(port.getTrips().get(i).getArrivalDate())){
+                if (port.getTrips().get(i).getStatus() && validateTime(port.getTrips().get(i).getArrivalDate())){ // check condition if it exceeds 7 days
                     port.getTrips().subList(0,i+1).clear();
                     break;
-                }else if (!port.getTrips().get(i).getStatus() && validateTime(port.getTrips().get(i).getDepartureDate())){
+                }else if (!port.getTrips().get(i).getStatus() && validateTime(port.getTrips().get(i).getDepartureDate())){ // check condition if it exceeds 7 days
                     port.getTrips().subList(0,i+1).clear();
                     break;
                 }
@@ -153,28 +154,28 @@ public class ContainerPortManagementSystem {
                 .getPath("")
                 .toAbsolutePath()
                 .toString().concat("/Programming1/PortManagementSystem/Ports.txt")).getCanonicalPath();
-    }
+    } // return the port file path
 
     public static String getUserFilePath() throws IOException {
         return new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
                 .toString().concat("/Programming1/PortManagementSystem/Users.txt")).getCanonicalPath();
-    }
+    } // return the user file path
 
     public static String getVehicleFilePath() throws IOException {
         return new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
                 .toString().concat("/Programming1/PortManagementSystem/Vehicles.txt")).getCanonicalPath();
-    }
+    } // return the vehicle file path
 
     public static String getContainerFilePath() throws IOException {
         return new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
                 .toString().concat("/Programming1/PortManagementSystem/Containers.txt")).getCanonicalPath();
-    }
+    } // return the container file path
 
     //check if the time exceeds 7 days
     public static boolean validateTime(LocalDate priorDate){
@@ -190,7 +191,7 @@ public class ContainerPortManagementSystem {
         } catch (IOException e) {
             System.out.println("The 'Containers.txt' file does not exist");
         }
-    }
+    } // write container into text file
 
     private static void readContainer() {
         try {
@@ -201,7 +202,7 @@ public class ContainerPortManagementSystem {
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("The 'Containers.txt' file does not exist or the file is empty");
         }
-    }
+    } // read container from text file
 
     private static void writeVehicle() {
         try {
@@ -212,7 +213,7 @@ public class ContainerPortManagementSystem {
         } catch (IOException e) {
             System.out.println("The 'Vehicles.txt' file does not exist");
         }
-    }
+    } // write vehicle from text file
 
     private static void readVehicle() {
         try {
@@ -223,7 +224,7 @@ public class ContainerPortManagementSystem {
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("The 'Vehicles.txt' file does not exist or the file is empty");
         }
-    }
+    } // read vehicle from text file
 
     private static void writePort() {
         try {
@@ -234,7 +235,7 @@ public class ContainerPortManagementSystem {
         } catch (IOException e) {
             System.out.println("The 'Ports.txt' file does not exist!");
         }
-    }
+    } // write port into text file
 
     private static void readPort() {
         try {
@@ -245,7 +246,7 @@ public class ContainerPortManagementSystem {
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("The 'Ports.txt' file does not exist or the file is empty");
         }
-    }
+    } // read port from text file
 
     private static void writeUser() {
         try {
@@ -257,7 +258,7 @@ public class ContainerPortManagementSystem {
             e.printStackTrace();
             System.out.println("The 'Users.txt' file does not exist!");
         }
-    }
+    } // write user into text file
 
     private static void readUser() {
         try {
@@ -268,5 +269,5 @@ public class ContainerPortManagementSystem {
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("The 'Users.txt' file does not exist or the file is empty");
         }
-    }
+    } // read user from text file
 }

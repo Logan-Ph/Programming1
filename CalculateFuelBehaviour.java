@@ -1,4 +1,5 @@
 public class CalculateFuelBehaviour {
+    // return the fuel consumption per unit of weight per kilometres based on vehicle type and container type
     public static double calculateFuelConsumption(Container container, Vehicle vehicle){
         if (vehicle instanceof Ship && container instanceof DryStorage){
             return 3.5;

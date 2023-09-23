@@ -1,6 +1,7 @@
 import java.io.Serializable;
 
 public class ReeferTruck extends Truck implements Vehicle, Serializable {
+    // Reefer truck constructor
     public ReeferTruck(String name, double fuelCapacity, double storingCapacity, Port port) {
         super(name, fuelCapacity, storingCapacity, port);
     }

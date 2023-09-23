@@ -10,19 +10,19 @@ public class Trip implements Serializable {
     private final Port ARRIVAL_PORT;
     private boolean status;
 
-    private final double AMOUNT_FUEL;
+    private final double amountFuel;
 
     public Trip(Vehicle vehicle,Port departurePort, Port arrivalPort, boolean status, double amountFuel) {
-        ID = generateID();
+        this.ID = generateID();
         this.DEPARTURE_DATE = LocalDate.now();
         this.DEPARTURE_PORT = departurePort;
         this.ARRIVAL_PORT = arrivalPort;
         this.status = status;
         this.VEHICLE = vehicle;
-        this.AMOUNT_FUEL = amountFuel;
+        this.amountFuel = amountFuel;
     }
 
-    public String getID() {
+    public String getId() {
         return ID;
     }
 
@@ -39,10 +39,10 @@ public class Trip implements Serializable {
     }
 
     public double getAmountFuel() {
-        return AMOUNT_FUEL;
+        return amountFuel;
     }
 
-    public Vehicle getVEHICLE() {
+    public Vehicle getVehicle() {
         return VEHICLE;
     }
 
@@ -69,14 +69,14 @@ public class Trip implements Serializable {
     @Override
     public String toString() {
         return "Trip{" +
-                "ID='" + ID + '\'' +
-                ", VEHICLE=" + VEHICLE +
+                "id='" + ID + '\'' +
+                ", vehicle=" + VEHICLE +
                 ", departureDate=" + DEPARTURE_DATE +
                 ", arrivalDate=" + arrivalDate +
                 ", departurePort=" + DEPARTURE_PORT +
                 ", arrivalPort=" + ARRIVAL_PORT +
                 ", status=" + status +
-                ", amountFuel=" + AMOUNT_FUEL +
+                ", amountFuel=" + amountFuel +
                 '}';
     }
 }
