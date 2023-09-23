@@ -255,7 +255,6 @@ public class ContainerPortManagementSystem {
             userOut.close();
             System.out.println("Writing User successfully");
         } catch (IOException e) {
-            e.printStackTrace();
             System.out.println("The 'Users.txt' file does not exist!");
         }
     } // write user into text file

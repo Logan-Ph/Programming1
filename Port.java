@@ -32,9 +32,9 @@ public class Port implements Serializable {
     }
 
     public boolean addContainer(Container container) {
-        if (container.getWeight() + getCurrentStoringCapacity() <= getStoringCapacity()) {
+        if (container.getWEIGHT() + getCurrentStoringCapacity() <= getStoringCapacity()) {
             this.containers.add(container); // add container to vector
-            currentStoringCapacity += container.getWeight(); // update current storing of the port
+            currentStoringCapacity += container.getWEIGHT(); // update current storing of the port
             return true;
         } else {
             // Print error message if the container cannot be added to the port
@@ -50,7 +50,7 @@ public class Port implements Serializable {
         Container container = findContainerByID(id); // find the container in the port
         try {
             this.containers.remove(container); // remove the container in the port
-            currentStoringCapacity -= container.getWeight();
+            currentStoringCapacity -= container.getWEIGHT();
             container.setPort(null);
             return container;
         } catch (NullPointerException e) { // catch exception when the id does not match any container in the port
@@ -63,7 +63,7 @@ public class Port implements Serializable {
     public void removeContainer(Container container) {
         try {
             this.containers.remove(container); // remove the container in the port
-            currentStoringCapacity -= container.getWeight();
+            currentStoringCapacity -= container.getWEIGHT();
             container.setPort(null);
         } catch (NullPointerException e) { // catch exception when the container does not exist in the port
             System.out.println("The container does not exist in this Port!");
@@ -225,7 +225,7 @@ public class Port implements Serializable {
 
     public Container findContainerByID(String id) {
         for (Container container : this.containers) { // loop through the list of containers in this port
-            if (container.getId().equals(id)) {
+            if (container.getID().equals(id)) {
                 return container; // return the container with matching id
             }
         }

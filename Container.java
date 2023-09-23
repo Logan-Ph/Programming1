@@ -12,11 +12,11 @@ public abstract class Container {
         this.port = port;
     }
 
-    public String getId() {
+    public String getID() {
         return id;
     }
 
-    public double getWeight() {
+    public double getWEIGHT() {
         return weight;
     }
 

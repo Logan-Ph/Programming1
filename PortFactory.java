@@ -3,7 +3,6 @@ import java.util.Scanner;
 public class PortFactory {
     public static Port createPort() {
         Scanner input = new Scanner(System.in);
-        boolean existed = false;
         boolean landingAbility;
         double longitude, latitude, storingCapacity;
         String portName;

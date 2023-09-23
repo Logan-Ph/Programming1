@@ -25,9 +25,9 @@ public abstract class Truck implements Vehicle {
     //Load the container to the vehicle
     @Override
     public boolean load(Container container) {
-        if (LoadContainerBehavior.load(container, this) && getCurrentStoringCapacity() + container.getWeight() <= getStoringCapacity()) { // check if that vehicle can load the container or if the container weight exceed the storing capacity
+        if (LoadContainerBehavior.load(container, this) && getCurrentStoringCapacity() + container.getWEIGHT() <= getStoringCapacity()) { // check if that vehicle can load the container or if the container weight exceed the storing capacity
             this.containers.add(container);
-            currentStoringCapacity += container.getWeight();
+            currentStoringCapacity += container.getWEIGHT();
             return true;
         } else {
             System.out.println("This vehicle cannot carry this container!");
@@ -43,7 +43,7 @@ public abstract class Truck implements Vehicle {
         Container container = findContainerByID(id);
         try {
             this.containers.remove(container); // remove the container from the ArrayList
-            currentStoringCapacity -= container.getWeight();
+            currentStoringCapacity -= container.getWEIGHT();
             return container;
         } catch (Exception e) {
             System.out.println("There is no matching ID container!"); // Throw exception if the container doesn't exist in the ArrayList
@@ -55,7 +55,7 @@ public abstract class Truck implements Vehicle {
     public Container findContainerByID(String id) {
         Container container = null;
         for (Container cont : this.containers) {
-            if (cont.getId().equals(id)) {
+            if (cont.getID().equals(id)) {
                 container = cont;
             }
         }
@@ -94,7 +94,7 @@ public abstract class Truck implements Vehicle {
         double totalFuelConsumption = 0.0;
         try {
             for (Container container : containers) {
-                totalFuelConsumption += container.getWeight() * CalculateFuelBehaviour.calculateFuelConsumption(container, this); // calculate the fuel consumption
+                totalFuelConsumption += container.getWEIGHT() * CalculateFuelBehaviour.calculateFuelConsumption(container, this); // calculate the fuel consumption
             }
             return (double) Math.round(totalFuelConsumption * this.port.getDistance(port)*100)/100.0 ; // round 2 decimal points
         } catch (NullPointerException e) {

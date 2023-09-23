@@ -331,15 +331,15 @@ public class Admin implements User, Serializable {
 
         for (Container container : containers) {
             if (container instanceof OpenSide) {
-                weightOfContainerType.merge("Open Side", container.getWeight(), Double::sum); // if the container does not exist in the hashmap, put new container weight or sum up to the current value
+                weightOfContainerType.merge("Open Side", container.getWEIGHT(), Double::sum); // if the container does not exist in the hashmap, put new container weight or sum up to the current value
             } else if (container instanceof Liquid) {
-                weightOfContainerType.merge("Liquid", container.getWeight(), Double::sum);
+                weightOfContainerType.merge("Liquid", container.getWEIGHT(), Double::sum);
             } else if (container instanceof DryStorage) {
-                weightOfContainerType.merge("DryStorage", container.getWeight(), Double::sum);
+                weightOfContainerType.merge("DryStorage", container.getWEIGHT(), Double::sum);
             } else if (container instanceof Refrigerated) {
-                weightOfContainerType.merge("Refrigerated", container.getWeight(), Double::sum);
+                weightOfContainerType.merge("Refrigerated", container.getWEIGHT(), Double::sum);
             } else if (container instanceof OpenTop) {
-                weightOfContainerType.merge("OpenTop", container.getWeight(), Double::sum);
+                weightOfContainerType.merge("OpenTop", container.getWEIGHT(), Double::sum);
             }
         }
         if (!weightOfContainerType.isEmpty()) {
