@@ -1,23 +1,26 @@
+import java.io.Serializable;
 import java.util.Scanner;
 import java.util.Vector;
 
-public abstract class Truck implements Vehicle {
-    private final String ID;
+public abstract class Truck implements Vehicle, Serializable {
+    private String id;
     private String name;
     private double currentFuel;
-    private final double FUEL_CAPACITY;
-    private final double STORING_CAPACITY;
+    private double fuelCapacity;
+    private double storingCapacity;
     private double currentStoringCapacity;
     private Vector<Container> containers;
     private Port port;
 
+    public Truck(){}
+
     // initialize the constructor
     public Truck(String name, double fuelCapacity, double storingCapacity, Port port) {
-        this.ID = generateID();
+        this.id = generateID();
         this.name = name;
         this.currentFuel = 0.0;
-        this.FUEL_CAPACITY = fuelCapacity;
-        this.STORING_CAPACITY = storingCapacity;
+        this.fuelCapacity = fuelCapacity;
+        this.storingCapacity = storingCapacity;
         this.port = port;
         this.containers = new Vector<>();
     }
@@ -78,7 +81,7 @@ public abstract class Truck implements Vehicle {
             System.out.println("The amount can not be negative");
         }
 
-        if (getCurrentFuel() + fuel > FUEL_CAPACITY) { // check if it does not exceed the fuel capacity
+        if (getCurrentFuel() + fuel > fuelCapacity) { // check if it does not exceed the fuel capacity
             System.out.println("You can not refuel more than the fuel capacity of this vehicle!");
             System.out.println("The current fuel of the vehicle is: " + getCurrentFuel());
             System.out.println("The maximum fuel capacity of the vehicle is: " + getFuelCapacity());
@@ -114,7 +117,7 @@ public abstract class Truck implements Vehicle {
 
     @Override
     public String getID() {
-        return ID;
+        return id;
     }
 
     public void setPort(Port port) {
@@ -134,11 +137,11 @@ public abstract class Truck implements Vehicle {
     }
 
     public double getStoringCapacity() {
-        return STORING_CAPACITY;
+        return storingCapacity;
     }
 
     public double getFuelCapacity() {
-        return FUEL_CAPACITY;
+        return fuelCapacity;
     }
 
     @Override

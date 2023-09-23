@@ -1,6 +1,7 @@
 import java.io.IOException;
+import java.io.Serializable;
 
-public interface User {
+public interface User extends Serializable {
     public String password();
 
     public String username();

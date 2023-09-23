@@ -6,6 +6,10 @@ public class Liquid extends Container implements Serializable{
         super(weight, port);
     }
 
+    public Liquid(){
+        super();
+    }
+
     @Override
     public String toString() {
         return "Liquid - id: " + getID() + " - weight (Kg): " + getWEIGHT() + " - Vehicle: " + getVehicle();

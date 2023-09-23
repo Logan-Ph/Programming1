@@ -1,6 +1,6 @@
 import java.util.*;
 public abstract class Container {
-    private final String id;
+    private String id;
     private double weight;
     private Vehicle vehicle;
     private Port port;
@@ -11,6 +11,8 @@ public abstract class Container {
         this.vehicle = null;
         this.port = port;
     }
+
+    public Container(){}
 
     public String getID() {
         return id;
