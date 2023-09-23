@@ -151,14 +151,14 @@ public class PortManager implements User, Serializable {
     // Unload container from the vehicle
     public void unloadContainer() {
         Scanner scanner = new Scanner(System.in);
-        if (port.getVehicles() != null){
+        if (!port.getVehicles().isEmpty()){
             try {
                 System.out.println("List of vehicle in the port: ");
                 GUI.displayVehicleInPort(port);
                 // Prompt vehicle ID
                 System.out.println("Enter the vehicle ID to unload container: ");
                 Vehicle chosenVehicle = port.findVehicleByID(scanner.nextLine());
-                if (chosenVehicle.getContainers() == null) {
+                if (chosenVehicle.getContainers().isEmpty()) {
                     System.out.println("The vehicle does not have any container to unload!");
                 } else {
                     System.out.println("List of containers in the vehicle:");
@@ -177,6 +177,8 @@ public class PortManager implements User, Serializable {
                 System.out.println("The container or the the vehicle does not exist in this port");
                 System.out.println("Unload container unsuccessfully");
             }
+        } else {
+            System.out.println("There are no vehicle in this port.");
         }
     }
 
