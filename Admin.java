@@ -340,19 +340,19 @@ public class Admin implements User, Serializable {
 
         for (Container container : containers) {
             if (container instanceof OpenSide) {
-                openSideTotalWeight += container.getWEIGHT();
+                openSideTotalWeight += container.getWeight();
                 weightOfContainerType.put("Open Side", openSideTotalWeight);
             } else if (container instanceof Liquid) {
-                liquidTotalWeight += container.getWEIGHT();
+                liquidTotalWeight += container.getWeight();
                 weightOfContainerType.put("Liquid", liquidTotalWeight);
             } else if (container instanceof DryStorage) {
-                dryStorageTotalWeight += container.getWEIGHT();
+                dryStorageTotalWeight += container.getWeight();
                 weightOfContainerType.put("DryStorage", dryStorageTotalWeight);
             } else if (container instanceof Refrigerated) {
-                refrigeratedTotalWeight += container.getWEIGHT();
+                refrigeratedTotalWeight += container.getWeight();
                 weightOfContainerType.put("Refrigerated", refrigeratedTotalWeight);
             } else if (container instanceof OpenTop) {
-                openTopTotalWeight += container.getWEIGHT();
+                openTopTotalWeight += container.getWeight();
                 weightOfContainerType.put("OpenTop", openTopTotalWeight);
             }
         }
