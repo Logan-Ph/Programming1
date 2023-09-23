@@ -1,7 +1,8 @@
+import java.util.*;
 public abstract class Container {
 
     private final String id;
-    private final double weight;
+    private double weight;
     private Vehicle vehicle;
     private Port port;
 
@@ -38,6 +39,17 @@ public abstract class Container {
 
     public void setPort(Port port) {
         this.port = port;
+    }
+
+    public void updateWeight() {
+        Scanner input = new Scanner(System.in);
+        try {
+            System.out.print("Enter the weight of the container (kg): ");
+            weight = Double.parseDouble(input.nextLine());
+            System.out.println("Update container weight successfully.");
+        } catch (RuntimeException e) {
+            System.out.println("Container weight must be a number.");
+        }
     }
 
     public abstract String toString();

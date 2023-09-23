@@ -3,10 +3,10 @@ import java.util.Vector;
 
 public abstract class Truck implements Vehicle {
     private final String id;
-    private final String name;
+    private String name;
     private double currentFuel;
     private final double fuelCapacity;
-    private final double storingCapacity;
+    private double storingCapacity;
     private double currentStoringCapacity;
 
     private Vector<Container> containers;
@@ -144,6 +144,25 @@ public abstract class Truck implements Vehicle {
 
     public double getFuelCapacity() {
         return fuelCapacity;
+    }
+    @Override
+    public void setStoringCapacity() {
+        Scanner input = new Scanner(System.in);
+        try {
+            System.out.print("Enter the new storing capacity of the vehicle (kg): ");
+            storingCapacity = Double.parseDouble(input.nextLine());
+            System.out.println("Update vehicle storing capacity successfully.");
+        } catch (RuntimeException e) {
+            System.out.println("Vehicle weight must be a number.");
+        }
+    }
+
+    @Override
+    public void setName() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter new vehicle name: ");
+        this.name = input.next();
+        System.out.println("Update vehicle name successfully.");
     }
 
     @Override

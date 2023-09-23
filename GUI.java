@@ -120,6 +120,9 @@ public class GUI {
         System.out.println("13: Display all trip between 2 days");
         System.out.println("14: Confirm trip");
         System.out.println("15: Remove port");
+        System.out.println("16: Update port");
+        System.out.println("17: Update container weight");
+        System.out.println("18: Update vehicle");
         System.out.println(Separator.sep());
     }
 

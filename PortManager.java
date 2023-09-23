@@ -6,8 +6,8 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public class PortManager implements User, Serializable {
-    private final String password;
-    private final String username;
+    private String password;
+    private String username;
     private Port port;
 
     public PortManager(String username, String password, Port port) {
@@ -31,6 +31,7 @@ public class PortManager implements User, Serializable {
     public void setPort(Port port) {
         this.port = port;
     }
+
 
     @Override
     public String toString() {

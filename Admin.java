@@ -43,6 +43,9 @@ public record Admin(String username, String password) implements User, Serializa
             case "13" -> listTripsBetweenDays(port);
             case "14" -> confirmTrip(port);
             case "15" -> removePortAndPortManager(port);
+            case "16" -> updatePort(port);
+            case "17" -> updateContainerWeight(port);
+            case "18" -> updateVehicle(port);
             default -> System.out.println("You have to choose the number associated with the operation");
         }
     }
@@ -72,6 +75,55 @@ public record Admin(String username, String password) implements User, Serializa
                 }
             } else {
                 System.out.println("The port does not exist in the system");
+            }
+        }
+    }
+
+    public void updatePort(Port port) {
+        System.out.print("Choose attributes to update: 1. Name | 2. Storing Capacity | 3. Landing Ability | 4. Port Manager.");
+        Scanner input = new Scanner(System.in);
+        String chosenAttribute = input.nextLine();
+        switch (chosenAttribute) {
+            case "1" -> port.updateName();
+            case "2" -> port.updateStoringCapacity();
+            case "3" -> port.updateLandingAbility();
+//            case "4" -> port.
+            default -> System.out.println("You have to choose the number associated with the attribute.");
+        }
+    }
+
+    public void updateContainerWeight(Port port) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Current Container(s) in the port: " + port.getName());
+        GUI.displayContainerInPort(port);
+        if (port.getContainers().isEmpty()) {
+            System.out.println("There are no container in the port");
+        } else {
+            System.out.print("Enter the container id associated to update: ");
+            Container container = port.findContainerByID(input.nextLine());
+            if (container == null){
+                System.out.println("Container does not exist in this port.");
+            } else {
+                container.updateWeight();
+            }
+        }
+    }
+
+    public void updateVehicle(Port port) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Vehicles in port: ");
+        GUI.displayVehicleInPort(port);
+        System.out.println("Enter the id for the vehicle to update: ");
+        Vehicle vehicle = port.findVehicleByID(input.nextLine());
+        if (vehicle == null) {
+            System.out.println("The vehicle does not exist in the port");
+        } else {
+            System.out.print("Choose attributes to update: 1. Name | 2. Storing Capacity: ");
+            String chosenAttribute = input.nextLine();
+            switch (chosenAttribute) {
+                case "1" -> vehicle.setName();
+                case "2" -> vehicle.setStoringCapacity();
+                default -> System.out.println("You have to choose the number associated with the attribute.");
             }
         }
     }

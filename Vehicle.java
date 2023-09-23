@@ -22,4 +22,7 @@ public interface Vehicle {
     Vector<Container> getContainers();
 
     double getCurrentFuel();
+
+    void setStoringCapacity();
+    void setName();
 }
