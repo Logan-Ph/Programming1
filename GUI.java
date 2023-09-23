@@ -83,8 +83,9 @@ public class GUI {
             if (vehicle.getContainers() == null){
                 continue;
             }
+            System.out.println("Vehicle: ");
             for (Container container: vehicle.getContainers()){
-                System.out.println("    "+container);
+                System.out.println("        "+container);
             }
         }
     }

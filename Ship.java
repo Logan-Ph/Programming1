@@ -154,7 +154,7 @@ public class Ship implements Vehicle, Serializable {
     @Override
     public void setName() {
         Scanner input = new Scanner(System.in);
-        System.out.println("Enter new port name: ");
+        System.out.println("Enter new vehicle name: ");
         this.name = input.next();
         System.out.println("Update vehicle name successfully.");
     }

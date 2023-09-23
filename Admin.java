@@ -152,7 +152,7 @@ public class Admin implements User, Serializable {
             case "1" -> port.updateName();
             case "2" -> port.updateStoringCapacity();
             case "3" -> port.updateLandingAbility();
-//            case "4" -> port.
+            case "4" -> port.updatePortManager();
             default -> System.out.println("You have to choose the number associated with the attribute.");
         }
     }
@@ -178,12 +178,16 @@ public class Admin implements User, Serializable {
         Scanner input = new Scanner(System.in);
         System.out.println("Vehicles in port: ");
         GUI.displayVehicleInPort(port);
-        System.out.println("Enter the id for the vehicle to update: ");
-        Vehicle vehicle = port.findVehicleByID(input.nextLine());
-        if (vehicle == null) {
-            System.out.println("The vehicle does not exist in the port");
+        if (port.getVehicles().isEmpty()) {
+            System.out.println("There are no vehicle in this port.");
         } else {
-            vehicle.setName();
+            System.out.println("Enter the id for the vehicle to update: ");
+            Vehicle vehicle = port.findVehicleByID(input.nextLine());
+            if (vehicle == null){
+                System.out.println("Container does not exist in this port.");
+            } else {
+                vehicle.setName();
+            }
         }
     }
 
