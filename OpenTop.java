@@ -1,6 +1,7 @@
 import java.io.Serializable;
 
 public class OpenTop extends Container implements Serializable {
+    // define constructor
     public OpenTop(double weight, Port port) {
         super(weight, port);
     }

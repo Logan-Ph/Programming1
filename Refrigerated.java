@@ -1,6 +1,7 @@
 import java.io.Serializable;
 
 public class Refrigerated extends Container implements Serializable {
+    // define constructor
     public Refrigerated(double weight, Port port) {
         super(weight, port);
     }

@@ -1,11 +1,10 @@
 public class GUI {
-
     public static void display() {
         System.out.println("------------------------------------------------");
         System.out.println("| COSC2081 GROUP ASSIGNMENT                    |");
         System.out.println("| CONTAINER PORT MANAGEMENT SYSTEM             |");
         System.out.println("| Instructor: Mr. Minh Vu & Dr. Phong Ngo      |");
-        System.out.println("| Group: Group Name                            |");
+        System.out.println("| Group: 12                                    |");
         System.out.println("| s3975979 Pham Phuoc Sang                     |");
         System.out.println("| s3978387 Cao Nguyen Hai Linh                 |");
         System.out.println("| s3978486 Nguyen Ngoc Thanh Mai               |");
@@ -30,6 +29,7 @@ public class GUI {
         System.out.println(Separator.sep());
     }
 
+    // display the operation
     public static void displayOperation() {
         System.out.println("Select the operation");
         System.out.println("1: Operation on Port");
@@ -39,6 +39,7 @@ public class GUI {
         System.out.println(Separator.sep());
     }
 
+    // display all the port in the system
     public static void displayPort() {
         int i = 1;
         for (Port port : ContainerPortManagementSystem.getPorts()) {
@@ -46,6 +47,7 @@ public class GUI {
         }
     }
 
+    // display all the port with distance
     public static void displayPortWithDistance(Port port) {
         for (Port p : ContainerPortManagementSystem.getPorts()) {
             if (p != port){
@@ -54,10 +56,12 @@ public class GUI {
         }
     }
 
+    // display container in the vehicle
     public static void displayContainerInVehicle(Vehicle vehicle){
         vehicle.getContainers().forEach(System.out::println);
     }
 
+    // display container in port
     public static void displayContainerInPort(Port port) {
         for (Container container : port.getContainers()) {
             System.out.println(container);
@@ -66,6 +70,7 @@ public class GUI {
 
     }
 
+    // display the vehicle in the port
     public static void displayVehicleInPort(Port port) {
         for (Vehicle vehicle : port.getVehicles()) {
             System.out.println(vehicle);
@@ -73,6 +78,7 @@ public class GUI {
         System.out.println(Separator.sep());
     }
 
+    // display all the container and vehicle in the port
     public static void displayContainerAndVehicleInPort(Port port){
         System.out.println("Unloaded container:");
         displayContainerInPort(port);
@@ -90,6 +96,7 @@ public class GUI {
         }
     }
 
+    // display all the trip in the port
     public static void displayTripInPort(Port port) {
         for(Trip trip: port.getTrips()) {
             if (trip.getArrivalPort() == port && !trip.getStatus()) {
@@ -98,6 +105,7 @@ public class GUI {
         }
     }
 
+    // display all the vehicle type
     public static void displayVehicleType() {
         System.out.println(Separator.sep());
         System.out.println("1: Basic Truck");
@@ -107,6 +115,7 @@ public class GUI {
         System.out.println(Separator.sep());
     }
 
+    // display all the port operation
     public static void displayPortOperation() {
         System.out.println(Separator.sep());
         System.out.println("1: Add new container");
@@ -123,13 +132,14 @@ public class GUI {
         System.out.println("12: Display all trip in a day");
         System.out.println("13: Display all trip between 2 days");
         System.out.println("14: Confirm trip");
-        System.out.println("15: Remove port");
-        System.out.println("16: Update port");
+        System.out.println("15: Remove port manager and port");
+        System.out.println("16: Update port and port manager");
         System.out.println("17: Update container weight");
         System.out.println("18: Update vehicle");
         System.out.println(Separator.sep());
     }
 
+    // display all the container type
     public static void displayContainerType() {
         System.out.println("1: Dry Storage");
         System.out.println("2: Liquid");

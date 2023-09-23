@@ -2,28 +2,28 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class Trip implements Serializable {
-    private final String id;
-    private final Vehicle vehicle;
-    private final LocalDate departureDate;
+    private final String ID;
+    private final Vehicle VEHICLE;
+    private final LocalDate DEPARTURE_DATE;
     private LocalDate arrivalDate;
-    private final Port departurePort;
-    private final Port arrivalPort;
+    private final Port DEPARTURE_PORT;
+    private final Port ARRIVAL_PORT;
     private boolean status;
 
     private final double amountFuel;
 
     public Trip(Vehicle vehicle,Port departurePort, Port arrivalPort, boolean status, double amountFuel) {
-        id = generateID();
-        this.departureDate = LocalDate.now();
-        this.departurePort = departurePort;
-        this.arrivalPort = arrivalPort;
+        this.ID = generateID();
+        this.DEPARTURE_DATE = LocalDate.now();
+        this.DEPARTURE_PORT = departurePort;
+        this.ARRIVAL_PORT = arrivalPort;
         this.status = status;
-        this.vehicle = vehicle;
+        this.VEHICLE = vehicle;
         this.amountFuel = amountFuel;
     }
 
     public String getId() {
-        return id;
+        return ID;
     }
 
     public boolean getStatus() {
@@ -43,15 +43,15 @@ public class Trip implements Serializable {
     }
 
     public Vehicle getVehicle() {
-        return vehicle;
+        return VEHICLE;
     }
 
     public LocalDate getDepartureDate() {
-        return departureDate;
+        return DEPARTURE_DATE;
     }
 
     public Port getArrivalPort() {
-        return arrivalPort;
+        return ARRIVAL_PORT;
     }
 
     public LocalDate getArrivalDate() {
@@ -59,7 +59,7 @@ public class Trip implements Serializable {
     }
 
     public Port getDeparturePort() {
-        return departurePort;
+        return DEPARTURE_PORT;
     }
 
     public String generateID(){
@@ -69,12 +69,12 @@ public class Trip implements Serializable {
     @Override
     public String toString() {
         return "Trip{" +
-                "id='" + id + '\'' +
-                ", vehicle=" + vehicle +
-                ", departureDate=" + departureDate +
+                "id='" + ID + '\'' +
+                ", vehicle=" + VEHICLE +
+                ", departureDate=" + DEPARTURE_DATE +
                 ", arrivalDate=" + arrivalDate +
-                ", departurePort=" + departurePort +
-                ", arrivalPort=" + arrivalPort +
+                ", departurePort=" + DEPARTURE_PORT +
+                ", arrivalPort=" + ARRIVAL_PORT +
                 ", status=" + status +
                 ", amountFuel=" + amountFuel +
                 '}';

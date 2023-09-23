@@ -1,8 +1,4 @@
-
-import java.io.Serializable;
-
-import java.util.Scanner;
-import java.util.Vector;
+import java.io.Serializable;;
 
 public class TankerTruck extends Truck implements Vehicle, Serializable {
 

@@ -1,6 +1,7 @@
 import java.io.Serializable;
 
 public class DryStorage extends Container implements Serializable {
+    // define constructor
     public DryStorage(double weight, Port port) {
         super(weight, port);
     }

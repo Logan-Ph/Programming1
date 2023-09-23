@@ -4,18 +4,18 @@ public class VehicleFactory {
     public static Vehicle createVehicle(Port port) {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter the vehicle name: ");
-        String vehicleName = input.nextLine();
+        String vehicleName = input.nextLine(); // get the vehicle name from user
         String vehicleType;
         double fuelCapacity, storingCapacity;
         try {
             System.out.print("Enter the fuel capacity of the vehicle (Gallon): ");
-            fuelCapacity = Double.parseDouble(input.nextLine());
+            fuelCapacity = Double.parseDouble(input.nextLine()); // get the fuel capacity from user
             System.out.print("Enter the storing capacity of the vehicle (Kg): ");
-            storingCapacity = Double.parseDouble(input.nextLine());
+            storingCapacity = Double.parseDouble(input.nextLine()); // get the storing capacity from user
             System.out.println("Vehicle type: ");
             GUI.displayVehicleType();
             System.out.print("Enter the number associated with the vehicle type: ");
-            vehicleType = input.nextLine();
+            vehicleType = input.nextLine(); // get the vehicle type from the user
         }catch (RuntimeException e){
             System.out.println("You have to enter the number");
             return null;
