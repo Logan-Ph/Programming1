@@ -127,7 +127,7 @@ public class Admin implements User, Serializable {
             Port port = ContainerPortManagementSystem.findPortById(input.nextLine()); // find the port based on the id in the system
             if (port != null) {
                 while (true) {
-                    GUI.displayPortOperation(); // display all the operation on the port
+                    GUI.displayPortOperation(port); // display all the operation on the port
                     System.out.print("Enter the associated number with the operation or 'x' to exit: ");
                     String opCase = input.nextLine();
                     if (opCase.equals("x")) {
@@ -259,6 +259,7 @@ public class Admin implements User, Serializable {
             Container container = port.removeContainer(input.nextLine()); // remove the container in the port
             try {
                 if (container == null){
+                    System.out.println("The container does not exist.");
                     return;
                 }
                 ContainerPortManagementSystem.getContainers().remove(container); // remove the container from the system
@@ -281,6 +282,7 @@ public class Admin implements User, Serializable {
         try {
             Vehicle vehicle = port.removeVehicle(input.nextLine()); // remove the vehicle from the port
             if (vehicle == null){
+                System.out.println("The vehicle does not exist.");
                 return;
             }
             ContainerPortManagementSystem.getVehicles().remove(vehicle); // remove the vehicle from the system
@@ -382,13 +384,13 @@ public class Admin implements User, Serializable {
 
     public void unloadContainer(Port port) {
         Scanner scanner = new Scanner(System.in);
-        if (port.getVehicles() != null){ // check if the port have any vehicles
+        if (!port.getVehicles().isEmpty()){ // check if the port have any vehicles
             try {
                 System.out.println("List of vehicle in the port: ");
                 GUI.displayVehicleInPort(port); // display the vehicle in the port
                 System.out.println("Enter the vehicle ID to unload container: ");
                 Vehicle chosenVehicle = port.findVehicleByID(scanner.nextLine()); // find the vehicle in the port
-                if (chosenVehicle.getContainers() == null) { // check if the containers in the vehicle exist
+                if (chosenVehicle.getContainers().isEmpty()) { // check if the containers in the vehicle exist
                     System.out.println("The vehicle does not have any container to unload!");
                 } else {
                     System.out.println("List of containers in the vehicle:");
@@ -405,6 +407,8 @@ public class Admin implements User, Serializable {
                 System.out.println("The container or the the vehicle does not exist in this port");
                 System.out.println("Unload container unsuccessfully");
             }
+        } else {
+            System.out.println("There are no vehicle in this port.");
         }
     }
 

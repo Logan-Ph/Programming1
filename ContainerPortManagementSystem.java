@@ -30,8 +30,6 @@ public class ContainerPortManagementSystem {
 
         while (!exit.equals("q")){
             User user = login();
-            System.out.println(Separator.sep());
-
             if (user == null){
                 System.out.println("Wrong username!");
             }else {

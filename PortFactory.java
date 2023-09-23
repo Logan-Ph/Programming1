@@ -12,10 +12,10 @@ public class PortFactory {
         System.out.print("Enter the new port name: ");
         portName = input.nextLine();
         try {
-            System.out.print("Enter the new port longitude: ");
-            longitude = Double.parseDouble(input.nextLine()); // get the longitude from user
             System.out.print("Enter the new port latitude: ");
             latitude = Double.parseDouble(input.nextLine()); // get the latitude from user
+            System.out.print("Enter the new port longitude: ");
+            longitude = Double.parseDouble(input.nextLine()); // get the longitude from user
             System.out.print("Enter the new port storing capacity (Kg): ");
             storingCapacity = Double.parseDouble(input.nextLine()); // get the storing capacity from user
         } catch (RuntimeException e) {
@@ -38,6 +38,7 @@ public class PortFactory {
         }
 
         if (ContainerPortManagementSystem.checkPortInfo(latitude, longitude, portName)) { // return null if the port info has exist in the system
+            System.out.println("The port name or the coordinate have already existed.");
             return null;
         }
         return new Port(portName, latitude, longitude, storingCapacity, landingAbility);

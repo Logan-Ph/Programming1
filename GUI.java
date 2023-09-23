@@ -13,6 +13,7 @@ public class GUI {
     }
 
     public static void displayOperationForPortManager() {
+        System.out.println(Separator.sep());
         System.out.println("1: Add new container");
         System.out.println("2: Remove container");
         System.out.println("3: Display all vehicle and container");
@@ -31,6 +32,7 @@ public class GUI {
 
     // display the operation
     public static void displayOperation() {
+        System.out.println(Separator.sep());
         System.out.println("Select the operation");
         System.out.println("1: Operation on Port");
         System.out.println("2: Add new port manager and port");
@@ -116,8 +118,9 @@ public class GUI {
     }
 
     // display all the port operation
-    public static void displayPortOperation() {
+    public static void displayPortOperation(Port port) {
         System.out.println(Separator.sep());
+        System.out.println("You are at the port: " + port.getName());
         System.out.println("1: Add new container");
         System.out.println("2: Add new vehicle");
         System.out.println("3: Remove vehicle ");
@@ -141,6 +144,7 @@ public class GUI {
 
     // display all the container type
     public static void displayContainerType() {
+        System.out.println(Separator.sep());
         System.out.println("1: Dry Storage");
         System.out.println("2: Liquid");
         System.out.println("3: Open Top");
