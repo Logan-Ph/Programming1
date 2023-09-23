@@ -1,23 +1,24 @@
+import java.util.*;
 public abstract class Container {
 
-    private final String ID;
-    private final double WEIGHT;
+    private final String id;
+    private double weight;
     private Vehicle vehicle;
     private Port port;
 
     public Container( double weight, Port port) {
-        this.ID = generateID();
-        this.WEIGHT = weight;
+        this.id = generateID();
+        this.weight = weight;
         this.vehicle = null;
         this.port = port;
     }
 
-    public String getID() {
-        return ID;
+    public String getId() {
+        return id;
     }
 
-    public double getWEIGHT() {
-        return WEIGHT;
+    public double getWeight() {
+        return weight;
     }
 
     public Vehicle getVehicle() {
@@ -38,6 +39,17 @@ public abstract class Container {
 
     public void setPort(Port port) {
         this.port = port;
+    }
+
+    public void updateWeight() {
+        Scanner input = new Scanner(System.in);
+        try {
+            System.out.print("Enter the weight of the container (kg): ");
+            weight = Double.parseDouble(input.nextLine());
+            System.out.println("Update container weight successfully.");
+        } catch (RuntimeException e) {
+            System.out.println("Container weight must be a number.");
+        }
     }
 
     public abstract String toString();

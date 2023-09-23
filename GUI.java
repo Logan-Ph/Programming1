@@ -26,6 +26,7 @@ public class GUI {
         System.out.println("10: Display all trip in a day");
         System.out.println("11: Display all trip between 2 days");
         System.out.println("12: Confirm trip");
+        System.out.println("13: Update container weight");
         System.out.println(Separator.sep());
     }
 
@@ -33,6 +34,8 @@ public class GUI {
         System.out.println("Select the operation");
         System.out.println("1: Operation on Port");
         System.out.println("2: Add new port manager and port");
+        System.out.println("3: Display total weight of container types");
+        System.out.println("4: Update account");
         System.out.println(Separator.sep());
     }
 
@@ -80,8 +83,9 @@ public class GUI {
             if (vehicle.getContainers() == null){
                 continue;
             }
+            System.out.println("Vehicle: ");
             for (Container container: vehicle.getContainers()){
-                System.out.println("    "+container);
+                System.out.println("        "+container);
             }
         }
     }
@@ -120,6 +124,9 @@ public class GUI {
         System.out.println("13: Display all trip between 2 days");
         System.out.println("14: Confirm trip");
         System.out.println("15: Remove port");
+        System.out.println("16: Update port");
+        System.out.println("17: Update container weight");
+        System.out.println("18: Update vehicle");
         System.out.println(Separator.sep());
     }
 

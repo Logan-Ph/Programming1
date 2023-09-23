@@ -1,5 +1,8 @@
+import com.sun.jdi.InvalidTypeException;
+
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Scanner;
 import java.util.Vector;
 
 // con method add vehicle, vaf remove vehicle=
@@ -249,6 +252,56 @@ public class Port implements Serializable {
         return IDFactory.generateID("port");
     }
 
+    public void updateName() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter new port name: ");
+        this.name = input.next();
+        System.out.println("Update port name successfully.");
+    }
+
+    public void updateStoringCapacity() {
+        Scanner input = new Scanner(System.in);
+        try {
+            System.out.print("Enter the new port storing capacity (Kg): ");
+            storingCapacity = Double.parseDouble(input.nextLine());
+        } catch (RuntimeException e) {
+            System.out.println("You have to enter a number");
+        }
+    }
+
+    public void updateLandingAbility() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter the port landing ability ('true' or 'false')");
+        System.out.println("If 'true' the truck can land at this port");
+        String landing = input.nextLine();
+        if (landing.equals("true") || landing.equals("false")) {
+            landingAbility = Boolean.parseBoolean(landing);
+        } else {
+            System.out.println("You have to enter 'true' or 'false'");
+        }
+    }
+
+    public void updatePortManager() {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Choose attributes to update: 1. Name | 2. Password: ");
+        String chosenAttribute = input.nextLine();
+        switch (chosenAttribute) {
+            case "1":
+                System.out.print("Enter the new port manager username: ");
+                String username = input.nextLine();
+                if (ContainerPortManagementSystem.checkUsername(username)) {
+                    System.out.println("The user name has already exist.");
+                } else {
+                    portManager.setUsername(username);
+                }
+            case "2":
+                System.out.print("Enter the new port manager password: ");
+                portManager.setPassword(input.next());
+            default:
+                System.out.println("You have to choose the number associated with the attribute.");
+        }
+
+    }
     @Override
     public String toString() {
         return "Port{" +

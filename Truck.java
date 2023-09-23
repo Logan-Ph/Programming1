@@ -2,11 +2,11 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public abstract class Truck implements Vehicle {
-    private final String ID;
-    private final String NAME;
+    private final String id;
+    private String name;
     private double currentFuel;
-    private final double FUEL_CAPACITY;
-    private final double STORING_CAPACITY;
+    private final double fuelCapacity;
+    private double storingCapacity;
     private double currentStoringCapacity;
 
     private Vector<Container> containers;
@@ -14,11 +14,11 @@ public abstract class Truck implements Vehicle {
 
     // initialize the constructor
     public Truck(String name, double fuelCapacity, double storingCapacity, Port port) {
-        this.ID = generateID();
-        this.NAME = name;
+        this.id = generateID();
+        this.name = name;
         this.currentFuel = 0.0;
-        this.FUEL_CAPACITY = fuelCapacity;
-        this.STORING_CAPACITY = storingCapacity;
+        this.fuelCapacity = fuelCapacity;
+        this.storingCapacity = storingCapacity;
         this.port = port;
         this.containers = new Vector<>();
     }
@@ -26,9 +26,9 @@ public abstract class Truck implements Vehicle {
     //Load the container to the vehicle
     @Override
     public boolean load(Container container) {
-        if (LoadContainerBehavior.load(container, this) && getCurrentStoringCapacity() + container.getWEIGHT() <= getStoringCapacity()) { // check if that vehicle can load the container or if the container weight exceed the storing capacity
+        if (LoadContainerBehavior.load(container, this) && getCurrentStoringCapacity() + container.getWeight() <= getStoringCapacity()) { // check if that vehicle can load the container or if the container weight exceed the storing capacity
             this.containers.add(container);
-            currentStoringCapacity += container.getWEIGHT();
+            currentStoringCapacity += container.getWeight();
             return true;
         } else {
             System.out.println("This vehicle cannot carry this container!");
@@ -50,7 +50,7 @@ public abstract class Truck implements Vehicle {
 
     @Override
     public String getID() {
-        return ID;
+        return id;
     }
 
     //Unload the container from the vehicle
@@ -59,7 +59,7 @@ public abstract class Truck implements Vehicle {
         Container container = findContainerByID(id);
         try {
             this.containers.remove(container); // remove the container from the ArrayList
-            currentStoringCapacity -= container.getWEIGHT();
+            currentStoringCapacity -= container.getWeight();
             return container;
         } catch (Exception e) {
             System.out.println("There is no matching ID container!"); // Throw exception if the container doesn't exist in the ArrayList
@@ -67,11 +67,11 @@ public abstract class Truck implements Vehicle {
         }
     }
 
-    //Find the container by using ID
+    //Find the container by using id
     public Container findContainerByID(String id) {
         Container container = null;
         for (Container cont : this.containers) {
-            if (cont.getID().equals(id)) {
+            if (cont.getId().equals(id)) {
                 container = cont;
             }
         }
@@ -94,7 +94,7 @@ public abstract class Truck implements Vehicle {
             System.out.println("The amount can not be negative");
         }
 
-        if (getCurrentFuel() + fuel > FUEL_CAPACITY) { // check if it does not exceed the fuel capacity
+        if (getCurrentFuel() + fuel > fuelCapacity) { // check if it does not exceed the fuel capacity
             System.out.println("You can not refuel more than the fuel capacity of this vehicle!");
             System.out.println("The current fuel of the vehicle is: " + getCurrentFuel());
             System.out.println("The maximum fuel capacity of the vehicle is: " + getFuelCapacity());
@@ -110,7 +110,7 @@ public abstract class Truck implements Vehicle {
         double totalFuelConsumption = 0.0;
         try {
             for (Container container : containers) {
-                totalFuelConsumption += container.getWEIGHT() * CalculateFuelBehaviour.calculateFuelConsumption(container, this);
+                totalFuelConsumption += container.getWeight() * CalculateFuelBehaviour.calculateFuelConsumption(container, this);
             }
             return (double) Math.round(totalFuelConsumption * this.port.getDistance(port)*100)/100.0 ;
         } catch (NullPointerException e) {
@@ -122,8 +122,12 @@ public abstract class Truck implements Vehicle {
         this.port = port;
     }
 
-    public String getNAME() {
-        return NAME;
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public double getCurrentFuel() {
@@ -135,11 +139,18 @@ public abstract class Truck implements Vehicle {
     }
 
     public double getStoringCapacity() {
-        return STORING_CAPACITY;
+        return storingCapacity;
     }
 
     public double getFuelCapacity() {
-        return FUEL_CAPACITY;
+        return fuelCapacity;
+    }
+    @Override
+    public void setName() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter new vehicle name: ");
+        this.name = input.next();
+        System.out.println("Update vehicle name successfully.");
     }
 
     @Override

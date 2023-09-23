@@ -6,7 +6,24 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.Vector;
 
-public record Admin(String username, String password) implements User, Serializable {
+public class Admin implements User, Serializable {
+    private String password;
+    private String username;
+
+    public Admin(String username, String password) {
+        this.password = password;
+        this.username = username;
+    }
+
+    @Override
+    public String password() {
+        return password;
+    }
+
+    @Override
+    public String username() {
+        return username;
+    }
 
     @Override
     public String toString() {
@@ -22,6 +39,7 @@ public record Admin(String username, String password) implements User, Serializa
             case "1" -> portOperation();
             case "2" -> createPortAndPortManager();
             case "3" -> displayWeightOfContainerType(ContainerPortManagementSystem.getContainers());
+            case "4" -> updateAdmin();
             default -> System.out.println("You have to choose the number associated with the operation");
         }
     }
@@ -43,8 +61,58 @@ public record Admin(String username, String password) implements User, Serializa
             case "13" -> listTripsBetweenDays(port);
             case "14" -> confirmTrip(port);
             case "15" -> removePortAndPortManager(port);
+            case "16" -> updatePort(port);
+            case "17" -> updateContainerWeight(port);
+            case "18" -> updateVehicle(port);
+            case "19" -> updatePortManager(port);
             default -> System.out.println("You have to choose the number associated with the operation");
         }
+    }
+
+    public static User create() {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter the new admin username: ");
+        String username = input.nextLine().strip();
+
+        if (ContainerPortManagementSystem.checkUsername(username)){
+            System.out.println("The user name has already exist. Please enter the username again");
+            username = input.nextLine().strip();
+        }
+
+        System.out.print("Enter the new admin password: ");
+        String password = input.nextLine();
+
+        return new Admin(username,password);
+    }
+    @Override
+    public void setUsername(String username) {this.username = username;}
+
+    @Override
+    public void setPassword(String password) {this.password = password;}
+
+    public void updateAdmin() {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Choose attributes to update: 1. Username | 2. Password: ");
+        String chosenAttribute = input.nextLine();
+        switch (chosenAttribute) {
+            case "1" -> {
+                System.out.print("Enter the new admin username: ");
+                String username = input.nextLine().strip();
+                if (ContainerPortManagementSystem.checkUsername(username)) {
+                    System.out.println("The user name has already exist.");
+                } else {
+                    this.setUsername(username);
+                }
+                System.out.println("Update username successfully");
+            }
+            case "2" -> {
+                System.out.print("Enter the new admin password: ");
+                this.setPassword(input.next().strip());
+                System.out.println("Update password successfully");
+            }
+            default -> System.out.println("You have to choose the number associated with the attribute.");
+        }
+
     }
 
     private void portOperation() {
@@ -74,6 +142,57 @@ public record Admin(String username, String password) implements User, Serializa
                 System.out.println("The port does not exist in the system");
             }
         }
+    }
+
+    public void updatePort(Port port) {
+        System.out.print("Choose attributes to update: 1. Name | 2. Storing Capacity | 3. Landing Ability | 4. Port Manager.");
+        Scanner input = new Scanner(System.in);
+        String chosenAttribute = input.nextLine();
+        switch (chosenAttribute) {
+            case "1" -> port.updateName();
+            case "2" -> port.updateStoringCapacity();
+            case "3" -> port.updateLandingAbility();
+            case "4" -> port.updatePortManager();
+            default -> System.out.println("You have to choose the number associated with the attribute.");
+        }
+    }
+
+    public void updateContainerWeight(Port port) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Current Container(s) in the port: " + port.getName());
+        GUI.displayContainerInPort(port);
+        if (port.getContainers().isEmpty()) {
+            System.out.println("There are no container in the port");
+        } else {
+            System.out.print("Enter the container id associated to update: ");
+            Container container = port.findContainerByID(input.nextLine());
+            if (container == null){
+                System.out.println("Container does not exist in this port.");
+            } else {
+                container.updateWeight();
+            }
+        }
+    }
+
+    public void updateVehicle(Port port) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Vehicles in port: ");
+        GUI.displayVehicleInPort(port);
+        if (port.getVehicles().isEmpty()) {
+            System.out.println("There are no vehicle in this port.");
+        } else {
+            System.out.println("Enter the id for the vehicle to update: ");
+            Vehicle vehicle = port.findVehicleByID(input.nextLine());
+            if (vehicle == null){
+                System.out.println("Container does not exist in this port.");
+            } else {
+                vehicle.setName();
+            }
+        }
+    }
+
+    public void updatePortManager(Port port) {
+        port.updatePortManager();
     }
 
     public void refuelVehicle(Port port) {
