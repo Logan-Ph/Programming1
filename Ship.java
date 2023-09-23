@@ -3,22 +3,22 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public class Ship implements Vehicle, Serializable {
-    private final String id;
+    private final String ID;
     private String name;
     private double currentFuel;
-    private final double fuelCapacity;
-    private double storingCapacity;
+    private final double FUEL_CAPACITY;
+    private final double  STORING_CAPACITY;
     private double currentStoringCapacity;
     private Vector<Container> containers;
     private Port port;
 
     // initialize the constructor
     public Ship(String name, double fuelCapacity, double storingCapacity, Port port) {
-        this.id = generateID();
+        this.ID = generateID();
         this.name = name;
         this.currentFuel = 0.0;
-        this.fuelCapacity = fuelCapacity;
-        this.storingCapacity = storingCapacity;
+        this.FUEL_CAPACITY = fuelCapacity;
+        this.STORING_CAPACITY = storingCapacity;
         this.port = port;
         this.containers = new Vector<>();
     }
@@ -26,9 +26,9 @@ public class Ship implements Vehicle, Serializable {
     //Load the container to the vehicle
     @Override
     public boolean load(Container container) {
-        if (getCurrentStoringCapacity() + container.getWeight() <= getStoringCapacity()) { // check if that vehicle can load the container or if the container weight exceed the storing capacity
+        if (getCurrentStoringCapacity() + container.getWEIGHT() <= getStoringCapacity()) { // check if that vehicle can load the container or if the container weight exceed the storing capacity
             this.containers.add(container);
-            currentStoringCapacity += container.getWeight();
+            currentStoringCapacity += container.getWEIGHT();
             return true;
         } else {
             System.out.println("This vehicle cannot carry this container!");
@@ -50,7 +50,7 @@ public class Ship implements Vehicle, Serializable {
 
     @Override
     public String getID() {
-        return id;
+        return ID;
     }
 
     //Unload the container from the vehicle
@@ -59,7 +59,7 @@ public class Ship implements Vehicle, Serializable {
         Container container = findContainerByID(id);
         try {
             this.containers.remove(container); // remove the container from the ArrayList
-            currentStoringCapacity-=container.getWeight();
+            currentStoringCapacity-=container.getWEIGHT();
             return container;
         } catch (Exception e) {
             System.out.println("There is no matching ID container!"); // Throw exception if the container doesn't exist in the ArrayList
@@ -71,7 +71,7 @@ public class Ship implements Vehicle, Serializable {
     public Container findContainerByID(String id) {
         Container container = null;
         for (Container cont : this.containers) {
-            if (cont.getId().equals(id)) {
+            if (cont.getID().equals(id)) {
                 container = cont;
             }
         }
@@ -94,7 +94,7 @@ public class Ship implements Vehicle, Serializable {
             System.out.println("The amount can not be negative");
         }
 
-        if (getCurrentFuel() + fuel > fuelCapacity) { // check if it does not exceed the fuel capacity
+        if (getCurrentFuel() + fuel > FUEL_CAPACITY) { // check if it does not exceed the fuel capacity
             System.out.println("You can not refuel more than the fuel capacity of this vehicle!");
             System.out.println("The current fuel of the vehicle is: "+getCurrentFuel());
             System.out.println("The maximum fuel capacity of the vehicle is: "+getFuelCapacity());
@@ -110,7 +110,7 @@ public class Ship implements Vehicle, Serializable {
         double totalFuelConsumption = 0.0;
         try {
             for (Container container: containers){
-                totalFuelConsumption += container.getWeight()*CalculateFuelBehaviour.calculateFuelConsumption(container,this);
+                totalFuelConsumption += container.getWEIGHT()*CalculateFuelBehaviour.calculateFuelConsumption(container,this); // calculate fuel consumption
             }
             return totalFuelConsumption*this.port.getDistance(port);
         }catch (NullPointerException e){
@@ -123,7 +123,7 @@ public class Ship implements Vehicle, Serializable {
     }
 
     public String getId() {
-        return id;
+        return ID;
     }
 
     public String getName() {
@@ -139,11 +139,11 @@ public class Ship implements Vehicle, Serializable {
     }
 
     public double getStoringCapacity() {
-        return storingCapacity;
+        return STORING_CAPACITY;
     }
 
     public double getFuelCapacity() {
-        return fuelCapacity;
+        return FUEL_CAPACITY;
     }
 
     @Override

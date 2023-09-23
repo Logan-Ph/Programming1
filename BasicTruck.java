@@ -3,7 +3,7 @@ import java.io.Serializable;
 public class BasicTruck extends Truck implements Vehicle, Serializable {
     public BasicTruck(String name, double fuelCapacity, double storingCapacity, Port port) {
         super(name, fuelCapacity, storingCapacity, port);
-    }
+    } // define constructor
 
     @Override
     public String toString() {

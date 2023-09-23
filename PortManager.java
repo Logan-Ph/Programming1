@@ -41,6 +41,7 @@ public class PortManager implements User, Serializable {
                 '}';
     }
 
+    // Method to invoke other methods based on the number input
     @Override
     public void operationCase(String opCase){
         switch (opCase) {
@@ -61,11 +62,12 @@ public class PortManager implements User, Serializable {
         }
     }
 
+    // Create and validate new port manager account
     public static User create(){
         Scanner input = new Scanner(System.in);
         System.out.print("Enter the new port manager username: ");
         String username = input.nextLine();
-
+        // Call static method to check whether username has existed in the system
         if (ContainerPortManagementSystem.checkUsername(username)){
             System.out.println("The user name has already exist. Please enter the username again");
             username = input.nextLine();
@@ -80,6 +82,7 @@ public class PortManager implements User, Serializable {
     public void setPassword(String password) {this.password = password;}
     public void setUsername(String username) {this.username = username;}
 
+    // Add new container to the port
     public void createContainer() {
         Container container = ContainerFactory.createContainer(port);
         if (container!= null && port.addContainer(container)){
@@ -89,6 +92,8 @@ public class PortManager implements User, Serializable {
             System.out.println("Adding container unsuccessful");
         }
     }
+
+    // Remove container from the port
     public void removeContainer() {
         Scanner input = new Scanner(System.in);
         System.out.println("Current Container(s) in the port: " + port.getName());
@@ -110,10 +115,12 @@ public class PortManager implements User, Serializable {
         }
     }
 
+    // Load container onto the vehicle
     public void loadContainer() {
         // print vehicle and container in the port
         Scanner scanner = new Scanner(System.in);
-        if (port.getContainers().isEmpty() || port.getVehicles().isEmpty()) {
+        // check whether the port has unloaded container
+        if (port.getContainers().isEmpty() || port.getVehicles().isEmpty())  {
             System.out.println("There are no container or vehicle in the port");
         } else {
             try{
@@ -134,18 +141,21 @@ public class PortManager implements User, Serializable {
                     System.out.println("Loaded successfully");
                 }
             }catch (NullPointerException e){
+                // catch exception if the user entered the wrong id
                 System.out.println("The vehicle or the container does not exist in the system");
                 System.out.println("Loaded unsuccessfully");
             }
         }
     }
 
+    // Unload container from the vehicle
     public void unloadContainer() {
         Scanner scanner = new Scanner(System.in);
         if (port.getVehicles() != null){
             try {
                 System.out.println("List of vehicle in the port: ");
                 GUI.displayVehicleInPort(port);
+                // Prompt vehicle ID
                 System.out.println("Enter the vehicle ID to unload container: ");
                 Vehicle chosenVehicle = port.findVehicleByID(scanner.nextLine());
                 if (chosenVehicle.getContainers() == null) {
@@ -153,6 +163,7 @@ public class PortManager implements User, Serializable {
                 } else {
                     System.out.println("List of containers in the vehicle:");
                     GUI.displayContainerInVehicle(chosenVehicle);
+                    // Prompt container ID
                     System.out.println("Enter container ID to unload:");
                     Container container = chosenVehicle.unLoad(scanner.nextLine());
                     if (port.addContainer(container)) {
@@ -162,12 +173,14 @@ public class PortManager implements User, Serializable {
                     }
                 }
             }catch (NullPointerException e){
+                // Catch exception when the user either enter the wrong vehicle ID or container ID
                 System.out.println("The container or the the vehicle does not exist in this port");
                 System.out.println("Unload container unsuccessfully");
             }
         }
     }
 
+    // Refuel vehicle at the port
     public void refuelVehicle(){
         Scanner input = new Scanner(System.in);
         System.out.println("Vehicles in port: ");
@@ -175,6 +188,7 @@ public class PortManager implements User, Serializable {
         System.out.println("Enter the id for the vehicle to refuel: ");
         Vehicle vehicle = port.findVehicleByID(input.nextLine());
         if (vehicle == null){
+            // Validate input, variable vehicle is null when system cannot find the vehicle with the input id in the port
             System.out.println("The vehicle does not exist in the port");
         }else {
             if (vehicle.refueling()){
@@ -183,27 +197,35 @@ public class PortManager implements User, Serializable {
         }
     }
 
+    // Confirm the arrival of vehicle sent from another port
     public void confirmTrip() {
         Scanner input = new Scanner(System.in);
+        // Print lists of unconfirmed trip
         System.out.println("List of trips: ");
         GUI.displayTripInPort(port);
+        // Prompt trip id
         System.out.println("Enter the trip id associated to confirm");
         port.confirmTrip(input.nextLine());
     }
 
+    // Send vehicle to another port
     public void sendVehicle() {
         Scanner input = new Scanner(System.in);
+        // Display distance to other ports
         System.out.println("Distance to all Port(s) in the system:");
         GUI.displayPortWithDistance(port);
+        // Prompt destination port id
         System.out.print("Enter the destination port id: ");
         Port destinationPort = ContainerPortManagementSystem.findPortById(input.nextLine());
         try {
             GUI.displayVehicleInPort(port);
         } catch (NullPointerException e) {
+            // Catch exception when the input id is invalid
             System.out.println("The port does not exist");
             System.out.println("Sending vehicle unsuccessfully");
             return;
         }
+        // Prompt vehicle id
         System.out.print("Enter the vehicle id associated for sending: ");
         Vehicle vehicle = port.findVehicleByID(input.nextLine());
         try {
@@ -219,11 +241,13 @@ public class PortManager implements User, Serializable {
                 System.out.println("Sending vehicle successfully");
             }
         }catch (NullPointerException e){
+            // Catch exception when the input id is invalid
             System.out.println("The vehicle does not exist in this port");
             System.out.println("Sending vehicle unsuccessfully");
         }
     }
 
+    // Display the total weight of each type of container
     public void displayWeightOfContainerType() {
         HashMap<String, Double> weightOfContainerType = new HashMap<>();
 
@@ -233,6 +257,7 @@ public class PortManager implements User, Serializable {
         double refrigeratedTotalWeight = 0.0;
         double openTopTotalWeight = 0.0;
 
+        // Loop through list of containers and categorize them into types
         for (Container container : port.getContainers()) {
             if (container instanceof OpenSide) {
                 openSideTotalWeight += container.getWEIGHT();
@@ -259,11 +284,13 @@ public class PortManager implements User, Serializable {
         }
     }
 
+    // List trips between two given days
     public void listTripsBetweenDays() {
         Scanner scanner = new Scanner(System.in);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd M yyyy");
         LocalDate startDay,endDay;
         Vector<Trip> trips;
+        // Validate day input
         try {
             System.out.println("Enter the start day (You need to enter only day, NOT MONTH OR YEAR): ");
             startDay = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
@@ -279,6 +306,7 @@ public class PortManager implements User, Serializable {
             System.out.println("The day is invalid");
             return;
         }
+        // Display all trips with either departure day and arrival day between 2 input day
         trips = port.listAllTripFromDayAToB(startDay, endDay);
         if (trips==null){
             System.out.println("No trips found");
@@ -288,11 +316,13 @@ public class PortManager implements User, Serializable {
         }
     }
 
+    // List all trips in a given day
     public void listTripsInDay() {
         Scanner scanner = new Scanner(System.in);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd M yyyy");
         LocalDate date;
         Vector<Trip> trips;
+        // Validate input
         try {
             System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR): ");
             date = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
@@ -300,8 +330,10 @@ public class PortManager implements User, Serializable {
             System.out.println("The day is invalid");
             return;
         }
+        // List trips
         trips = port.listAllTripInDay(date);
         if (trips==null){
+            // Print message if there are no trip in the given day at this port
             System.out.println("No trips found");
         }
         else {
@@ -309,10 +341,12 @@ public class PortManager implements User, Serializable {
         }
     }
 
+    // Display the amount of fuel used in a given day
     public void amountFuelUsedInDay(){
         Scanner scanner = new Scanner(System.in);
         LocalDate date;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd M yyyy");
+        // Validate day input
         try {
             System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR): ");
             date = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
@@ -323,13 +357,17 @@ public class PortManager implements User, Serializable {
         System.out.println("The amount of fuel used in this day: " + port.amountFuelUsedInDay(date));
     }
 
+    // Update a container's weight
     public void updateContainerWeight() {
         Scanner input = new Scanner(System.in);
+        // Print existing container in the port
         System.out.println("Current Container(s) in the port: " + port.getName());
         GUI.displayContainerInPort(port);
         if (port.getContainers().isEmpty()) {
+            // Print message if no container is found
             System.out.println("There are no container in the port");
         } else {
+            // Prompt container ID
             System.out.print("Enter the container id associated to update: ");
             Container container = port.findContainerByID(input.nextLine());
             if (container == null){

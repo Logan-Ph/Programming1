@@ -1,15 +1,8 @@
-import com.sun.security.jgss.GSSUtil;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.util.Scanner;
-import java.util.Vector;
 
 public class PortFactory {
     public static Port createPort() {
         Scanner input = new Scanner(System.in);
-        boolean existed = false;
         boolean landingAbility;
         double longitude, latitude, storingCapacity;
         String portName;
@@ -20,11 +13,11 @@ public class PortFactory {
         portName = input.nextLine();
         try {
             System.out.print("Enter the new port longitude: ");
-            longitude = Double.parseDouble(input.nextLine());
+            longitude = Double.parseDouble(input.nextLine()); // get the longitude from user
             System.out.print("Enter the new port latitude: ");
-            latitude = Double.parseDouble(input.nextLine());
+            latitude = Double.parseDouble(input.nextLine()); // get the latitude from user
             System.out.print("Enter the new port storing capacity (Kg): ");
-            storingCapacity = Double.parseDouble(input.nextLine());
+            storingCapacity = Double.parseDouble(input.nextLine()); // get the storing capacity from user
         } catch (RuntimeException e) {
             System.out.println("You have to enter the number");
             return null;
@@ -33,8 +26,8 @@ public class PortFactory {
         try {
             System.out.println("Enter the port landing ability ('true' or 'false')");
             System.out.println("If 'true' the truck can land at this port");
-            String landing = input.nextLine();
-            if (landing.equals("true") || landing.equals("false")) {
+            String landing = input.nextLine(); // get the landing ability from user
+            if (landing.equals("true") || landing.equals("false")) { // validate the prompt
                 landingAbility = Boolean.parseBoolean(landing);
             } else {
                 return null;
@@ -44,7 +37,7 @@ public class PortFactory {
             return null;
         }
 
-        if (ContainerPortManagementSystem.checkPortInfo(latitude, longitude, portName)) {
+        if (ContainerPortManagementSystem.checkPortInfo(latitude, longitude, portName)) { // return null if the port info has exist in the system
             return null;
         }
         return new Port(portName, latitude, longitude, storingCapacity, landingAbility);

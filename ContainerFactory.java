@@ -7,12 +7,12 @@ public class ContainerFactory {
         String containerType;
         try {
             System.out.print("Enter the weight of the container (kg): ");
-            weight = Double.parseDouble(input.nextLine());
+            weight = Double.parseDouble(input.nextLine()); // get the input from user
 
             System.out.println("Container type:");
             GUI.displayContainerType();
             System.out.print("Enter number associated to the container type: ");
-            containerType = input.nextLine();
+            containerType = input.nextLine(); // get input from user
         }catch (RuntimeException e){
             return null;
         }

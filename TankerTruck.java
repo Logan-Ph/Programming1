@@ -1,5 +1,4 @@
-
-import java.io.Serializable;
+import java.io.Serializable;;
 
 public class TankerTruck extends Truck implements Vehicle, Serializable {
 
