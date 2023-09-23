@@ -6,6 +6,10 @@ public class DryStorage extends Container implements Serializable {
         super(weight, port);
     }
 
+    public DryStorage(){
+        super();
+    }
+
     @Override
     public String toString() {
         return "Dry Storage - id: " + getID() + " - weight (Kg): " + getWEIGHT() + " - Vehicle: " + getVehicle();

@@ -6,6 +6,10 @@ public class OpenSide extends Container implements Serializable {
         super(weight, port);
     }
 
+    public OpenSide(){
+        super();
+    }
+
     @Override
     public String toString() {
         return "Open Side - id: " + getID() + " - weight (Kg): " + getWEIGHT() + " - Vehicle: " + getVehicle();

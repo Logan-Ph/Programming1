@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Vector;
 
-public interface Vehicle {
+public interface Vehicle extends Serializable {
     boolean load(Container container);
     Container unLoad(String id);
     boolean refueling();

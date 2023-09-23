@@ -15,6 +15,8 @@ public class Admin implements User, Serializable {
         this.username = username;
     }
 
+
+
     @Override
     public String password() {
         return password;
@@ -223,6 +225,7 @@ public class Admin implements User, Serializable {
             ((PortManager) portManager).setPort(port);
             ContainerPortManagementSystem.getPorts().add(port); // add Port to the system
             ContainerPortManagementSystem.getUsers().add(portManager); // add Port manager to the system
+            System.out.println("Port and port manager created successfully!");
         } else {
             System.out.println("Port and port manager created unsuccessfully!");
         }
@@ -346,7 +349,7 @@ public class Admin implements User, Serializable {
         }
         if (!weightOfContainerType.isEmpty()) {
             // Print the total weight for each type of container
-            weightOfContainerType.forEach((key, value) -> System.out.println(key + " = " + value));
+            weightOfContainerType.forEach((key, value) -> System.out.println(key + " = " + value + " KG"));
         } else {
             System.out.println("There are no Containers to display!");
         }

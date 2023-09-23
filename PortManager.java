@@ -16,6 +16,8 @@ public class PortManager implements User, Serializable {
         this.port = port;
     }
 
+    public PortManager(){}
+
     public String password() {
         return password;
     }

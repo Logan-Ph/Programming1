@@ -87,11 +87,11 @@ public class GUI {
 
         System.out.println("Loaded container:");
         for (Vehicle vehicle : port.getVehicles()) {
+            System.out.println("Vehicle: ");
             System.out.println(vehicle);
             if (vehicle.getContainers() == null){
                 continue;
             }
-            System.out.println("Vehicle: ");
             for (Container container: vehicle.getContainers()){
                 System.out.println("        "+container);
             }

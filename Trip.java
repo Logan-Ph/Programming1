@@ -2,28 +2,31 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class Trip implements Serializable {
-    private final String ID;
-    private final Vehicle VEHICLE;
-    private final LocalDate DEPARTURE_DATE;
+    private String id;
+    private Vehicle vehicle;
+    private LocalDate departureDate;
     private LocalDate arrivalDate;
-    private final Port DEPARTURE_PORT;
-    private final Port ARRIVAL_PORT;
+    private Port departurePort;
+    private Port arrivalPort;
     private boolean status;
+    private double amountFuel;
 
-    private final double amountFuel;
 
     public Trip(Vehicle vehicle,Port departurePort, Port arrivalPort, boolean status, double amountFuel) {
-        this.ID = generateID();
-        this.DEPARTURE_DATE = LocalDate.now();
-        this.DEPARTURE_PORT = departurePort;
-        this.ARRIVAL_PORT = arrivalPort;
+        this.id = generateID();
+        this.departureDate = LocalDate.now();
+        this.departurePort = departurePort;
+        this.arrivalPort = arrivalPort;
         this.status = status;
-        this.VEHICLE = vehicle;
+        this.vehicle = vehicle;
         this.amountFuel = amountFuel;
     }
 
+    public Trip(){}
+
+
     public String getId() {
-        return ID;
+        return id;
     }
 
     public boolean getStatus() {
@@ -43,15 +46,15 @@ public class Trip implements Serializable {
     }
 
     public Vehicle getVehicle() {
-        return VEHICLE;
+        return vehicle;
     }
 
     public LocalDate getDepartureDate() {
-        return DEPARTURE_DATE;
+        return departureDate;
     }
 
     public Port getArrivalPort() {
-        return ARRIVAL_PORT;
+        return arrivalPort;
     }
 
     public LocalDate getArrivalDate() {
@@ -59,7 +62,7 @@ public class Trip implements Serializable {
     }
 
     public Port getDeparturePort() {
-        return DEPARTURE_PORT;
+        return departurePort;
     }
 
     public String generateID(){
@@ -69,12 +72,12 @@ public class Trip implements Serializable {
     @Override
     public String toString() {
         return "Trip{" +
-                "id='" + ID + '\'' +
-                ", vehicle=" + VEHICLE +
-                ", departureDate=" + DEPARTURE_DATE +
+                "id='" + id + '\'' +
+                ", vehicle=" + vehicle +
+                ", departureDate=" + departureDate +
                 ", arrivalDate=" + arrivalDate +
-                ", departurePort=" + DEPARTURE_PORT +
-                ", arrivalPort=" + ARRIVAL_PORT +
+                ", departurePort=" + departurePort +
+                ", arrivalPort=" + arrivalPort +
                 ", status=" + status +
                 ", amountFuel=" + amountFuel +
                 '}';
