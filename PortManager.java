@@ -56,6 +56,7 @@ public class PortManager implements User, Serializable {
             case "10" -> listTripsInDay();
             case "11" -> listTripsBetweenDays();
             case "12" -> confirmTrip();
+            case "13" -> updateContainerWeight();
             default -> System.out.println("You have to choose the number associated with the operation");
         }
     }
@@ -75,6 +76,9 @@ public class PortManager implements User, Serializable {
 
         return new PortManager(username,password,null);
     }
+
+    public void setPassword(String password) {this.password = password;}
+    public void setUsername(String username) {this.username = username;}
 
     public void createContainer() {
         Container container = ContainerFactory.createContainer(port);
@@ -317,5 +321,22 @@ public class PortManager implements User, Serializable {
             return;
         }
         System.out.println("The amount of fuel used in this day: " + port.amountFuelUsedInDay(date));
+    }
+
+    public void updateContainerWeight() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Current Container(s) in the port: " + port.getName());
+        GUI.displayContainerInPort(port);
+        if (port.getContainers().isEmpty()) {
+            System.out.println("There are no container in the port");
+        } else {
+            System.out.print("Enter the container id associated to update: ");
+            Container container = port.findContainerByID(input.nextLine());
+            if (container == null){
+                System.out.println("Container does not exist in this port.");
+            } else {
+                container.updateWeight();
+            }
+        }
     }
 }

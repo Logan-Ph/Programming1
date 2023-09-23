@@ -281,18 +281,27 @@ public class Port implements Serializable {
         }
     }
 
-//    public void updatePortManager() {
-//        Scanner input = new Scanner(System.in);
-//        System.out.print("Enter the new port manager username: ");
-//        String username = input.nextLine();
-//        if (ContainerPortManagementSystem.checkUsername(username)){
-//            System.out.println("The user name has already exist. Please enter the username again");
-//            username = input.nextLine();
-//        } else
-//        System.out.print("Enter the new port manager password: ");
-//        String password = input.nextLine();
-//
-//    }
+    public void updatePortManager() {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Choose attributes to update: 1. Name | 2. Password: ");
+        String chosenAttribute = input.nextLine();
+        switch (chosenAttribute) {
+            case "1":
+                System.out.print("Enter the new port manager username: ");
+                String username = input.nextLine();
+                if (ContainerPortManagementSystem.checkUsername(username)) {
+                    System.out.println("The user name has already exist.");
+                } else {
+                    portManager.setUsername(username);
+                }
+            case "2":
+                System.out.print("Enter the new port manager password: ");
+                portManager.setPassword(input.next());
+            default:
+                System.out.println("You have to choose the number associated with the attribute.");
+        }
+
+    }
     @Override
     public String toString() {
         return "Port{" +

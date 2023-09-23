@@ -26,6 +26,7 @@ public class GUI {
         System.out.println("10: Display all trip in a day");
         System.out.println("11: Display all trip between 2 days");
         System.out.println("12: Confirm trip");
+        System.out.println("13: Update container weight");
         System.out.println(Separator.sep());
     }
 

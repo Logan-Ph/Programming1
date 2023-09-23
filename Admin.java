@@ -46,6 +46,7 @@ public record Admin(String username, String password) implements User, Serializa
             case "16" -> updatePort(port);
             case "17" -> updateContainerWeight(port);
             case "18" -> updateVehicle(port);
+            case "19" -> updatePortManager(port);
             default -> System.out.println("You have to choose the number associated with the operation");
         }
     }
@@ -126,6 +127,10 @@ public record Admin(String username, String password) implements User, Serializa
                 default -> System.out.println("You have to choose the number associated with the attribute.");
             }
         }
+    }
+
+    public void updatePortManager(Port port) {
+        port.updatePortManager();
     }
 
     public void refuelVehicle(Port port) {
