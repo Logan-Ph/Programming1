@@ -153,28 +153,28 @@ public class ContainerPortManagementSystem {
         return new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
-                .toString().concat("/Programming1/PortManagementSystem/Ports.txt")).getCanonicalPath();
+                .toString().concat("/PortManagementSystem/Ports.txt")).getCanonicalPath();
     } // return the port file path
 
     public static String getUserFilePath() throws IOException {
         return new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
-                .toString().concat("/Programming1/PortManagementSystem/Users.txt")).getCanonicalPath();
+                .toString().concat("/PortManagementSystem/Users.txt")).getCanonicalPath();
     } // return the user file path
 
     public static String getVehicleFilePath() throws IOException {
         return new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
-                .toString().concat("/Programming1/PortManagementSystem/Vehicles.txt")).getCanonicalPath();
+                .toString().concat("/PortManagementSystem/Vehicles.txt")).getCanonicalPath();
     } // return the vehicle file path
 
     public static String getContainerFilePath() throws IOException {
         return new File(FileSystems.getDefault()
                 .getPath("")
                 .toAbsolutePath()
-                .toString().concat("/Programming1/PortManagementSystem/Containers.txt")).getCanonicalPath();
+                .toString().concat("/PortManagementSystem/Containers.txt")).getCanonicalPath();
     } // return the container file path
 
     //check if the time exceeds 7 days
