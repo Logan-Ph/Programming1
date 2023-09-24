@@ -42,14 +42,21 @@ public abstract class Container {
         this.port = port;
     }
 
-    public void updateWeight() {
+    public boolean updateWeight() {
         Scanner input = new Scanner(System.in);
         try {
             System.out.print("Enter the weight of the container (kg): ");
-            weight = Double.parseDouble(input.nextLine());
-            System.out.println("Update container weight successfully.");
+            double newWeight = Double.parseDouble(input.nextLine());
+            if (newWeight >0){
+                weight = newWeight;
+                return true;
+            }else {
+                System.out.println("The weight can not be negative or zero");
+                return false;
+            }
         } catch (RuntimeException e) {
             System.out.println("Container weight must be a number.");
+            return false;
         }
     }
 

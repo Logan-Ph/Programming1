@@ -70,9 +70,13 @@ public class PortManager implements User, Serializable {
         System.out.print("Enter the new port manager username: ");
         String username = input.nextLine();
         // Call static method to check whether username has existed in the system
-        if (ContainerPortManagementSystem.checkUsername(username)){
-            System.out.println("The user name has already exist. Please enter the username again");
-            username = input.nextLine();
+        while (true){
+            if (ContainerPortManagementSystem.checkUsername(username)) {
+                System.out.println("The user name has already exist. Please enter the username again");
+                username = input.nextLine();
+            }else {
+                break;
+            }
         }
 
         System.out.print("Enter the new port manager password: ");
@@ -111,7 +115,7 @@ public class PortManager implements User, Serializable {
                 }
                 ContainerPortManagementSystem.getContainers().remove(container);
                 System.out.println("Remove container successfully");
-            } catch (NullPointerException | AssertionError e) {
+            } catch (NullPointerException e) {
                 System.out.println("Remove container unsuccessfully");
             }
         }
@@ -203,13 +207,16 @@ public class PortManager implements User, Serializable {
 
     // Confirm the arrival of vehicle sent from another port
     public void confirmTrip() {
-        Scanner input = new Scanner(System.in);
-        // Print lists of unconfirmed trip
-        System.out.println("List of trips: ");
-        GUI.displayTripInPort(port);
-        // Prompt trip id
-        System.out.println("Enter the trip id associated to confirm");
-        port.confirmTrip(input.nextLine());
+        if (port.checkTrip()){
+            Scanner input = new Scanner(System.in);
+            System.out.println("List of trips: ");
+            GUI.displayTripInPort(port); // display all the trip in the port
+            System.out.println("Enter the trip id associated to confirm");
+            port.confirmTrip(input.nextLine()); // call the method of the port
+        }
+        else {
+            System.out.println("There are no trip to confirm");
+        }
     }
 
     // Send vehicle to another port
@@ -284,7 +291,7 @@ public class PortManager implements User, Serializable {
         Vector<Trip> trips;
         // Validate day input
         try {
-            System.out.println("Enter the start day (You need to enter only day, NOT MONTH OR YEAR): ");
+            System.out.println("Enter the start day (You need to enter only day, NOT MONTH OR YEAR). The day format is (dd) not (d): ");
             startDay = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
         }catch (RuntimeException e){
             System.out.println("The day is invalid");
@@ -292,7 +299,7 @@ public class PortManager implements User, Serializable {
         }
 
         try {
-            System.out.println("Enter the end day (You need to enter only day, NOT MONTH OR YEAR): ");
+            System.out.println("Enter the end day (You need to enter only day, NOT MONTH OR YEAR). The day format is (dd) not (d): ");
             endDay = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
         }catch (RuntimeException e){
             System.out.println("The day is invalid");
@@ -300,7 +307,7 @@ public class PortManager implements User, Serializable {
         }
         // Display all trips with either departure day and arrival day between 2 input day
         trips = port.listAllTripFromDayAToB(startDay, endDay);
-        if (trips==null){
+        if (trips.isEmpty()){
             System.out.println("No trips found");
         }
         else {
@@ -316,7 +323,7 @@ public class PortManager implements User, Serializable {
         Vector<Trip> trips;
         // Validate input
         try {
-            System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR): ");
+            System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR). The day format is (dd) not (d): ");
             date = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
         }catch (RuntimeException e){
             System.out.println("The day is invalid");
@@ -324,7 +331,7 @@ public class PortManager implements User, Serializable {
         }
         // List trips
         trips = port.listAllTripInDay(date);
-        if (trips==null){
+        if (trips.isEmpty()){
             // Print message if there are no trip in the given day at this port
             System.out.println("No trips found");
         }
@@ -340,32 +347,31 @@ public class PortManager implements User, Serializable {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd M yyyy");
         // Validate day input
         try {
-            System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR): ");
+            System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR). The day format is (dd) not (d): ");
             date = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);
         }catch (RuntimeException e){
             System.out.println("The day is invalid");
             return;
         }
-        System.out.println("The amount of fuel used in this day: " + port.amountFuelUsedInDay(date));
+        System.out.println("The amount of fuel used in this day: " + port.amountFuelUsedInDay(date) + " Gallon");
     }
 
     // Update a container's weight
     public void updateContainerWeight() {
         Scanner input = new Scanner(System.in);
-        // Print existing container in the port
         System.out.println("Current Container(s) in the port: " + port.getName());
-        GUI.displayContainerInPort(port);
-        if (port.getContainers().isEmpty()) {
-            // Print message if no container is found
+        GUI.displayContainerInPort(port); // display all the container in the port
+        if (port.getContainers().isEmpty()) { // check if there is any container in the port
             System.out.println("There are no container in the port");
         } else {
-            // Prompt container ID
             System.out.print("Enter the container id associated to update: ");
-            Container container = port.findContainerByID(input.nextLine());
+            Container container = port.findContainerByID(input.nextLine()); // find the container by ID in the port
             if (container == null){
                 System.out.println("Container does not exist in this port.");
-            } else {
-                container.updateWeight();
+            } else if (container.updateWeight()){
+                System.out.println("Update weight successfully");
+            }else {
+                System.out.println("Update weight unsuccessfully");
             }
         }
     }

@@ -26,8 +26,8 @@ public class PortFactory {
             }
             System.out.print("Enter the new port storing capacity (Kg): ");
             storingCapacity = Double.parseDouble(input.nextLine()); // get the storing capacity from user
-            if (storingCapacity<0){
-                System.out.println("The storing capacity can not be negative");
+            if (storingCapacity<=0){
+                System.out.println("The storing capacity can not be negative or zero");
                 return null;
             }
         } catch (RuntimeException e) {
@@ -42,6 +42,7 @@ public class PortFactory {
             if (landing.equals("true") || landing.equals("false")) { // validate the prompt
                 landingAbility = Boolean.parseBoolean(landing);
             } else {
+                System.out.println("You have to enter either 'true' or 'false'");
                 return null;
             }
         } catch (RuntimeException e) {

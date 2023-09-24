@@ -88,7 +88,7 @@ public class GUI {
         Optional.ofNullable(
                 vehicle.getContainers()).ifPresent(
                         containers -> containers.forEach(
-                                container -> System.out.println(" " + container)));
+                                container -> System.out.println("           " + container)));
         });
     }
 

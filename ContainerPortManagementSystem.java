@@ -40,7 +40,7 @@ public class ContainerPortManagementSystem {
                         String operation = input.nextLine();
                         if (operation.equals("x")){break;}
                         user.operationCase(operation);
-                    }else if (user instanceof PortManager){
+                    }else{
                         GUI.displayOperationForPortManager();
                         System.out.print("Enter the number associated with the operation or 'x' to exit: ");
                         String operation = input.nextLine();
@@ -92,7 +92,7 @@ public class ContainerPortManagementSystem {
     }
 
     public static Port findPortById(String id){
-        return getPorts().stream().filter(port -> port.getId().equals(id)).findFirst().orElse(null);
+        return getPorts().stream().filter(port -> port.getId().equals(id)).findAny().orElse(null);
     }
 
     public static void clearPortHistory(){

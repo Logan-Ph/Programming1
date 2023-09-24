@@ -15,8 +15,6 @@ public class Admin implements User, Serializable {
         this.username = username;
     }
 
-
-
     @Override
     public String password() {
         return password;
@@ -173,8 +171,10 @@ public class Admin implements User, Serializable {
             Container container = port.findContainerByID(input.nextLine()); // find the container by ID in the port
             if (container == null){
                 System.out.println("Container does not exist in this port.");
-            } else {
-                container.updateWeight(); // update the weight in the container
+            } else if (container.updateWeight()){
+                System.out.println("Update weight successfully");
+            }else {
+                System.out.println("Update weight unsuccessfully");
             }
         }
     }
@@ -212,11 +212,16 @@ public class Admin implements User, Serializable {
     }
 
     public void confirmTrip(Port port) {
-        Scanner input = new Scanner(System.in);
-        System.out.println("List of trips: ");
-        GUI.displayTripInPort(port); // display all the trip in the port
-        System.out.println("Enter the trip id associated to confirm");
-        port.confirmTrip(input.nextLine()); // call the method of the port
+        if (port.checkTrip()){
+            Scanner input = new Scanner(System.in);
+            System.out.println("List of trips: ");
+            GUI.displayTripInPort(port); // display all the trip in the port
+            System.out.println("Enter the trip id associated to confirm");
+            port.confirmTrip(input.nextLine()); // call the method of the port
+        }
+        else {
+            System.out.println("There are no trip to confirm");
+        }
     }
 
     public void createPortAndPortManager() {
@@ -269,7 +274,7 @@ public class Admin implements User, Serializable {
                 }
                 ContainerPortManagementSystem.getContainers().remove(container); // remove the container from the system
                 System.out.println("Remove container successfully");
-            } catch (NullPointerException | AssertionError e) {
+            } catch (NullPointerException e) {
                 System.out.println("Remove container unsuccessfully");
             }
         }
@@ -291,11 +296,11 @@ public class Admin implements User, Serializable {
                 return;
             }
             ContainerPortManagementSystem.getVehicles().remove(vehicle); // remove the vehicle from the system
-            if (vehicle.getContainers() != null) {
+            if (vehicle.getContainers() != null || !vehicle.getContainers().isEmpty()) {
                 vehicle.getContainers().forEach(container -> ContainerPortManagementSystem.getContainers().remove(container)); // remove all the container in the vehicle from the system
             }
             System.out.println("Remove vehicle successfully");
-        } catch (NullPointerException | AssertionError e) {
+        } catch (NullPointerException e) {
             System.out.println("Remove vehicle unsuccessfully");
         }
     }
@@ -423,7 +428,7 @@ public class Admin implements User, Serializable {
         LocalDate startDay, endDay;
         Vector<Trip> trips;
         try {
-            System.out.println("Enter the start day (You need to enter only day, NOT MONTH OR YEAR): ");
+            System.out.println("Enter the start day (You need to enter only day, NOT MONTH OR YEAR). The day format is (dd) not (d): ");
             startDay = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf); // parse the startDay to the LocalDate data type
         } catch (RuntimeException e) {
             System.out.println("The day is invalid");
@@ -431,14 +436,14 @@ public class Admin implements User, Serializable {
         }
 
         try {
-            System.out.println("Enter the end day (You need to enter only day, NOT MONTH OR YEAR): ");
+            System.out.println("Enter the end day (You need to enter only day, NOT MONTH OR YEAR). The day format is (dd) not (d): ");
             endDay = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf); // parse the endDay to the LocalDate data type
         } catch (RuntimeException e) {
             System.out.println("The day is invalid");
             return;
         }
         trips = port.listAllTripFromDayAToB(startDay, endDay); // get all the trips from the port
-        if (trips == null) {
+        if (trips.isEmpty()) {
             System.out.println("No trips found");
         } else {
             trips.forEach(System.out::println);
@@ -451,14 +456,14 @@ public class Admin implements User, Serializable {
         LocalDate date;
         Vector<Trip> trips;
         try {
-            System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR): ");
+            System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR). The day format is (dd) not (d): ");
             date = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);  // parse the Day to the LocalDate data type
         } catch (RuntimeException e) {
             System.out.println("The day is invalid");
             return;
         }
         trips = port.listAllTripInDay(date); // get trips from the port
-        if (trips == null) {
+        if (trips.isEmpty()) {
             System.out.println("No trips found");
         } else {
             trips.forEach(System.out::println);
@@ -470,13 +475,13 @@ public class Admin implements User, Serializable {
         LocalDate date;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd M yyyy");
         try {
-            System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR): ");
+            System.out.println("Enter the day (You need to enter only day, NOT MONTH OR YEAR). The day format is (dd) not (d): ");
             date = LocalDate.parse(scanner.nextLine() + " " + LocalDate.now().getMonthValue() + " " + LocalDate.now().getYear(), dtf);  // parse the Day to the LocalDate data type
         } catch (RuntimeException e) {
             System.out.println("The day is invalid");
             return;
         }
-        System.out.println("The amount of fuel used in this day: " + port.amountFuelUsedInDay(date)); // get the amount fuel used in the defined day
+        System.out.println("The amount of fuel used in this day: " + port.amountFuelUsedInDay(date) + " Gallon"); // get the amount fuel used in the defined day
     }
 
     public void removePortAndPortManager(Port port) {

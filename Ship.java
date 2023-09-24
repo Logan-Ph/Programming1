@@ -7,7 +7,7 @@ public class Ship implements Vehicle, Serializable {
     private String name;
     private double currentFuel;
     private double fuelCapacity;
-    private double  storingCapacity;
+    private double storingCapacity;
     private double currentStoringCapacity;
     private Vector<Container> containers;
     private Port port;
@@ -23,7 +23,8 @@ public class Ship implements Vehicle, Serializable {
         this.containers = new Vector<>();
     }
 
-    public Ship(){}
+    public Ship() {
+    }
 
     //Load the container to the vehicle
     @Override
@@ -34,8 +35,8 @@ public class Ship implements Vehicle, Serializable {
             return true;
         } else {
             System.out.println("This vehicle cannot carry this container!");
-            System.out.println("The current storing capacity of this vehicle is: "+getCurrentStoringCapacity());
-            System.out.println("The maximum storing capacity of this vehicle is: "+getStoringCapacity());
+            System.out.println("The current storing capacity of this vehicle is: " + getCurrentStoringCapacity());
+            System.out.println("The maximum storing capacity of this vehicle is: " + getStoringCapacity());
             return false;
         }
     }
@@ -61,7 +62,7 @@ public class Ship implements Vehicle, Serializable {
         Container container = findContainerByID(id);
         try {
             this.containers.remove(container); // remove the container from the ArrayList
-            currentStoringCapacity-=container.getWEIGHT();
+            currentStoringCapacity -= container.getWEIGHT();
             return container;
         } catch (Exception e) {
             System.out.println("There is no matching ID container!"); // Throw exception if the container doesn't exist in the ArrayList
@@ -71,14 +72,7 @@ public class Ship implements Vehicle, Serializable {
 
     //Find the container by using id
     public Container findContainerByID(String id) {
-        return this.containers.stream().filter(container -> container.getID().equals(id)).findFirst().orElse(null);
-//        Container container = null;
-//        for (Container cont : this.containers) {
-//            if (cont.getID().equals(id)) {
-//                container = cont;
-//            }
-//        }
-//        return container;
+        return this.containers.stream().filter(container -> container.getID().equals(id)).findAny().orElse(null);
     }
 
     //Refueling the vehicle
@@ -89,18 +83,19 @@ public class Ship implements Vehicle, Serializable {
         System.out.print("Enter the amount you want to refuel: ");
         try {
             fuel = Double.parseDouble(input.nextLine());
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             System.out.println("The amount must be a number");
             return false;
         }
-        if (fuel<0){
+        if (fuel < 0) {
             System.out.println("The amount can not be negative");
+            return false;
         }
 
         if (getCurrentFuel() + fuel > fuelCapacity) { // check if it does not exceed the fuel capacity
             System.out.println("You can not refuel more than the fuel capacity of this vehicle!");
-            System.out.println("The current fuel of the vehicle is: "+getCurrentFuel());
-            System.out.println("The maximum fuel capacity of the vehicle is: "+getFuelCapacity());
+            System.out.println("The current fuel of the vehicle is: " + getCurrentFuel());
+            System.out.println("The maximum fuel capacity of the vehicle is: " + getFuelCapacity());
             return false;
         } else {
             currentFuel += fuel;
@@ -111,14 +106,10 @@ public class Ship implements Vehicle, Serializable {
     @Override
     public double calculateFuelConsumption(Port port) {
         double totalFuelConsumption = 0.0;
-        try {
-            for (Container container: containers){
-                totalFuelConsumption += container.getWEIGHT()*CalculateFuelBehaviour.calculateFuelConsumption(container,this); // calculate fuel consumption
-            }
-            return totalFuelConsumption*this.port.getDistance(port);
-        }catch (NullPointerException e){
-            return 1.0;
+        for (Container container : containers) {
+            totalFuelConsumption += container.getWEIGHT() * CalculateFuelBehaviour.calculateFuelConsumption(container, this); // calculate fuel consumption
         }
+        return totalFuelConsumption * this.port.getDistance(port);
     }
 
     public void setPort(Port port) {

@@ -56,7 +56,7 @@ public abstract class Truck implements Vehicle, Serializable {
 
     //Find the container by using id
     public Container findContainerByID(String id) {
-        return this.containers.stream().filter(container -> container.getID().equals(id)).findFirst().orElse(null);
+        return this.containers.stream().filter(container -> container.getID().equals(id)).findAny().orElse(null);
     }
 
     //Refueling the vehicle
@@ -73,6 +73,7 @@ public abstract class Truck implements Vehicle, Serializable {
         }
         if (fuel < 0) {
             System.out.println("The amount can not be negative");
+            return false;
         }
 
         if (getCurrentFuel() + fuel > fuelCapacity) { // check if it does not exceed the fuel capacity
@@ -89,14 +90,10 @@ public abstract class Truck implements Vehicle, Serializable {
     @Override
     public double calculateFuelConsumption(Port port) {
         double totalFuelConsumption = 0.0;
-        try {
-            for (Container container : containers) {
-                totalFuelConsumption += container.getWEIGHT() * CalculateFuelBehaviour.calculateFuelConsumption(container, this); // calculate the fuel consumption
-            }
-            return (double) Math.round(totalFuelConsumption * this.port.getDistance(port)*100)/100.0 ; // round 2 decimal points
-        } catch (NullPointerException e) {
-            return 1.0;
+        for (Container container : containers) {
+            totalFuelConsumption += container.getWEIGHT() * CalculateFuelBehaviour.calculateFuelConsumption(container, this); // calculate the fuel consumption
         }
+        return (double) Math.round(totalFuelConsumption * this.port.getDistance(port)*100)/100.0 ; // round 2 decimal points
     }
 
     //Get the current storing capacity
