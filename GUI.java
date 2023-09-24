@@ -1,3 +1,6 @@
+import java.util.Optional;
+import java.util.stream.IntStream;
+
 public class GUI {
     public static void display() {
         System.out.println("------------------------------------------------");
@@ -43,68 +46,55 @@ public class GUI {
 
     // display all the port in the system
     public static void displayPort() {
-        int i = 1;
-        for (Port port : ContainerPortManagementSystem.getPorts()) {
-            System.out.println("Port " + i++ + ": " + port);
-        }
+        IntStream.range(0, ContainerPortManagementSystem.getPorts().size())
+                .forEach(i -> System.out.println("Port " + i + ": " + ContainerPortManagementSystem.getPorts().get(i)));
     }
 
     // display all the port with distance
     public static void displayPortWithDistance(Port port) {
-        for (Port p : ContainerPortManagementSystem.getPorts()) {
-            if (p != port){
-                System.out.println("    " + p.getName() + " - "+ p.getId() +": " + port.getDistance(p) + "km");
-            }
-        }
+        ContainerPortManagementSystem.getPorts().stream().filter(p -> p != port).forEach(p -> System.out.println("    " + p.getName() + " - " + p.getId() + ": " + port.getDistance(p) + "km"));
     }
 
     // display container in the vehicle
-    public static void displayContainerInVehicle(Vehicle vehicle){
+    public static void displayContainerInVehicle(Vehicle vehicle) {
         vehicle.getContainers().forEach(System.out::println);
     }
 
     // display container in port
     public static void displayContainerInPort(Port port) {
-        for (Container container : port.getContainers()) {
-            System.out.println(container);
-        }
         System.out.println(Separator.sep());
-
+        port.getContainers().forEach(System.out::println);
+        System.out.println(Separator.sep());
     }
 
     // display the vehicle in the port
     public static void displayVehicleInPort(Port port) {
-        for (Vehicle vehicle : port.getVehicles()) {
-            System.out.println(vehicle);
-        }
+        System.out.println(Separator.sep());
+        port.getVehicles().forEach(System.out::println);
         System.out.println(Separator.sep());
     }
 
     // display all the container and vehicle in the port
-    public static void displayContainerAndVehicleInPort(Port port){
+    public static void displayContainerAndVehicleInPort(Port port) {
+        System.out.println(Separator.sep());
         System.out.println("Unloaded container:");
         displayContainerInPort(port);
 
         System.out.println("Loaded container:");
-        for (Vehicle vehicle : port.getVehicles()) {
-            System.out.println("Vehicle: ");
-            System.out.println(vehicle);
-            if (vehicle.getContainers() == null){
-                continue;
-            }
-            for (Container container: vehicle.getContainers()){
-                System.out.println("        "+container);
-            }
-        }
+        port.getVehicles()
+        .forEach(vehicle -> {
+        System.out.println("Vehicle: ");
+        System.out.println(vehicle);
+        Optional.ofNullable(
+                vehicle.getContainers()).ifPresent(
+                        containers -> containers.forEach(
+                                container -> System.out.println(" " + container)));
+        });
     }
 
     // display all the trip in the port
     public static void displayTripInPort(Port port) {
-        for(Trip trip: port.getTrips()) {
-            if (trip.getArrivalPort() == port && !trip.getStatus()) {
-                System.out.println(trip);
-            }
-        }
+        port.getTrips().stream().filter(trip -> trip.getArrivalPort() == port && !trip.getStatus()).forEach(System.out::println);
     }
 
     // display all the vehicle type

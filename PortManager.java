@@ -255,34 +255,22 @@ public class PortManager implements User, Serializable {
     public void displayWeightOfContainerType() {
         HashMap<String, Double> weightOfContainerType = new HashMap<>();
 
-        double openSideTotalWeight = 0.0;
-        double liquidTotalWeight = 0.0;
-        double dryStorageTotalWeight = 0.0;
-        double refrigeratedTotalWeight = 0.0;
-        double openTopTotalWeight = 0.0;
-
-        // Loop through list of containers and categorize them into types
         for (Container container : port.getContainers()) {
             if (container instanceof OpenSide) {
-                openSideTotalWeight += container.getWEIGHT();
-                weightOfContainerType.put("Open Side", openSideTotalWeight);
+                weightOfContainerType.merge("Open Side", container.getWEIGHT(), Double::sum); // if the container does not exist in the hashmap, put new container weight or sum up to the current value
             } else if (container instanceof Liquid) {
-                liquidTotalWeight += container.getWEIGHT();
-                weightOfContainerType.put("Liquid", liquidTotalWeight);
+                weightOfContainerType.merge("Liquid", container.getWEIGHT(), Double::sum);
             } else if (container instanceof DryStorage) {
-                dryStorageTotalWeight += container.getWEIGHT();
-                weightOfContainerType.put("DryStorage", dryStorageTotalWeight);
+                weightOfContainerType.merge("DryStorage", container.getWEIGHT(), Double::sum);
             } else if (container instanceof Refrigerated) {
-                refrigeratedTotalWeight += container.getWEIGHT();
-                weightOfContainerType.put("Refrigerated", refrigeratedTotalWeight);
+                weightOfContainerType.merge("Refrigerated", container.getWEIGHT(), Double::sum);
             } else if (container instanceof OpenTop) {
-                openTopTotalWeight += container.getWEIGHT();
-                weightOfContainerType.put("OpenTop", openTopTotalWeight);
+                weightOfContainerType.merge("OpenTop", container.getWEIGHT(), Double::sum);
             }
         }
         if (!weightOfContainerType.isEmpty()) {
             // Print the total weight for each type of container
-            weightOfContainerType.forEach((key, value) -> System.out.println(key + " = " + value));
+            weightOfContainerType.forEach((key, value) -> System.out.println(key + " = " + value + " KG"));
         } else {
             System.out.println("There are no Containers to display!");
         }

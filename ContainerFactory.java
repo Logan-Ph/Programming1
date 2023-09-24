@@ -8,7 +8,10 @@ public class ContainerFactory {
         try {
             System.out.print("Enter the weight of the container (kg): ");
             weight = Double.parseDouble(input.nextLine()); // get the input from user
-
+            if (weight<0){
+                System.out.println("The weight can not be negative");
+                return null;
+            }
             System.out.println("Container type:");
             GUI.displayContainerType();
             System.out.print("Enter number associated to the container type: ");

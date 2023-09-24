@@ -56,13 +56,7 @@ public abstract class Truck implements Vehicle, Serializable {
 
     //Find the container by using id
     public Container findContainerByID(String id) {
-        Container container = null;
-        for (Container cont : this.containers) {
-            if (cont.getID().equals(id)) {
-                container = cont;
-            }
-        }
-        return container;
+        return this.containers.stream().filter(container -> container.getID().equals(id)).findFirst().orElse(null);
     }
 
     //Refueling the vehicle

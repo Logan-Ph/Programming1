@@ -2,6 +2,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Scanner;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 public class Port implements Serializable {
     private String id;
@@ -102,41 +103,50 @@ public class Port implements Serializable {
     }
 
     public Vector<Trip> listAllTripFromDayAToB(LocalDate startTime, LocalDate endTime) {
-        Vector<Trip> listTripOut = new Vector<>(); // create new vector to return
-        for (Trip currentTrip : this.getTrips()) {
-            // Trips is validated when either the departure days or arrival day is in the given day range.
-            if ((!currentTrip.getStatus() && (currentTrip.getDepartureDate().isAfter(startTime)||currentTrip.getDepartureDate().isEqual(startTime)) && (currentTrip.getDepartureDate().isBefore(endTime))||currentTrip.getDepartureDate().isEqual(endTime)) || (currentTrip.getStatus() && (((currentTrip.getArrivalDate().isAfter(startTime)||currentTrip.getArrivalDate().isEqual(startTime)) && (currentTrip.getArrivalDate().isBefore(endTime)||currentTrip.getArrivalDate().isEqual(endTime))) || ((currentTrip.getDepartureDate().isBefore(endTime)||currentTrip.getDepartureDate().isEqual(endTime)) && (currentTrip.getDepartureDate().isAfter(startTime)||currentTrip.getDepartureDate().isEqual(startTime)))))) {
-                listTripOut.add(currentTrip); // add validated trip to the vector
-            }
-        }
-        return listTripOut;
+//        Vector<Trip> listTripOut = new Vector<>(); // create new vector to return
+        return (Vector<Trip>) this.getTrips().stream().filter(currentTrip->(!currentTrip.getStatus() && (currentTrip.getDepartureDate().isAfter(startTime)||currentTrip.getDepartureDate().isEqual(startTime)) && (currentTrip.getDepartureDate().isBefore(endTime))||currentTrip.getDepartureDate().isEqual(endTime)) || (currentTrip.getStatus() && (((currentTrip.getArrivalDate().isAfter(startTime)||currentTrip.getArrivalDate().isEqual(startTime)) && (currentTrip.getArrivalDate().isBefore(endTime)||currentTrip.getArrivalDate().isEqual(endTime))) || ((currentTrip.getDepartureDate().isBefore(endTime)||currentTrip.getDepartureDate().isEqual(endTime)) && (currentTrip.getDepartureDate().isAfter(startTime)||currentTrip.getDepartureDate().isEqual(startTime)))))).collect(Collectors.toList());
+//        for (Trip currentTrip : this.getTrips()) {
+//            // Trips is validated when either the departure days or arrival day is in the given day range.
+//            if ((!currentTrip.getStatus() && (currentTrip.getDepartureDate().isAfter(startTime)||currentTrip.getDepartureDate().isEqual(startTime)) && (currentTrip.getDepartureDate().isBefore(endTime))||currentTrip.getDepartureDate().isEqual(endTime)) || (currentTrip.getStatus() && (((currentTrip.getArrivalDate().isAfter(startTime)||currentTrip.getArrivalDate().isEqual(startTime)) && (currentTrip.getArrivalDate().isBefore(endTime)||currentTrip.getArrivalDate().isEqual(endTime))) || ((currentTrip.getDepartureDate().isBefore(endTime)||currentTrip.getDepartureDate().isEqual(endTime)) && (currentTrip.getDepartureDate().isAfter(startTime)||currentTrip.getDepartureDate().isEqual(startTime)))))) {
+//                listTripOut.add(currentTrip); // add validated trip to the vector
+//            }
+//        }
+//        return listTripOut;
     }
 
     public Vector<Trip> listAllTripInDay(LocalDate date) {
-        Vector<Trip> listTripOut = new Vector<>(); // create new vector to return
-        for (Trip currentTrip : this.getTrips()) {
-            // Trips is validated when either the departure day or arrival day is the given day
-            if ((currentTrip.getStatus() && (currentTrip.getArrivalDate().isEqual(date) || currentTrip.getDepartureDate().isEqual(date))) || (!currentTrip.getStatus() && currentTrip.getDepartureDate().isEqual(date))) {
-                listTripOut.add(currentTrip); // add validated trip to the vector
-            }
-        }
-        return listTripOut;
+//        Vector<Trip> listTripOut = new Vector<>(); // create new vector to return
+        return (Vector<Trip>) this.getTrips().stream().filter(currentTrip->(currentTrip.getStatus() && (currentTrip.getArrivalDate().isEqual(date) || currentTrip.getDepartureDate().isEqual(date))) || (!currentTrip.getStatus() && currentTrip.getDepartureDate().isEqual(date))).collect(Collectors.toList());
+//        for (Trip currentTrip : this.getTrips()) {
+//            // Trips is validated when either the departure day or arrival day is the given day
+//            if ((currentTrip.getStatus() && (currentTrip.getArrivalDate().isEqual(date) || currentTrip.getDepartureDate().isEqual(date))) || (!currentTrip.getStatus() && currentTrip.getDepartureDate().isEqual(date))) {
+//                listTripOut.add(currentTrip); // add validated trip to the vector
+//            }
+//        }
+//        return listTripOut;
     }
 
     public double amountFuelUsedInDay(LocalDate date) {
-        Vector<Trip> trips;
-        trips = listAllTripInDay(date); // call method to get all the trips in the given day
-        double amountFuel = 0; // initialize result variable
-        if (trips.isEmpty()) {
-            return 0; // return 0 if no trip is found
-        } else {
-            for (Trip trip : trips) {
-                if (trip.getDeparturePort() == this) {
-                    amountFuel += trip.getAmountFuel(); // add the trip's used fuel to result variable
-                }
-            }
-            return amountFuel;
-        }
+        Vector<Trip> trips = listAllTripInDay(date);
+
+        return trips.stream()
+                .filter(trip -> trip.getDeparturePort() == this)
+                .mapToDouble(Trip::getAmountFuel)
+                .sum();
+//
+//        Vector<Trip> trips;
+//        trips = listAllTripInDay(date); // call method to get all the trips in the given day
+//        double amountFuel = 0; // initialize result variable
+//        if (trips.isEmpty()) {
+//            return 0; // return 0 if no trip is found
+//        } else {
+//            for (Trip trip : trips) {
+//                if (trip.getDeparturePort() == this) {
+//                    amountFuel += trip.getAmountFuel(); // add the trip's used fuel to result variable
+//                }
+//            }
+//            return amountFuel;
+//        }
     }
 
     // Get distance to other port
@@ -185,12 +195,17 @@ public class Port implements Serializable {
     }
 
     public Trip findTripById(String id) {
-        for (Trip trip : this.trips) { // loop through the list of trip in the port
-            if (trip.getId().equals(id)) {
-                return trip; // return the trip match with the given id
-            }
-        }
-        return null;
+        return this.trips.stream()
+                .filter(trip -> trip.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+//        for (Trip trip : this.trips) { // loop through the list of trip in the port
+//            if (trip.getId().equals(id)) {
+//                return trip; // return the trip match with the given id
+//            }
+//        }
+//        return null;
     }
 
     public Vector<Trip> getTrips() {
@@ -215,30 +230,39 @@ public class Port implements Serializable {
     }
 
     public boolean checkTrip() {
-        for (Trip trip : trips) {
-            if (!trip.getStatus() && trip.getArrivalPort() == this) {
-                return true; // return true if there is any trip to confirm
-            }
-        }
-        return false;
+        return trips.stream().anyMatch(trip -> (!trip.getStatus() && trip.getArrivalPort() == this));
+//        for (Trip trip : trips) {
+//            if (!trip.getStatus() && trip.getArrivalPort() == this) {
+//                return true; // return true if there is any trip to confirm
+//            }
+//        }
+//        return false;
     }
 
     public Container findContainerByID(String id) {
-        for (Container container : this.containers) { // loop through the list of containers in this port
-            if (container.getID().equals(id)) {
-                return container; // return the container with matching id
-            }
-        }
-        return null;
+        return this.containers.stream()
+                .filter(container -> container.getID().equals(id))
+                .findFirst()
+                .orElse(null);
+//        for (Container container : this.containers) { // loop through the list of containers in this port
+//            if (container.getID().equals(id)) {
+//                return container; // return the container with matching id
+//            }
+//        }
+//        return null;
     }
 
     public Vehicle findVehicleByID(String id) {
-        for (Vehicle vehicle : this.vehicles) { // loop through the list of vehicles in this port
-            if (vehicle.getID().equals(id)) {
-                return vehicle; // return the vehicle with matching id
-            }
-        }
-        return null;
+        return this.vehicles.stream()
+                .filter(vehicle -> vehicle.getID().equals(id))
+                .findFirst()
+                .orElse(null);
+//        for (Vehicle vehicle : this.vehicles) { // loop through the list of vehicles in this port
+//            if (vehicle.getID().equals(id)) {
+//                return vehicle; // return the vehicle with matching id
+//            }
+//        }
+//        return null;
     }
 
     public void addTrip(Trip trip) {

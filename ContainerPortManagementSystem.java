@@ -21,7 +21,7 @@ public class ContainerPortManagementSystem {
         systemInitialization(); // initialize the system
         System.out.println(Separator.sep());
 
-        if (users.isEmpty()) {
+        if (users.stream().noneMatch(user -> user instanceof Admin)) {
             System.out.println("Because user admin does not exist in the system, you have to create new admin account.");
             users.add(Admin.create()); // create User admin if there are no user in the system
             System.out.println("Create admin successfully.");
@@ -74,47 +74,25 @@ public class ContainerPortManagementSystem {
     }
 
     public static boolean checkUsername(String username){
-        for (User user: getUsers()){
-            if (user.username().equals(username)){
-                return true;
-            }
-        }
-        return false;
+        return getUsers().stream().anyMatch(user -> user.username().equals(username));
     }
 
     // check if the port info has existed in the system
     public static boolean checkPortInfo(double latitude, double longitude, String portName){
-        for (Port port: getPorts()){
-            if ((port.getLatitude() == latitude && port.getLongitude() == longitude)|| port.getName().equals(portName)){
-                return true;
-            }
-        }
-        return false;
+        return getPorts().stream().anyMatch(port -> (port.getLatitude() == latitude && port.getLongitude() == longitude) || port.getName().equals(portName));
     }
 
     private static User login() {
         Scanner input = new Scanner(System.in);
-        Vector<User> users = getUsers();
-
         System.out.println("Please enter the username");
         String username = input.nextLine().strip(); // get the username from the user
         System.out.println("Please enter the password");
         String password = input.nextLine().strip(); // get the password from the user
-        for (User user : users) {
-            if (user.username().equals(username) && user.password().equals(password)) {
-                return user; // return the user if matching the password or username
-            }
-        }
-        return null;
+        return getUsers().stream().filter(user -> user.username().equals(username) && user.password().equals(password)).findAny().orElse(null);
     }
 
     public static Port findPortById(String id){
-        for(Port port: getPorts()){
-            if (port.getId().equals(id)){
-                return port; // return the port if it's matching the ID
-            }
-        }
-        return null;
+        return getPorts().stream().filter(port -> port.getId().equals(id)).findFirst().orElse(null);
     }
 
     public static void clearPortHistory(){

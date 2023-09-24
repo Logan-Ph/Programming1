@@ -103,10 +103,12 @@ public class Admin implements User, Serializable {
                 String username = input.nextLine().strip(); // get the new username
                 if (ContainerPortManagementSystem.checkUsername(username)) { // check if the username exist in the system
                     System.out.println("The user name has already exist.");
+                    System.out.println("Update username unsuccessfully");
                 } else {
                     this.setUsername(username); // set the username
+                    System.out.println("Update username successfully");
+
                 }
-                System.out.println("Update username successfully");
             }
             case "2" -> {
                 System.out.print("Enter the new admin password: ");

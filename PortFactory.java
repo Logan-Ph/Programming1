@@ -14,10 +14,22 @@ public class PortFactory {
         try {
             System.out.print("Enter the new port latitude: ");
             latitude = Double.parseDouble(input.nextLine()); // get the latitude from user
+            if (latitude<0){
+                System.out.println("The latitude can not be negative");
+                return null;
+            }
             System.out.print("Enter the new port longitude: ");
             longitude = Double.parseDouble(input.nextLine()); // get the longitude from user
+            if (longitude<0){
+                System.out.println("The longitude can not be negative");
+                return null;
+            }
             System.out.print("Enter the new port storing capacity (Kg): ");
             storingCapacity = Double.parseDouble(input.nextLine()); // get the storing capacity from user
+            if (storingCapacity<0){
+                System.out.println("The storing capacity can not be negative");
+                return null;
+            }
         } catch (RuntimeException e) {
             System.out.println("You have to enter the number");
             return null;
