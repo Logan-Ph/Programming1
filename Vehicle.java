@@ -14,4 +14,5 @@ public interface Vehicle extends Serializable {
     Vector<Container> getContainers();
     double getCurrentFuel();
     void setName();
+    void setCurrentFuel(double currentFuel);
 }

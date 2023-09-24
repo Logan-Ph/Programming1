@@ -249,6 +249,7 @@ public class PortManager implements User, Serializable {
                 destinationPort.addTrip(trip);
                 port.addTrip(trip);
                 port.removeVehicle(vehicle);
+                vehicle.setCurrentFuel(vehicle.getCurrentFuel()-vehicle.calculateFuelConsumption(destinationPort));
                 System.out.println("Sending vehicle successfully");
             }
         }catch (NullPointerException e){

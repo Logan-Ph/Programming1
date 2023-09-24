@@ -145,6 +145,10 @@ public class Ship implements Vehicle, Serializable {
         return containers;
     }
 
+    public void setCurrentFuel(double currentFuel) {
+        this.currentFuel = currentFuel;
+    }
+
     @Override
     public void setName() {
         Scanner input = new Scanner(System.in);

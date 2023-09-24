@@ -135,6 +135,10 @@ public abstract class Truck implements Vehicle, Serializable {
         return fuelCapacity;
     }
 
+    public void setCurrentFuel(double currentFuel) {
+        this.currentFuel = currentFuel;
+    }
+
     @Override
     public void setName() {
         Scanner input = new Scanner(System.in);

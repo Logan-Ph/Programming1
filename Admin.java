@@ -330,6 +330,7 @@ public class Admin implements User, Serializable {
                   destinationPort.addTrip(trip); // add the trip to the destination port
                   port.addTrip(trip); // add the trip to this port
                   port.removeVehicle(vehicle); // remove the vehicle from this port
+                  vehicle.setCurrentFuel(vehicle.getCurrentFuel()-vehicle.calculateFuelConsumption(destinationPort));
                   System.out.println("Sending vehicle successfully");
               }
         }catch (NullPointerException e){
