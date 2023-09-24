@@ -322,6 +322,7 @@ public class Admin implements User, Serializable {
         Vehicle vehicle = port.findVehicleByID(input.nextLine()); // find the vehicle in the port by ID
         try {
               if (vehicle.calculateFuelConsumption(destinationPort) > vehicle.getCurrentFuel()){
+                  System.out.println("To travel to the port, this vehicle need "+ vehicle.calculateFuelConsumption(destinationPort) + " Gallon");
                   System.out.println("The vehicle cannot drive to the port with the current fuel capacity");
                   System.out.println("Please refuel the vehicle or change to another vehicle");
               } else if (LandingBehaviour.landing(destinationPort, vehicle)) {
