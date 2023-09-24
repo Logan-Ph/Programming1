@@ -9,7 +9,7 @@ to open the folder 'Programming1' (the folder of the repo). And then go the "Mai
 For the admin role:
           usernmae: Admin  -  password: admin123
 ----------------------------
-For the port manager role (5 port manager inside the system):
+For the port manager role (5 port managers inside the system):
           username: pm1  -  password: pm1
 
 the same with other port manager (the number behind 'pm' will increase. Ex: pm2 - pm2, pm3 - pm3,... to 5)
