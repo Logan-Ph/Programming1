@@ -1,5 +1,6 @@
+import java.io.Serializable;
 import java.util.*;
-public abstract class Container {
+public abstract class Container implements Serializable {
     private String id;
     private double weight;
     private Vehicle vehicle;
